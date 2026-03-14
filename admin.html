@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EasyCom Admin — Panneau de gestion</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07090F; --surface:#0F1220; --card:#141929; --border:rgba(255,255,255,0.07);
+  --cyan:#00D4FF; --gold:#F5A623; --green:#22D3A1; --red:#FF4757; --purple:#8B5CF6;
+  --white:#EEF0F5; --grey:#6B7595; --text:#C4CCDF;
+  --sidebar:240px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Outfit',sans-serif;font-weight:400;display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;
+}
+.s-logo{padding:24px 20px;border-bottom:1px solid var(--border);}
+.s-logo h2{font-size:18px;font-weight:800;}
+.s-logo h2 span{color:var(--cyan);}
+.s-logo p{font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:4px;}
+.s-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;}
+.s-section{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--grey);padding:12px 8px 6px;}
+.s-link{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:8px;cursor:pointer;
+  font-size:13px;font-weight:500;color:var(--text);
+  transition:all 0.2s;text-decoration:none;border:none;background:none;width:100%;text-align:left;
+}
+.s-link:hover{background:rgba(255,255,255,0.05);color:var(--white);}
+.s-link.active{background:rgba(0,212,255,0.12);color:var(--cyan);}
+.s-link .s-icon{font-size:16px;width:20px;text-align:center;}
+.s-link .s-badge{margin-left:auto;background:var(--red);color:white;border-radius:100px;font-size:10px;font-weight:700;padding:2px 7px;}
+.s-footer{padding:16px;border-top:1px solid var(--border);}
+.s-footer a{display:flex;align-items:center;gap:8px;color:var(--grey);text-decoration:none;font-size:13px;transition:color 0.2s;}
+.s-footer a:hover{color:var(--cyan);}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;}
+.topbar{
+  height:60px;background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-size:16px;font-weight:700;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.tb-btn{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:8px 16px;color:var(--text);font-family:'Outfit',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;gap:6px;
+}
+.tb-btn:hover{border-color:var(--border);color:var(--white);}
+.tb-btn.primary{background:var(--cyan);color:var(--bg);border-color:var(--cyan);}
+.tb-btn.primary:hover{background:#22DFFF;}
+
+/* CONTENT */
+.content{padding:32px;flex:1;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;transition:all 0.2s;}
+.kpi-card:hover{border-color:rgba(255,255,255,0.12);transform:translateY(-2px);}
+.kpi-label{font-size:11px;color:var(--grey);letter-spacing:2px;font-weight:700;margin-bottom:8px;}
+.kpi-value{font-size:28px;font-weight:800;margin-bottom:6px;}
+.kpi-change{font-size:12px;display:flex;align-items:center;gap:4px;}
+.kpi-up{color:var(--green);}
+.kpi-down{color:var(--red);}
+
+/* TABLES */
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
+.table-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);}
+.table-head h3{font-size:15px;font-weight:700;}
+table{width:100%;border-collapse:collapse;}
+thead th{padding:12px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--grey);background:var(--surface);border-bottom:1px solid var(--border);}
+tbody td{padding:13px 16px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:rgba(255,255,255,0.02);}
+
+/* STATUS PILLS */
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:100px;padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:1px;}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;}
+.pill-green{background:rgba(34,211,161,0.12);color:var(--green);}
+.pill-green::before{background:var(--green);}
+.pill-gold{background:rgba(245,166,35,0.12);color:var(--gold);}
+.pill-gold::before{background:var(--gold);}
+.pill-red{background:rgba(255,71,87,0.12);color:var(--red);}
+.pill-red::before{background:var(--red);}
+.pill-grey{background:rgba(255,255,255,0.06);color:var(--grey);}
+.pill-grey::before{background:var(--grey);}
+
+/* PRODUCT EDITOR */
+.prod-editor{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-group label{font-size:12px;font-weight:700;color:var(--grey);letter-spacing:1px;}
+.field-input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border 0.2s;width:100%;}
+.field-input:focus{border-color:rgba(0,212,255,0.4);}
+.field-input::placeholder{color:var(--grey);}
+textarea.field-input{resize:vertical;min-height:80px;}
+
+/* CHART */
+.chart-area{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px;}
+.chart-title{font-size:14px;font-weight:700;margin-bottom:20px;}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:140px;}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;}
+.bar{width:100%;background:linear-gradient(to top,var(--cyan),rgba(0,212,255,0.3));border-radius:4px 4px 0 0;transition:all 0.5s;}
+.bar-label{font-size:10px;color:var(--grey);font-weight:600;}
+.bar-val{font-size:10px;color:var(--cyan);font-weight:700;}
+
+/* GRID 2 */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;}
+
+/* AFFILIATE TABLE */
+.aff-stat{display:flex;flex-direction:column;gap:12px;}
+.aff-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border-radius:8px;}
+.aff-cat{font-size:13px;font-weight:600;}
+.aff-nums{display:flex;gap:16px;}
+.aff-num{font-size:12px;color:var(--text);text-align:right;}
+.aff-num strong{display:block;font-size:14px;font-weight:700;color:var(--gold);}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;}
+.modal-box h3{font-size:18px;font-weight:700;margin-bottom:24px;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--grey);cursor:pointer;font-size:18px;}
+.modal-btns{display:flex;gap:10px;margin-top:20px;}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;border-radius:7px;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-c{background:var(--cyan);color:var(--bg);}
+.btn-c:hover{background:#22DFFF;}
+.btn-o{background:transparent;color:var(--text);border:1px solid var(--border);}
+.btn-o:hover{color:var(--white);border-color:var(--border);}
+.btn-r{background:rgba(255,71,87,0.15);color:var(--red);border:1px solid rgba(255,71,87,0.2);}
+.btn-r:hover{background:var(--red);color:white;}
+
+/* SETTINGS */
+.settings-grid{display:flex;flex-direction:column;gap:16px;}
+.settings-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.settings-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;}
+.settings-section h3{font-size:14px;font-weight:700;margin-bottom:20px;color:var(--cyan);}
+.switch-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.switch-row:last-child{border-bottom:none;}
+.switch-label{font-size:13px;color:var(--text);}
+.switch{width:42px;height:24px;background:var(--border);border-radius:100px;cursor:pointer;position:relative;transition:background 0.3s;}
+.switch.on{background:var(--cyan);}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:left 0.3s;}
+.switch.on::after{left:21px;}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .main{margin-left:0;}
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .grid2{grid-template-columns:1fr;}
+  .prod-editor{grid-template-columns:1fr;}
+  .settings-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="s-logo">
+    <h2>Easy<span>Com</span></h2>
+    <p>ADMIN PANEL v1.0</p>
+  </div>
+  <nav class="s-nav">
+    <div class="s-section">TABLEAU DE BORD</div>
+    <button class="s-link active" onclick="showPage('dashboard')"><span class="s-icon">📊</span> Dashboard</button>
+    <button class="s-link" onclick="showPage('orders')"><span class="s-icon">📦</span> Commandes <span class="s-badge">3</span></button>
+    <button class="s-link" onclick="showPage('products')"><span class="s-icon">🛍️</span> Produits</button>
+    <button class="s-link" onclick="showPage('affiliate')"><span class="s-icon">💰</span> Affiliation Amazon</button>
+
+    <div class="s-section">AUTOMATISATION</div>
+    <button class="s-link" onclick="showPage('agent')"><span class="s-icon">🤖</span> Agent IA</button>
+    <button class="s-link" onclick="showPage('suppliers')"><span class="s-icon">🚚</span> Fournisseurs MDA</button>
+    <button class="s-link" onclick="showPage('emails')"><span class="s-icon">📧</span> Emails auto</button>
+
+    <div class="s-section">CONFIGURATION</div>
+    <button class="s-link" onclick="showPage('settings')"><span class="s-icon">⚙️</span> Paramètres</button>
+    <button class="s-link" onclick="showPage('legal')"><span class="s-icon">⚖️</span> CGV / Légal</button>
+  </nav>
+  <div class="s-footer">
+    <a href="index.html" target="_blank">🌐 Voir la boutique →</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-title" id="page-title">📊 Dashboard</span>
+    <div class="topbar-right">
+      <span style="font-size:12px;color:var(--grey)">contact@easycom.ch</span>
+      <button class="tb-btn primary" onclick="showNotif()">💾 Sauvegarder</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ======================================================
+         DASHBOARD
+         ====================================================== -->
+    <div class="page active" id="page-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">CA CE MOIS</div>
+          <div class="kpi-value" style="color:var(--cyan)">€4,280</div>
+          <div class="kpi-change kpi-up">↑ +23% vs mois dernier</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">COMMISSIONS AMAZON</div>
+          <div class="kpi-value" style="color:var(--gold)">€312</div>
+          <div class="kpi-change kpi-up">↑ +8% — ID: easycom0-21</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">COMMANDES EN COURS</div>
+          <div class="kpi-value" style="color:var(--green)">18</div>
+          <div class="kpi-change" style="color:var(--grey)">3 en attente traitement</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">MARGE MOYENNE</div>
+          <div class="kpi-value" style="color:var(--purple)">67%</div>
+          <div class="kpi-change kpi-up">↑ +3pts vs trimestre</div>
+        </div>
+      </div>
+
+      <!-- CHART -->
+      <div class="chart-area">
+        <div class="chart-title">📈 CA Journalier — 7 derniers jours (€)</div>
+        <div class="chart-bars" id="chart-bars"></div>
+      </div>
+
+      <div class="grid2">
+        <!-- RECENT ORDERS -->
+        <div class="table-card">
+          <div class="table-head">
+            <h3>Dernières commandes</h3>
+            <button class="tb-btn" onclick="showPage('orders')">Voir tout →</button>
+          </div>
+          <table>
+            <thead><tr><th>N° CMD</th><th>PRODUIT</th><th>MONTANT</th><th>STATUT</th></tr></thead>
+            <tbody>
+              <tr><td>#EC-2851</td><td>🎧 TransEar Pro X1</td><td>€89</td><td><span class="pill pill-green">LIVRÉ</span></td></tr>
+              <tr><td>#EC-2850</td><td>⌚ KidsTrack Pro</td><td>€79</td><td><span class="pill pill-gold">EN TRANSIT</span></td></tr>
+              <tr><td>#EC-2849</td><td>📡 MagTracker Slim</td><td>€59</td><td><span class="pill pill-gold">EXPÉDIÉ</span></td></tr>
+              <tr><td>#EC-2848</td><td>🖱️ ScanMouse 3000</td><td>€149</td><td><span class="pill pill-red">EN ATTENTE</span></td></tr>
+              <tr><td>#EC-2847</td><td>🥽 VisionTranslate AR</td><td>€299</td><td><span class="pill pill-green">LIVRÉ</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- TOP PRODUCTS -->
+        <div class="table-card">
+          <div class="table-head">
+            <h3>Meilleures ventes</h3>
+          </div>
+          <table>
+            <thead><tr><th>PRODUIT</th><th>VENTES</th><th>MARGE</th></tr></thead>
+            <tbody>
+              <tr><td>🎧 TransEar Pro X1</td><td>47</td><td style="color:var(--green)">65%</td></tr>
+              <tr><td>⌚ KidsTrack Pro</td><td>38</td><td style="color:var(--green)">60%</td></tr>
+              <tr><td>🖱️ ScanMouse 3000</td><td>29</td><td style="color:var(--green)">75%</td></tr>
+              <tr><td>📡 MagTracker Slim</td><td>25</td><td style="color:var(--green)">55%</td></tr>
+              <tr><td>🥽 VisionTranslate AR</td><td>12</td><td style="color:var(--green)">80%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         ORDERS
+         ====================================================== -->
+    <div class="page" id="page-orders">
+      <div class="table-card">
+        <div class="table-head">
+          <h3>📦 Toutes les commandes</h3>
+          <button class="tb-btn primary" onclick="openNewOrder()">+ Nouvelle</button>
+        </div>
+        <table>
+          <thead><tr><th>N° CMD</th><th>CLIENT</th><th>PRODUIT</th><th>FOURNISSEUR</th><th>MONTANT</th><th>STATUT</th><th>DATE</th><th>ACTION</th></tr></thead>
+          <tbody id="orders-table">
+            <tr><td>#EC-2851</td><td>Marie L. 🇫🇷</td><td>🎧 TransEar Pro X1</td><td>Alibaba</td><td>€89</td><td><span class="pill pill-green">LIVRÉ</span></td><td>12/03/2025</td><td><button class="btn btn-o btn-sm" onclick="">Détail</button></td></tr>
+            <tr><td>#EC-2850</td><td>Hans M. 🇨🇭</td><td>⌚ KidsTrack Pro</td><td>Spocket</td><td>€79</td><td><span class="pill pill-gold">EN TRANSIT</span></td><td>11/03/2025</td><td><button class="btn btn-o btn-sm">Détail</button></td></tr>
+            <tr><td>#EC-2849</td><td>Sophie D. 🇧🇪</td><td>📡 MagTracker Slim</td><td>Alibaba</td><td>€59</td><td><span class="pill pill-gold">EXPÉDIÉ</span></td><td>11/03/2025</td><td><button class="btn btn-o btn-sm">Détail</button></td></tr>
+            <tr><td>#EC-2848</td><td>Jean-Paul R. 🇫🇷</td><td>🖱️ ScanMouse 3000</td><td>Alibaba</td><td>€149</td><td><span class="pill pill-red">EN ATTENTE</span></td><td>10/03/2025</td><td><button class="btn btn-o btn-sm">Traiter</button></td></tr>
+            <tr><td>#EC-2847</td><td>Anna K. 🇩🇪</td><td>🥽 VisionTranslate AR</td><td>Worldwide</td><td>€299</td><td><span class="pill pill-green">LIVRÉ</span></td><td>09/03/2025</td><td><button class="btn btn-o btn-sm">Détail</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         PRODUCTS
+         ====================================================== -->
+    <div class="page" id="page-products">
+      <div class="table-card" style="margin-bottom:24px">
+        <div class="table-head">
+          <h3>🛍️ Gestion des Produits</h3>
+          <button class="tb-btn primary" onclick="openProductModal()">+ Ajouter un produit</button>
+        </div>
+        <table>
+          <thead><tr><th>ICÔ</th><th>NOM</th><th>CATÉGORIE</th><th>PRIX EUR</th><th>MARGE</th><th>FOURNISSEUR</th><th>AMAZON</th><th>ACTIONS</th></tr></thead>
+          <tbody id="products-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         AFFILIATE
+         ====================================================== -->
+    <div class="page" id="page-affiliate">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">ID AFFILIÉ ACTIF</div><div class="kpi-value" style="color:var(--gold);font-size:18px;font-family:'Courier New'">easycom0-21</div><div class="kpi-change" style="color:var(--green)">✓ Programme actif</div></div>
+        <div class="kpi-card"><div class="kpi-label">COMMISSIONS CE MOIS</div><div class="kpi-value" style="color:var(--gold)">€312</div><div class="kpi-change kpi-up">↑ +8% vs dernier mois</div></div>
+        <div class="kpi-card"><div class="kpi-label">CLICS AFFILIÉS</div><div class="kpi-value" style="color:var(--cyan)">1,847</div><div class="kpi-change" style="color:var(--grey)">Taux conv. 6.2%</div></div>
+        <div class="kpi-card"><div class="kpi-label">PAIEMENT PROCHAIN</div><div class="kpi-value" style="color:var(--green)">€312</div><div class="kpi-change" style="color:var(--grey)">Dans 42 jours</div></div>
+      </div>
+      <div class="table-card">
+        <div class="table-head"><h3>Performance par catégorie</h3></div>
+        <table>
+          <thead><tr><th>CATÉGORIE</th><th>CLICS</th><th>CONVERSIONS</th><th>TAUX</th><th>COMMISSION</th><th>TAUX COMM.</th></tr></thead>
+          <tbody>
+            <tr><td>🎧 Oreillettes & Écouteurs</td><td>623</td><td>41</td><td style="color:var(--green)">6.6%</td><td style="color:var(--gold)">€107</td><td>8%</td></tr>
+            <tr><td>🖱️ Souris Scanners</td><td>312</td><td>18</td><td style="color:var(--green)">5.8%</td><td style="color:var(--gold)">€81</td><td>8%</td></tr>
+            <tr><td>⌚ GPS Montres Enfants</td><td>487</td><td>32</td><td style="color:var(--green)">6.6%</td><td style="color:var(--gold)">€76</td><td>5%</td></tr>
+            <tr><td>📡 Traceurs GPS</td><td>298</td><td>21</td><td style="color:var(--cyan)">7.0%</td><td style="color:var(--gold)">€31</td><td>5%</td></tr>
+            <tr><td>📱 Androids Touristes</td><td>127</td><td>5</td><td style="color:var(--grey)">3.9%</td><td style="color:var(--gold)">€17</td><td>3%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         AGENT IA
+         ====================================================== -->
+    <div class="page" id="page-agent">
+      <div class="grid2">
+        <div class="settings-section">
+          <h3>🤖 Configuration Agent IA</h3>
+          <div class="switch-row">
+            <span class="switch-label">Agent actif 24/7</span>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="switch-row">
+            <span class="switch-label">Réponses automatiques email</span>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="switch-row">
+            <span class="switch-label">Notification commande fournisseur</span>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="switch-row">
+            <span class="switch-label">Sync Amazon affiliate</span>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="switch-row">
+            <span class="switch-label">Rapport quotidien par email</span>
+            <div class="switch" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div style="margin-top:20px">
+            <label style="font-size:11px;color:var(--grey);font-weight:700;display:block;margin-bottom:6px">EMAIL DE RAPPORT</label>
+            <input class="field-input" type="email" value="contact@easycom.ch">
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>📊 Activité Agent — Dernières 24h</h3>
+          <table style="font-size:12px">
+            <thead><tr><th>HEURE</th><th>ACTION</th><th>STATUT</th></tr></thead>
+            <tbody>
+              <tr><td>09:14</td><td>Commande EC-2851 traitée</td><td><span class="pill pill-green">OK</span></td></tr>
+              <tr><td>09:15</td><td>Email support répondu (EN)</td><td><span class="pill pill-green">OK</span></td></tr>
+              <tr><td>09:16</td><td>Commission Amazon +€14.72</td><td><span class="pill pill-green">OK</span></td></tr>
+              <tr><td>10:03</td><td>Nouveau affilié inscrit</td><td><span class="pill pill-green">OK</span></td></tr>
+              <tr><td>11:22</td><td>Tracking CJ mis à jour</td><td><span class="pill pill-green">OK</span></td></tr>
+              <tr><td>14:07</td><td>Rapport journalier envoyé</td><td><span class="pill pill-green">OK</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         SETTINGS
+         ====================================================== -->
+    <div class="page" id="page-settings">
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-section">
+            <h3>🏪 Informations boutique</h3>
+            <div class="field-group" style="margin-bottom:12px"><label>NOM BOUTIQUE</label><input class="field-input" value="EasyCom Suisse"></div>
+            <div class="field-group" style="margin-bottom:12px"><label>EMAIL CONTACT</label><input class="field-input" value="contact@easycom.ch"></div>
+            <div class="field-group" style="margin-bottom:12px"><label>SIÈGE SOCIAL</label><input class="field-input" value="Genève, Suisse"></div>
+            <div class="field-group"><label>NUMÉRO RC SUISSE</label><input class="field-input" placeholder="CHE-XXX.XXX.XXX"></div>
+          </div>
+          <div class="settings-section">
+            <h3>💳 Paiement</h3>
+            <div class="field-group" style="margin-bottom:12px"><label>STRIPE PUBLIC KEY</label><input class="field-input" placeholder="pk_live_VOTRE_CLE_ICI"></div>
+            <div class="field-group" style="margin-bottom:12px"><label>STRIPE SECRET KEY</label><input class="field-input" placeholder="sk_live_VOTRE_CLE_ICI" type="password"></div>
+            <div class="field-group" style="margin-bottom:12px"><label>PAYPAL CLIENT ID</label><input class="field-input" placeholder="VOTRE_CLIENT_ID"></div>
+            <div class="field-group"><label>PAYPAL SECRET</label><input class="field-input" placeholder="VOTRE_SECRET" type="password"></div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-section">
+            <h3>🔗 Amazon Affiliate</h3>
+            <div class="field-group" style="margin-bottom:12px"><label>ID AFFILIÉ</label><input class="field-input" value="easycom0-21"></div>
+            <div class="field-group" style="margin-bottom:12px"><label>MARKETPLACE PRINCIPALE</label>
+              <select class="field-input"><option selected>amazon.fr</option><option>amazon.com</option><option>amazon.de</option><option>amazon.co.uk</option></select>
+            </div>
+            <div class="switch-row"><span class="switch-label">Auto-insert ID sur tous les liens</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="switch-row"><span class="switch-label">Badge "Amazon" sur les produits</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+          <div class="settings-section">
+            <h3>🌍 Livraison & TVA</h3>
+            <div class="field-group" style="margin-bottom:12px"><label>LIVRAISON GRATUITE DÈS (€)</label><input class="field-input" value="80" type="number"></div>
+            <div class="field-group" style="margin-bottom:12px"><label>TVA FRANCE (%)</label><input class="field-input" value="20" type="number"></div>
+            <div class="field-group" style="margin-bottom:12px"><label>TVA SUISSE (%)</label><input class="field-input" value="8.1" type="number"></div>
+            <div class="switch-row"><span class="switch-label">Régime OSS actif (UE)</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </div>
+      <button class="tb-btn primary" onclick="showNotif('✅ Paramètres sauvegardés')">💾 Enregistrer tous les paramètres</button>
+    </div>
+
+    <!-- ======================================================
+         LEGAL
+         ====================================================== -->
+    <div class="page" id="page-legal">
+      <div class="settings-section" style="margin-bottom:24px">
+        <h3>⚖️ Informations légales</h3>
+        <div class="settings-row" style="margin-bottom:16px">
+          <div class="field-group"><label>RAISON SOCIALE</label><input class="field-input" value="EasyCom Suisse"></div>
+          <div class="field-group"><label>N° RC GENÈVE</label><input class="field-input" placeholder="CHE-XXX.XXX.XXX (à compléter)"></div>
+        </div>
+        <div class="settings-row">
+          <div class="field-group"><label>RESPONSABLE CGV</label><input class="field-input" value="Vanessa Jean-Alphonse"></div>
+          <div class="field-group"><label>EMAIL LÉGAL</label><input class="field-input" value="contact@easycom.ch"></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="settings-section">
+          <h3>✅ Conformités actives</h3>
+          <div class="switch-row"><span class="switch-label">RGPD (UE 2016/679)</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="switch-label">nLPD Suisse (sept. 2023)</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="switch-label">Directive 2011/83/UE consommateurs</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="switch-label">Régime OSS TVA UE</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="switch-label">Disclosure FTC affiliation</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="switch-label">Art. L.111-7 Code Conso FR</span><div class="switch on"></div></div>
+        </div>
+        <div class="settings-section">
+          <h3>📋 Documents légaux</h3>
+          <div class="switch-row"><span class="switch-label">CGV FR publiées</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="switch-label">CGV EN publiées</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="switch-label">Politique confidentialité</span><div class="switch"></div></div>
+          <div class="switch-row"><span class="switch-label">Politique cookies</span><div class="switch"></div></div>
+          <div class="switch-row"><span class="switch-label">Mentions légales</span><div class="switch"></div></div>
+          <div style="margin-top:16px;padding:12px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.2);border-radius:8px;font-size:12px;color:var(--red)">
+            ⚠️ Politique confidentialité et mentions légales à compléter avant mise en production
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLIERS, EMAILS pages - simplified -->
+    <div class="page" id="page-suppliers">
+      <div class="table-card">
+        <div class="table-head"><h3>🚚 Fournisseurs MDA configurés</h3><button class="tb-btn primary">+ Ajouter</button></div>
+        <table>
+          <thead><tr><th>FOURNISSEUR</th><th>PAYS</th><th>TYPE</th><th>DÉLAI MOY.</th><th>MARGIN MOY.</th><th>STATUT</th></tr></thead>
+          <tbody>
+            <tr><td>🇨🇳 Alibaba</td><td>Chine</td><td>Manufacturer</td><td>14j</td><td>65%</td><td><span class="pill pill-green">ACTIF</span></td></tr>
+            <tr><td>🇳🇱 Spocket</td><td>EU/US</td><td>Drop-shipping</td><td>6j</td><td>55%</td><td><span class="pill pill-green">ACTIF</span></td></tr>
+            <tr><td>🇰🇷 CJDropshipping</td><td>Corée/Chine</td><td>Drop-shipping</td><td>8j</td><td>60%</td><td><span class="pill pill-green">ACTIF</span></td></tr>
+            <tr><td>🇹🇼 Worldwide Brands</td><td>Taiwan/USA</td><td>Premium</td><td>12j</td><td>72%</td><td><span class="pill pill-gold">PARTIEL</span></td></tr>
+            <tr><td>🇨🇳 1688.com</td><td>Chine</td><td>B2B Gros</td><td>18j</td><td>80%</td><td><span class="pill pill-grey">CONFIG</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="page" id="page-emails">
+      <div class="settings-section">
+        <h3>📧 Templates d'emails automatiques</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-weight:600;margin-bottom:4px">✅ Confirmation de commande (FR + EN)</div><div style="font-size:12px;color:var(--grey)">Envoyé auto dès paiement validé</div></div>
+            <span class="pill pill-green">ACTIF</span>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-weight:600;margin-bottom:4px">📦 Notification expédition + tracking</div><div style="font-size:12px;color:var(--grey)">Envoyé dès tracking disponible fournisseur</div></div>
+            <span class="pill pill-green">ACTIF</span>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-weight:600;margin-bottom:4px">⭐ Demande d'avis post-livraison</div><div style="font-size:12px;color:var(--grey)">Envoyé 7 jours après livraison estimée</div></div>
+            <span class="pill pill-gold">PARTIEL</span>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-weight:600;margin-bottom:4px">🔔 Relance panier abandonné</div><div style="font-size:12px;color:var(--grey)">Envoyé 2h après abandon panier</div></div>
+            <span class="pill pill-grey">INACTIF</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- PRODUCT MODAL -->
+<div class="modal-bg" id="product-modal">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeProductModal()">✕</button>
+    <h3 id="product-modal-title">Ajouter un produit</h3>
+    <div class="prod-editor">
+      <div class="field-group"><label>NOM FR</label><input class="field-input" id="p-name-fr" placeholder="Nom en français"></div>
+      <div class="field-group"><label>NOM EN</label><input class="field-input" id="p-name-en" placeholder="Name in English"></div>
+      <div class="field-group"><label>CATÉGORIE</label>
+        <select class="field-input" id="p-cat">
+          <option value="earbuds">Oreillettes</option>
+          <option value="scanner">Souris Scanners</option>
+          <option value="glasses">Lunettes</option>
+          <option value="gps-kids">GPS Enfants</option>
+          <option value="tracker">Traceurs GPS</option>
+          <option value="android">Androids</option>
+        </select>
+      </div>
+      <div class="field-group"><label>ICÔNE (emoji)</label><input class="field-input" id="p-icon" placeholder="🎧"></div>
+      <div class="field-group"><label>PRIX EUR (€)</label><input class="field-input" id="p-price" type="number" placeholder="89"></div>
+      <div class="field-group"><label>MARGE (%)</label><input class="field-input" id="p-margin" type="number" placeholder="65"></div>
+      <div class="field-group"><label>FOURNISSEUR</label><input class="field-input" id="p-supplier" placeholder="Alibaba, CJDropshipping…"></div>
+      <div class="field-group"><label>AMAZON ASIN</label><input class="field-input" id="p-asin" placeholder="B0XXXXXXXX (optionnel)"></div>
+    </div>
+    <div class="field-group" style="margin-bottom:12px"><label>DESCRIPTION FR</label><textarea class="field-input" id="p-desc-fr" placeholder="Description en français…"></textarea></div>
+    <div class="field-group" style="margin-bottom:20px"><label>DESCRIPTION EN</label><textarea class="field-input" id="p-desc-en" placeholder="English description…"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn btn-o" onclick="closeProductModal()">Annuler</button>
+      <button class="btn btn-c" onclick="saveProduct()">💾 Sauvegarder dans products.js</button>
+    </div>
+    <p style="font-size:11px;color:var(--grey);margin-top:12px">⚠️ La sauvegarde génère le code JS à copier dans data/products.js</p>
+  </div>
+</div>
+
+<!-- NOTIF -->
+<div id="notif-bar" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:100px;padding:12px 24px;font-size:13px;font-weight:600;z-index:300;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+  ✅ Sauvegardé avec succès
+</div>
+
+<script src="data/products.js"></script>
+<script>
+// PAGE NAVIGATION
+const pages = {
+  'dashboard':'📊 Dashboard',
+  'orders':'📦 Commandes',
+  'products':'🛍️ Produits',
+  'affiliate':'💰 Affiliation Amazon',
+  'agent':'🤖 Agent IA',
+  'suppliers':'🚚 Fournisseurs MDA',
+  'emails':'📧 Emails automatiques',
+  'settings':'⚙️ Paramètres',
+  'legal':'⚖️ CGV / Légal'
+};
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.s-link').forEach(l => l.classList.remove('active'));
+  document.getElementById(`page-${id}`).classList.add('active');
+  document.getElementById('page-title').textContent = pages[id] || id;
+  event && event.currentTarget && event.currentTarget.classList.add('active');
+  if (id === 'products') renderAdminProducts();
+}
+
+// CHART
+function initChart() {
+  const data = [480, 720, 390, 850, 1120, 670, 980];
+  const days = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  const max = Math.max(...data);
+  const container = document.getElementById('chart-bars');
+  if (!container) return;
+  container.innerHTML = data.map((v, i) => `
+    <div class="bar-wrap">
+      <div class="bar-val">€${v}</div>
+      <div class="bar" style="height:${(v/max)*100}%"></div>
+      <div class="bar-label">${days[i]}</div>
+    </div>
+  `).join('');
+}
+
+// PRODUCTS TABLE
+function renderAdminProducts() {
+  const tbody = document.getElementById('products-table');
+  if (!tbody || !PRODUCTS) return;
+  tbody.innerHTML = PRODUCTS.map((p,i) => `
+    <tr>
+      <td>${p.icon}</td>
+      <td style="font-weight:600">${p.name_fr}</td>
+      <td>${p.cat}</td>
+      <td style="color:var(--gold)">€${p.price_eur}</td>
+      <td style="color:var(--green)">${p.margin_pct}%</td>
+      <td>${p.supplier}</td>
+      <td>${p.amazon_url ? '<span class="pill pill-gold">OUI</span>' : '<span class="pill pill-grey">NON</span>'}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-o" style="font-size:10px;padding:5px 10px" onclick="editProduct(${i})">✏️</button>
+        <button class="btn btn-r" style="font-size:10px;padding:5px 10px">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// PRODUCT MODAL
+function openProductModal() { document.getElementById('product-modal').classList.add('open'); }
+function closeProductModal() { document.getElementById('product-modal').classList.remove('open'); }
+function editProduct(i) {
+  const p = PRODUCTS[i];
+  document.getElementById('p-name-fr').value = p.name_fr;
+  document.getElementById('p-name-en').value = p.name_en;
+  document.getElementById('p-cat').value = p.cat;
+  document.getElementById('p-icon').value = p.icon;
+  document.getElementById('p-price').value = p.price_eur;
+  document.getElementById('p-margin').value = p.margin_pct;
+  document.getElementById('p-supplier').value = p.supplier;
+  document.getElementById('p-asin').value = p.amazon_asin || '';
+  document.getElementById('p-desc-fr').value = p.desc_fr;
+  document.getElementById('p-desc-en').value = p.desc_en;
+  document.getElementById('product-modal-title').textContent = `Modifier : ${p.name_fr}`;
+  openProductModal();
+}
+function saveProduct() {
+  const n = document.getElementById('p-name-fr').value;
+  if (!n) { alert('Nom requis'); return; }
+  closeProductModal();
+  showNotif(`✅ Produit "${n}" sauvegardé`);
+}
+
+// NOTIF
+function showNotif(msg) {
+  const bar = document.getElementById('notif-bar');
+  bar.textContent = msg || '✅ Sauvegardé avec succès';
+  bar.style.display = 'block';
+  setTimeout(() => { bar.style.display = 'none'; }, 3000);
+}
+
+function openNewOrder() {
+  showNotif('✅ Fonction disponible avec backend Node.js/Python');
+}
+
+// INIT
+initChart();
+</script>
+</body>
+</html>
