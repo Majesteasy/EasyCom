@@ -444,7 +444,7 @@ footer{
       <a href="#" class="btn-contour" onclick="ouvrirCGV()" data-fr="CGV / T&C" data-en="Terms & Conditions">CGV / T&C</a>
     </div>
     <div class="hero-badges">
-      <div class="hero-stat"><span>✦</span> <span data-fr="Paiement Stripe & PayPal" data-en="Stripe & PayPal payment" data-de="Zahlung Stripe & PayPal" data-it="Pagamento Stripe & PayPal" data-es="Pago Stripe & PayPal">Paiement Stripe & PayPal</span></div>
+      <div class="hero-stat"><span>✦</span> <span data-fr="Paiement sécurisé Amazon" data-en="Secure Amazon payment" data-de="Sichere Amazon-Zahlung" data-it="Pagamento sicuro Amazon" data-es="Pago seguro Amazon">Paiement sécurisé Amazon</span></div>
       <div class="hero-stat"><span>✦</span> <span data-fr="Livraison EU 5–10 jours" data-en="EU delivery 5–10 days" data-de="EU-Lieferung 5–10 Tage" data-it="Consegna UE 5–10 giorni" data-es="Entrega UE 5–10 días">Livraison EU 5–10 jours</span></div>
       <div class="hero-stat"><span>✦</span> <span data-fr="Retour 14 jours" data-en="14-day returns" data-de="14-Tage Rückgabe" data-it="Reso 14 giorni" data-es="Devolución 14 días">Retour 14 jours</span></div>
     </div>
@@ -486,15 +486,10 @@ footer{
     <a class="footer-lien" href="mailto:contact@easycom-world.ch">contact@easycom-world.ch</a>
   </div>
   <div class="footer-badges">
-    <div class="f-badge" data-fr="Sélection premium" data-en="Premium selection" data-de="Premium-Auswahl" data-it="Selezione premium" data-es="Selección premium">Stripe & PayPal</div>
+    <div class="f-badge" data-fr="Sélection premium" data-en="Premium selection" data-de="Premium-Auswahl" data-it="Selezione premium" data-es="Selección premium">Amazon Affilié</div>
     <div class="f-badge" data-fr="Multilingue & assisté par IA" data-en="Multilingual & AI-assisted" data-de="Mehrsprachig & KI-gestützt" data-it="Multilingue e assistito da IA" data-es="Multilingüe y asistido por IA">Livraison EU</div>
   </div>
 </footer>
-
-<!-- PANIER FLOTTANT -->
-<button class="panier-ico" onclick="ouvrirPanier()" aria-label="Panier">
-  🛒<div class="panier-count" id="panier-count">0</div>
-</button>
 
 <!-- CHATBOT -->
 <button class="chat-bulle" onclick="toggleChat()" aria-label="Chat">💬</button>
@@ -507,23 +502,6 @@ footer{
   <div class="chat-saisie">
     <input class="chat-input" id="chat-input" placeholder="Votre question..." onkeydown="chatKeydown(event)"/>
     <button class="chat-envoyer" onclick="envoyerChat()">→</button>
-  </div>
-</div>
-
-<!-- MODAL PANIER -->
-<div class="modal-fond" id="modal-panier">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h3 data-fr="Votre sélection" data-en="Your selection" data-de="Ihre Auswahl" data-it="La tua selezione" data-es="Tu selección">Votre sélection</h3>
-      <button class="modal-close" onclick="fermerPanier()">✕</button>
-    </div>
-    <div class="modal-corps" id="panier-corps"></div>
-    <div class="modal-pied">
-      <div class="panier-total"><span data-fr="Total" data-en="Total" data-de="Gesamt" data-it="Totale" data-es="Total">Total</span><span id="panier-total-val">0 €</span></div>
-      <button class="btn-or" style="width:100%;border:none;cursor:pointer;" id="btn-commander" onclick="commander()">
-        <span data-fr="Voir chez le partenaire — Paiement sécurisé" data-en="View with partner — Secure payment" data-de="Beim Partner ansehen — Sichere Zahlung" data-it="Vedi dal partner — Pagamento sicuro" data-es="Ver con el socio — Pago seguro">Voir chez le partenaire — Paiement sécurisé</span>
-      </button>
-    </div>
   </div>
 </div>
 
@@ -544,7 +522,7 @@ footer{
 <script>
 // ── DONNÉES PRODUITS ──
 // Images via liens conformes Amazon Associates (pas d'hébergement local)
-const TAG = 'easycom0ae-21';
+const AMAZON_TAG = 'easycomoae';
 
 const PRODUITS = [
   {
@@ -675,7 +653,6 @@ const CATS = [
 // ── ÉTAT ──
 let lang = 'fr';
 let catActive = 'tout';
-let panier = [];
 let chatOuvert = false;
 let chatBusy = false;
 let histoChat = [];
@@ -693,7 +670,7 @@ function setLang(l){
       el.textContent = val;
     }
   });
-  renderCats(); renderProduits(); renderPanier();
+  renderCats(); renderProduits();
 }
 
 // ── CATÉGORIES ──
@@ -712,19 +689,19 @@ function setCat(id){catActive=id; renderCats(); renderProduits();}
 function getUrl(p){
   const base = 'https://www.amazon.fr/';
   if(p.asin.length===10 && !p.asin.includes('+'))
-    return base+'dp/'+p.asin+'?tag='+TAG;
-  return base+'s?k='+p.asin+'&tag='+TAG;
+    return base+'dp/'+p.asin+'?tag='+AMAZON_TAG;
+  return base+'s?k='+p.asin+'&tag='+AMAZON_TAG;
 }
 
 function renderProduits(){
   const liste = catActive==='tout' ? PRODUITS : PRODUITS.filter(p=>p.cat===catActive);
   const g = document.getElementById('produits-grid');
   const buyLabels = {
-    fr:'Ajouter au panier EasyCom',
-    en:'Add to EasyCom cart',
-    de:'Zum EasyCom-Warenkorb',
-    it:'Aggiungi al carrello EasyCom',
-    es:'Añadir al carrito EasyCom'
+    fr:'Voir sur Amazon →',
+    en:'View on Amazon →',
+    de:'Auf Amazon ansehen →',
+    it:'Vedi su Amazon →',
+    es:'Ver en Amazon →'
   };
   g.innerHTML = liste.map(p=>{
     const badge = p['badge_'+lang] || p.badge_en || p.badge_fr || '';
@@ -754,47 +731,10 @@ function renderProduits(){
   }).join('');
 }
 
-// ── PANIER ──
+// ── AMAZON ──
 function ajouterPanier(id){
   const p = PRODUITS.find(x=>x.id===id);
   if(!p) return;
-  window.open(getUrl(p),'_blank');
-}
-function ouvrirPanier(){renderPanier(); document.getElementById('modal-panier').classList.add('ouvert');}
-function fermerPanier(){document.getElementById('modal-panier').classList.remove('ouvert');}
-function renderPanier(){
-  const corps = document.getElementById('panier-corps');
-  if(panier.length===0){
-    const emptyMap = {
-      fr:'Votre panier est vide',
-      en:'Your cart is empty',
-      de:'Ihr Warenkorb ist leer',
-      it:'Il tuo carrello è vuoto',
-      es:'Tu carrito está vacío'
-    };
-    corps.innerHTML=`<div class="panier-vide">${emptyMap[lang] || emptyMap.en}</div>`;
-    document.getElementById('panier-total-val').textContent='0 €';
-    return;
-  }
-  corps.innerHTML = panier.map((p,i)=>`
-    <div class="panier-ligne">
-      <span class="panier-ligne-nom">${lang==='fr'?p.nom_fr:p.nom_en}</span>
-      <span class="panier-ligne-prix">${p.prix} €</span>
-      <button class="panier-retirer" onclick="retirerPanier(${i})">✕</button>
-    </div>
-  `).join('');
-  const total = panier.reduce((s,p)=>s+p.prix,0);
-  document.getElementById('panier-total-val').textContent=total+' €';
-}
-function retirerPanier(i){
-  panier.splice(i,1);
-  document.getElementById('panier-count').textContent=panier.length;
-  renderPanier();
-}
-function commander(){
-  if(panier.length===0) return;
-  // Redirection vers le premier produit du panier sur Amazon
-  const p = panier[0];
   window.open(getUrl(p),'_blank');
 }
 
@@ -807,7 +747,7 @@ EasyCom — easycom-world.ch — contact@easycom-world.ch. Cette boutique opère
 EasyCom est participant au Programme Partenaires d'Amazon EU, un programme d'affiliation conçu pour permettre à des sites de percevoir une rémunération grâce à la création de liens vers Amazon.fr.
 
 <h4>3. Commandes et paiement</h4>
-Les commandes sont traitées via Amazon. Le paiement est sécurisé par Stripe et PayPal selon les modalités Amazon.
+Les commandes sont traitées directement via Amazon. Le paiement est sécurisé selon les modalités Amazon.
 
 <h4>4. Livraison</h4>
 Livraison en Union Européenne sous 5 à 10 jours ouvrés selon disponibilité du produit et pays de destination.
@@ -816,7 +756,7 @@ Livraison en Union Européenne sous 5 à 10 jours ouvrés selon disponibilité d
 Conformément à la directive européenne 2011/83/UE, vous disposez d'un délai de 14 jours à compter de la réception pour exercer votre droit de rétractation.
 
 <h4>6. Protection des données (RGPD / nLPD)</h4>
-EasyCom utilise certaines fonctionnalités d'intelligence artificielle pour l'assistance, la traduction, la recommandation de produits et l'amélioration de l'expérience utilisateur. Aucune donnée personnelle n'est collectée par EasyCom sans votre consentement explicite. Les données de paiement transitent exclusivement par les plateformes sécurisées d'Amazon, Stripe et PayPal.
+EasyCom utilise certaines fonctionnalités d'intelligence artificielle pour l'assistance, la traduction, la recommandation de produits et l'amélioration de l'expérience utilisateur. Aucune donnée personnelle n'est collectée par EasyCom sans votre consentement explicite. Les données de paiement transitent exclusivement par les plateformes sécurisées d'Amazon.
 
 <h4>7. Droit applicable</h4>
 Les présentes CGV sont soumises au droit suisse. Tout litige relève de la compétence des tribunaux de Genève, Suisse.
@@ -829,7 +769,7 @@ EasyCom — easycom-world.ch — contact@easycom-world.ch. This store operates a
 EasyCom is a participant in the Amazon EU Associates Programme, an affiliate advertising programme designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.fr.
 
 <h4>3. Orders and payment</h4>
-Orders are processed through Amazon. Payment is secured by Stripe and PayPal under Amazon's terms.
+Orders are processed directly through Amazon. Payment is secured under Amazon's terms.
 
 <h4>4. Delivery</h4>
 Delivery within the European Union within 5 to 10 business days depending on product availability and destination country.
@@ -838,7 +778,7 @@ Delivery within the European Union within 5 to 10 business days depending on pro
 In accordance with EU Directive 2011/83/EU, you have 14 days from receipt to exercise your right of withdrawal.
 
 <h4>6. Data protection (GDPR / nFADP)</h4>
-EasyCom uses certain artificial intelligence features for assistance, translation, product recommendation and user experience improvement. No personal data is collected by EasyCom without your explicit consent. Payment data transits exclusively through Amazon, Stripe and PayPal secure platforms.
+EasyCom uses certain artificial intelligence features for assistance, translation, product recommendation and user experience improvement. No personal data is collected by EasyCom without your explicit consent. Payment data transits exclusively through Amazon's secure platform.
 
 <h4>7. Applicable law</h4>
 These T&C are governed by Swiss law. Any dispute falls under the jurisdiction of the courts of Geneva, Switzerland.
@@ -935,10 +875,7 @@ function showToast(msg){
 
 // ── FERMER MODALS ──
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){fermerPanier();fermerCGV();}
-});
-document.getElementById('modal-panier').addEventListener('click',e=>{
-  if(e.target===document.getElementById('modal-panier'))fermerPanier();
+  if(e.key==='Escape') fermerCGV();
 });
 document.getElementById('modal-cgv').addEventListener('click',e=>{
   if(e.target===document.getElementById('modal-cgv'))fermerCGV();
