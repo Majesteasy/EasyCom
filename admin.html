@@ -14,6 +14,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--white);font-family:'Outfit',sans-serif;font-weight:400;display:flex;min-height:100vh;}
+
 /* SIDEBAR */
 .sidebar{
   width:var(--sidebar);flex-shrink:0;
@@ -177,10 +178,12 @@ textarea.field-input{resize:vertical;min-height:80px;}
     <button class="s-link" onclick="showPage('orders')"><span class="s-icon">📦</span> Commandes <span class="s-badge">3</span></button>
     <button class="s-link" onclick="showPage('products')"><span class="s-icon">🛍️</span> Produits</button>
     <button class="s-link" onclick="showPage('affiliate')"><span class="s-icon">💰</span> Affiliation Amazon</button>
+
     <div class="s-section">AUTOMATISATION</div>
     <button class="s-link" onclick="showPage('agent')"><span class="s-icon">🤖</span> Agent IA</button>
     <button class="s-link" onclick="showPage('suppliers')"><span class="s-icon">🚚</span> Fournisseurs MDA</button>
     <button class="s-link" onclick="showPage('emails')"><span class="s-icon">📧</span> Emails auto</button>
+
     <div class="s-section">CONFIGURATION</div>
     <button class="s-link" onclick="showPage('settings')"><span class="s-icon">⚙️</span> Paramètres</button>
     <button class="s-link" onclick="showPage('legal')"><span class="s-icon">⚖️</span> CGV / Légal</button>
@@ -199,6 +202,7 @@ textarea.field-input{resize:vertical;min-height:80px;}
       <button class="tb-btn primary" onclick="showNotif()">💾 Sauvegarder</button>
     </div>
   </div>
+
   <div class="content">
 
     <!-- ======================================================
@@ -227,11 +231,13 @@ textarea.field-input{resize:vertical;min-height:80px;}
           <div class="kpi-change kpi-up">↑ +3pts vs trimestre</div>
         </div>
       </div>
+
       <!-- CHART -->
       <div class="chart-area">
         <div class="chart-title">📈 CA Journalier — 7 derniers jours (€)</div>
         <div class="chart-bars" id="chart-bars"></div>
       </div>
+
       <div class="grid2">
         <!-- RECENT ORDERS -->
         <div class="table-card">
@@ -244,7 +250,8 @@ textarea.field-input{resize:vertical;min-height:80px;}
             <tbody>
               <tr><td>#EC-2851</td><td>🎧 TransEar Pro X1</td><td>€89</td><td><span class="pill pill-green">LIVRÉ</span></td></tr>
               <tr><td>#EC-2850</td><td>⌚ KidsTrack Pro</td><td>€79</td><td><span class="pill pill-gold">EN TRANSIT</span></td></tr>
-              <tr><td>#EC-2849</td><td>📡 MagTracker Slim</td><td>€59</td><td><span class="pill pill-gold">EXPÉDIÉ</span></td></tr>F
+              <tr><td>#EC-2849</td><td>📡 MagTracker Slim</td><td>€59</td><td><span class="pill pill-gold">EXPÉDIÉ</span></td></tr>
+              <tr><td>#EC-2848</td><td>🖱️ ScanMouse 3000</td><td>€149</td><td><span class="pill pill-red">EN ATTENTE</span></td></tr>
               <tr><td>#EC-2847</td><td>🥽 VisionTranslate AR</td><td>€299</td><td><span class="pill pill-green">LIVRÉ</span></td></tr>
             </tbody>
           </table>
@@ -258,7 +265,8 @@ textarea.field-input{resize:vertical;min-height:80px;}
             <thead><tr><th>PRODUIT</th><th>VENTES</th><th>MARGE</th></tr></thead>
             <tbody>
               <tr><td>🎧 TransEar Pro X1</td><td>47</td><td style="color:var(--green)">65%</td></tr>
-              <tr><td>⌚ KidsTrack Pro</td><td>38</td><td style="color:var(--green)">60%</td></tr
+              <tr><td>⌚ KidsTrack Pro</td><td>38</td><td style="color:var(--green)">60%</td></tr>
+              <tr><td>🖱️ ScanMouse 3000</td><td>29</td><td style="color:var(--green)">75%</td></tr>
               <tr><td>📡 MagTracker Slim</td><td>25</td><td style="color:var(--green)">55%</td></tr>
               <tr><td>🥽 VisionTranslate AR</td><td>12</td><td style="color:var(--green)">80%</td></tr>
             </tbody>
@@ -281,7 +289,8 @@ textarea.field-input{resize:vertical;min-height:80px;}
           <tbody id="orders-table">
             <tr><td>#EC-2851</td><td>Marie L. 🇫🇷</td><td>🎧 TransEar Pro X1</td><td>Alibaba</td><td>€89</td><td><span class="pill pill-green">LIVRÉ</span></td><td>12/03/2025</td><td><button class="btn btn-o btn-sm" onclick="">Détail</button></td></tr>
             <tr><td>#EC-2850</td><td>Hans M. 🇨🇭</td><td>⌚ KidsTrack Pro</td><td>Spocket</td><td>€79</td><td><span class="pill pill-gold">EN TRANSIT</span></td><td>11/03/2025</td><td><button class="btn btn-o btn-sm">Détail</button></td></tr>
-            <tr><td>#EC-2849</td><td>Sophie D. 🇧🇪</td><td>📡 MagTracker Slim</td><td>Alibaba</td><td>€59</td><td><span class="pill pill-gold">EXPÉDIÉ</span></td><td>11/03/2025</td><td><button class="btn btn-o btn-sm">Détail</button></td></t
+            <tr><td>#EC-2849</td><td>Sophie D. 🇧🇪</td><td>📡 MagTracker Slim</td><td>Alibaba</td><td>€59</td><td><span class="pill pill-gold">EXPÉDIÉ</span></td><td>11/03/2025</td><td><button class="btn btn-o btn-sm">Détail</button></td></tr>
+            <tr><td>#EC-2848</td><td>Jean-Paul R. 🇫🇷</td><td>🖱️ ScanMouse 3000</td><td>Alibaba</td><td>€149</td><td><span class="pill pill-red">EN ATTENTE</span></td><td>10/03/2025</td><td><button class="btn btn-o btn-sm">Traiter</button></td></tr>
             <tr><td>#EC-2847</td><td>Anna K. 🇩🇪</td><td>🥽 VisionTranslate AR</td><td>Worldwide</td><td>€299</td><td><span class="pill pill-green">LIVRÉ</span></td><td>09/03/2025</td><td><button class="btn btn-o btn-sm">Détail</button></td></tr>
           </tbody>
         </table>
@@ -309,12 +318,20 @@ textarea.field-input{resize:vertical;min-height:80px;}
     <div class="page" id="page-affiliate">
       <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-label">ID AFFILIÉ ACTIF</div><div class="kpi-value" style="color:var(--gold);font-size:18px;font-family:'Courier New'">easycom0-21</div><div class="kpi-change" style="color:var(--green)">✓ Programme actif</div></div>
-        <di
+        <div class="kpi-card"><div class="kpi-label">COMMISSIONS CE MOIS</div><div class="kpi-value" style="color:var(--gold)">€312</div><div class="kpi-change kpi-up">↑ +8% vs dernier mois</div></div>
+        <div class="kpi-card"><div class="kpi-label">CLICS AFFILIÉS</div><div class="kpi-value" style="color:var(--cyan)">1,847</div><div class="kpi-change" style="color:var(--grey)">Taux conv. 6.2%</div></div>
+        <div class="kpi-card"><div class="kpi-label">PAIEMENT PROCHAIN</div><div class="kpi-value" style="color:var(--green)">€312</div><div class="kpi-change" style="color:var(--grey)">Dans 42 jours</div></div>
+      </div>
       <div class="table-card">
         <div class="table-head"><h3>Performance par catégorie</h3></div>
         <table>
           <thead><tr><th>CATÉGORIE</th><th>CLICS</th><th>CONVERSIONS</th><th>TAUX</th><th>COMMISSION</th><th>TAUX COMM.</th></tr></thead>
           <tbody>
+            <tr><td>🎧 Oreillettes & Écouteurs</td><td>623</td><td>41</td><td style="color:var(--green)">6.6%</td><td style="color:var(--gold)">€107</td><td>8%</td></tr>
+            <tr><td>🖱️ Souris Scanners</td><td>312</td><td>18</td><td style="color:var(--green)">5.8%</td><td style="color:var(--gold)">€81</td><td>8%</td></tr>
+            <tr><td>⌚ GPS Montres Enfants</td><td>487</td><td>32</td><td style="color:var(--green)">6.6%</td><td style="color:var(--gold)">€76</td><td>5%</td></tr>
+            <tr><td>📡 Traceurs GPS</td><td>298</td><td>21</td><td style="color:var(--cyan)">7.0%</td><td style="color:var(--gold)">€31</td><td>5%</td></tr>
+            <tr><td>📱 Androids Touristes</td><td>127</td><td>5</td><td style="color:var(--grey)">3.9%</td><td style="color:var(--gold)">€17</td><td>3%</td></tr>
           </tbody>
         </table>
       </div>
@@ -355,6 +372,8 @@ textarea.field-input{resize:vertical;min-height:80px;}
         <div class="settings-section">
           <h3>📊 Activité Agent — Dernières 24h</h3>
           <table style="font-size:12px">
+            <thead><tr><th>HEURE</th><th>ACTION</th><th>STATUT</th></tr></thead>
+            <tbody>
               <tr><td>09:14</td><td>Commande EC-2851 traitée</td><td><span class="pill pill-green">OK</span></td></tr>
               <tr><td>09:15</td><td>Email support répondu (EN)</td><td><span class="pill pill-green">OK</span></td></tr>
               <tr><td>09:16</td><td>Commission Amazon +€14.72</td><td><span class="pill pill-green">OK</span></td></tr>
@@ -373,12 +392,21 @@ textarea.field-input{resize:vertical;min-height:80px;}
     <div class="page" id="page-settings">
       <div class="settings-grid">
         <div class="settings-row">
+          <div class="settings-section">
             <h3>🏪 Informations boutique</h3>
             <div class="field-group" style="margin-bottom:12px"><label>NOM BOUTIQUE</label><input class="field-input" value="EasyCom Suisse"></div>
             <div class="field-group" style="margin-bottom:12px"><label>EMAIL CONTACT</label><input class="field-input" value="contact@easycom.ch"></div>
             <div class="field-group" style="margin-bottom:12px"><label>SIÈGE SOCIAL</label><input class="field-input" value="Genève, Suisse"></div>
             <div class="field-group"><label>NUMÉRO RC SUISSE</label><input class="field-input" placeholder="CHE-XXX.XXX.XXX"></div>
-          </div>  
+          </div>
+          <div class="settings-section">
+           
+
+
+
+
+
+            
         <div class="settings-row">
           <div class="settings-section">
             <h3>🔗 Amazon Affiliate</h3>
@@ -412,7 +440,7 @@ textarea.field-input{resize:vertical;min-height:80px;}
           <div class="field-group"><label>N° RC GENÈVE</label><input class="field-input" placeholder="CHE-XXX.XXX.XXX (à compléter)"></div>
         </div>
         <div class="settings-row">
-          <div class="field-group"><label>RESPONSABLE CGV</label><input class="field-input" value="V.JA"></div>
+          <div class="field-group"><label>RESPONSABLE CGV</label><input class="field-input" value="Vanessa Jean-Alphonse"></div>
           <div class="field-group"><label>EMAIL LÉGAL</label><input class="field-input" value="contact@easycom.ch"></div>
         </div>
       </div>
@@ -435,10 +463,14 @@ textarea.field-input{resize:vertical;min-height:80px;}
           <div class="switch-row"><span class="switch-label">Mentions légales</span><div class="switch"></div></div>
           <div style="margin-top:16px;padding:12px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.2);border-radius:8px;font-size:12px;color:var(--red)">
             ⚠️ Politique confidentialité et mentions légales à compléter avant mise en production
-    </div>
-<div style="margin-top:16px;padding:12px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:8px;font-size:12px;color:var(--cyan)">
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:12px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:8px;font-size:12px;color:var(--cyan)">
   ⚠️ Ce site est assisté par intelligence artificielle. Les informations affichées peuvent évoluer. Vérifiez toujours les données, la disponibilité et le prix directement sur Amazon avant tout achat.
 </div>
+      </div>
+    </div>
+
     <!-- SUPPLIERS, EMAILS pages - simplified -->
     <div class="page" id="page-suppliers">
       <div class="table-card">
@@ -455,6 +487,7 @@ textarea.field-input{resize:vertical;min-height:80px;}
         </table>
       </div>
     </div>
+
     <div class="page" id="page-emails">
       <div class="settings-section">
         <h3>📧 Templates d'emails automatiques</h3>
@@ -478,6 +511,7 @@ textarea.field-input{resize:vertical;min-height:80px;}
         </div>
       </div>
     </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -492,12 +526,17 @@ textarea.field-input{resize:vertical;min-height:80px;}
       <div class="field-group"><label>CATÉGORIE</label>
         <select class="field-input" id="p-cat">
           <option value="earbuds">Oreillettes</option>
+          <option value="scanner">Souris Scanners</option>
           <option value="glasses">Lunettes</option>
           <option value="gps-kids">GPS Enfants</option>
-          <option value="tracker">Traceurs GPS</option>   
+          <option value="tracker">Traceurs GPS</option>
+          <option value="android">Androids</option>
         </select>
       </div>
-      <div class="field-group"><label>ICÔNE (emoji)</label><input class="field-input" id="p-icon" placeholder="🎧"></div> 
+      <div class="field-group"><label>ICÔNE (emoji)</label><input class="field-input" id="p-icon" placeholder="🎧"></div>
+      <div class="field-group"><label>PRIX EUR (€)</label><input class="field-input" id="p-price" type="number" placeholder="89"></div>
+
+      
       <div class="field-group"><label>AMAZON ASIN</label><input class="field-input" id="p-asin" placeholder="B0XXXXXXXX (optionnel)"></div>
     </div>
     <div class="field-group" style="margin-bottom:12px"><label>DESCRIPTION FR</label><textarea class="field-input" id="p-desc-fr" placeholder="Description en français…"></textarea></div>
@@ -514,6 +553,7 @@ textarea.field-input{resize:vertical;min-height:80px;}
 <div id="notif-bar" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:100px;padding:12px 24px;font-size:13px;font-weight:600;z-index:300;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
   ✅ Sauvegardé avec succès
 </div>
+
 <script src="data/products.js"></script>
 <script>
 // PAGE NAVIGATION
@@ -556,6 +596,7 @@ function initChart() {
 
 // PRODUCTS TABLE
 function renderAdminProducts() {
+  function renderAdminProducts() {
   const tbody = document.getElementById('products-table');
   if (!tbody || !PRODUCTS) return;
   tbody.innerHTML = PRODUCTS.map((p,i) => `
@@ -572,6 +613,9 @@ function renderAdminProducts() {
     </tr>
   `).join('');
 }
+
+
+  
 // PRODUCT MODAL
 function openProductModal() { document.getElementById('product-modal').classList.add('open'); }
 function closeProductModal() { document.getElementById('product-modal').classList.remove('open'); }
@@ -581,6 +625,9 @@ function editProduct(i) {
   document.getElementById('p-name-en').value = p.name_en;
   document.getElementById('p-cat').value = p.cat;
   document.getElementById('p-icon').value = p.icon;
+
+  
+  document.getElementById('p-supplier').value = p.supplier;
   document.getElementById('p-asin').value = p.amazon_asin || '';
   document.getElementById('p-desc-fr').value = p.desc_fr;
   document.getElementById('p-desc-en').value = p.desc_en;
