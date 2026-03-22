@@ -582,7 +582,7 @@ const PRODUITS = [
     nom_fr:'Lunettes Luckits 115L',nom_en:'Luckits 115L Glasses',
     desc_fr:'Lunettes intelligentes AI bluetooth, traduction bidirectionnelle 116 langues. Haut-parleurs open-ear stéréo, filtre lumière bleue, protection UV. Charge magnétique, 5h d\'autonomie.',
     desc_en:'AI smart bluetooth glasses, 116 languages bidirectional translation. Open-ear stereo speakers, blue light filter, UV protection. Magnetic charging, 5h battery.',
-    prix:33,23,
+    prix:33.23,
     badge_fr:'Nouveau',badge_en:'New',
     asin:'B0F62TC6CN',
     img:'https://m.media-amazon.com/images/I/61Q58bAapTL._AC_SX679_.jpg'
@@ -610,7 +610,7 @@ const PRODUITS = [
     nom_fr:'IRISPen Reader 8',nom_en:'IRISPen Reader 8',
     desc_fr:'Stylo scanner OCR professionnel, 130 langues reconnues. Reconnaissance de caractères haute précision, compatible PC et Mac. Idéal pour documents, livres, journaux.',
     desc_en:'Professional OCR scanner pen, 130 languages. High-precision character recognition, PC & Mac compatible. Perfect for documents, books and newspapers.',
-    prix:134,23,
+    prix:134.23,
     badge_fr:'Pro',badge_en:'Pro',
     asin:'B0D2JC29Q7',
     img:'https://m.media-amazon.com/images/I/510mBhOrbNL._AC_SY300_SX300_QL70_ML2_.jpg'
@@ -648,7 +648,7 @@ const PRODUITS = [
     nom_fr:'Samsung SmartTag2',nom_en:'Samsung SmartTag2',
     desc_fr:'Traceur Bluetooth & UWB Samsung. Réseau SmartThings Find mondial, mode Lost, IP67 étanche. Autonomie 6 mois. Compatible Galaxy uniquement.',
     desc_en:'Samsung Bluetooth & UWB tracker. Worldwide SmartThings Find network, Lost mode, IP67 waterproof. 6-month battery. Galaxy devices only.',
-    prix:15,21,
+    prix:15.21,
     asin:'B0CG7JHFKY',
     img:'https://m.media-amazon.com/images/I/51AZQFwHowL._AC_SX679_.jpg'
   },
@@ -657,7 +657,7 @@ const PRODUITS = [
     nom_fr:'Apple AirTag',nom_en:'Apple AirTag',
     desc_fr:'Traceur Apple avec précision Ultra Wideband. Réseau Find My de 2 milliards d\'appareils Apple. Résistant à l\'eau IP67. Pile CR2032 remplaçable, 1 an d\'autonomie.',
     desc_en:'Apple tracker with Ultra Wideband precision. Find My network of 2 billion Apple devices. IP67 water resistant. Replaceable CR2032 battery, 1-year life.',
-    prix:31,53,
+    prix:31.53,
     asin:'B0GJTCB2QM',
     img:'https://m.media-amazon.com/images/I/61lBuevDnnL._AC_SX679_.jpg'
   }
@@ -894,7 +894,7 @@ async function envoyerChat(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-5-20251001',
         max_tokens:200,
         system:SYSTEM_CHAT,
         messages:histoChat.slice(-8)
