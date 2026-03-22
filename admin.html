@@ -372,8 +372,8 @@ textarea.field-input{resize:vertical;min-height:80px;}
         <div class="settings-section">
           <h3>📊 Activité Agent — Dernières 24h</h3>
           <table style="font-size:12px">
-            <thead><tr><th>HEURE</th><th>ACTION</th><th>STATUT</th></tr></thead>
-            <tbody>
+            <thead><tr><th>ICÔ</th><th>NOM</th><th>CATÉGORIE</th><th>FOURNISSEUR</th><th>AMAZON</th><th>ACTIONS</th></tr></thead>
+<tbody id="products-table"></tbody>
               <tr><td>09:14</td><td>Commande EC-2851 traitée</td><td><span class="pill pill-green">OK</span></td></tr>
               <tr><td>09:15</td><td>Email support répondu (EN)</td><td><span class="pill pill-green">OK</span></td></tr>
               <tr><td>09:16</td><td>Commission Amazon +€14.72</td><td><span class="pill pill-green">OK</span></td></tr>
@@ -530,11 +530,11 @@ textarea.field-input{resize:vertical;min-height:80px;}
           <option value="glasses">Lunettes</option>
           <option value="gps-kids">GPS Enfants</option>
           <option value="tracker">Traceurs GPS</option>
-          <option value="android">Androids</option>
+         
         </select>
       </div>
       <div class="field-group"><label>ICÔNE (emoji)</label><input class="field-input" id="p-icon" placeholder="🎧"></div>
-      <div class="field-group"><label>PRIX EUR (€)</label><input class="field-input" id="p-price" type="number" placeholder="89"></div>
+      
 
       
       <div class="field-group"><label>AMAZON ASIN</label><input class="field-input" id="p-asin" placeholder="B0XXXXXXXX (optionnel)"></div>
@@ -596,7 +596,6 @@ function initChart() {
 
 // PRODUCTS TABLE
 function renderAdminProducts() {
-  function renderAdminProducts() {
   const tbody = document.getElementById('products-table');
   if (!tbody || !PRODUCTS) return;
   tbody.innerHTML = PRODUCTS.map((p,i) => `
@@ -627,7 +626,7 @@ function editProduct(i) {
   document.getElementById('p-icon').value = p.icon;
 
   
-  document.getElementById('p-supplier').value = p.supplier;
+  
   document.getElementById('p-asin').value = p.amazon_asin || '';
   document.getElementById('p-desc-fr').value = p.desc_fr;
   document.getElementById('p-desc-en').value = p.desc_en;
