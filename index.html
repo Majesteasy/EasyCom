@@ -758,17 +758,7 @@ function renderProduits(){
 function ajouterPanier(id){
   const p = PRODUITS.find(x=>x.id===id);
   if(!p) return;
-  panier.push(p);
-  document.getElementById('panier-count').textContent = panier.length;
-  const nom = p['nom_'+lang] || p.nom_en || p.nom_fr;
-  const map = {
-    fr:`${nom} ajouté ✦`,
-    en:`${nom} added ✦`,
-    de:`${nom} hinzugefügt ✦`,
-    it:`${nom} aggiunto ✦`,
-    es:`${nom} añadido ✦`
-  };
-  showToast(map[lang] || map.en);
+  window.open(getUrl(p),'_blank');
 }
 function ouvrirPanier(){renderPanier(); document.getElementById('modal-panier').classList.add('ouvert');}
 function fermerPanier(){document.getElementById('modal-panier').classList.remove('ouvert');}
