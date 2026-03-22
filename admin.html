@@ -14,7 +14,6 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--white);font-family:'Outfit',sans-serif;font-weight:400;display:flex;min-height:100vh;}
-
 /* SIDEBAR */
 .sidebar{
   width:var(--sidebar);flex-shrink:0;
@@ -178,12 +177,10 @@ textarea.field-input{resize:vertical;min-height:80px;}
     <button class="s-link" onclick="showPage('orders')"><span class="s-icon">📦</span> Commandes <span class="s-badge">3</span></button>
     <button class="s-link" onclick="showPage('products')"><span class="s-icon">🛍️</span> Produits</button>
     <button class="s-link" onclick="showPage('affiliate')"><span class="s-icon">💰</span> Affiliation Amazon</button>
-
     <div class="s-section">AUTOMATISATION</div>
     <button class="s-link" onclick="showPage('agent')"><span class="s-icon">🤖</span> Agent IA</button>
     <button class="s-link" onclick="showPage('suppliers')"><span class="s-icon">🚚</span> Fournisseurs MDA</button>
     <button class="s-link" onclick="showPage('emails')"><span class="s-icon">📧</span> Emails auto</button>
-
     <div class="s-section">CONFIGURATION</div>
     <button class="s-link" onclick="showPage('settings')"><span class="s-icon">⚙️</span> Paramètres</button>
     <button class="s-link" onclick="showPage('legal')"><span class="s-icon">⚖️</span> CGV / Légal</button>
@@ -202,7 +199,6 @@ textarea.field-input{resize:vertical;min-height:80px;}
       <button class="tb-btn primary" onclick="showNotif()">💾 Sauvegarder</button>
     </div>
   </div>
-
   <div class="content">
 
     <!-- ======================================================
@@ -231,13 +227,11 @@ textarea.field-input{resize:vertical;min-height:80px;}
           <div class="kpi-change kpi-up">↑ +3pts vs trimestre</div>
         </div>
       </div>
-
       <!-- CHART -->
       <div class="chart-area">
         <div class="chart-title">📈 CA Journalier — 7 derniers jours (€)</div>
         <div class="chart-bars" id="chart-bars"></div>
       </div>
-
       <div class="grid2">
         <!-- RECENT ORDERS -->
         <div class="table-card">
@@ -399,14 +393,7 @@ textarea.field-input{resize:vertical;min-height:80px;}
             <div class="field-group" style="margin-bottom:12px"><label>SIÈGE SOCIAL</label><input class="field-input" value="Genève, Suisse"></div>
             <div class="field-group"><label>NUMÉRO RC SUISSE</label><input class="field-input" placeholder="CHE-XXX.XXX.XXX"></div>
           </div>
-          <div class="settings-section">
-           
-
-
-
-
-
-            
+          <div class="settings-section">   
         <div class="settings-row">
           <div class="settings-section">
             <h3>🔗 Amazon Affiliate</h3>
@@ -487,7 +474,6 @@ textarea.field-input{resize:vertical;min-height:80px;}
         </table>
       </div>
     </div>
-
     <div class="page" id="page-emails">
       <div class="settings-section">
         <h3>📧 Templates d'emails automatiques</h3>
@@ -511,7 +497,6 @@ textarea.field-input{resize:vertical;min-height:80px;}
         </div>
       </div>
     </div>
-
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -529,14 +514,10 @@ textarea.field-input{resize:vertical;min-height:80px;}
           <option value="scanner">Souris Scanners</option>
           <option value="glasses">Lunettes</option>
           <option value="gps-kids">GPS Enfants</option>
-          <option value="tracker">Traceurs GPS</option>
-         
+          <option value="tracker">Traceurs GPS</option>   
         </select>
       </div>
-      <div class="field-group"><label>ICÔNE (emoji)</label><input class="field-input" id="p-icon" placeholder="🎧"></div>
-      
-
-      
+      <div class="field-group"><label>ICÔNE (emoji)</label><input class="field-input" id="p-icon" placeholder="🎧"></div> 
       <div class="field-group"><label>AMAZON ASIN</label><input class="field-input" id="p-asin" placeholder="B0XXXXXXXX (optionnel)"></div>
     </div>
     <div class="field-group" style="margin-bottom:12px"><label>DESCRIPTION FR</label><textarea class="field-input" id="p-desc-fr" placeholder="Description en français…"></textarea></div>
@@ -553,7 +534,6 @@ textarea.field-input{resize:vertical;min-height:80px;}
 <div id="notif-bar" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:100px;padding:12px 24px;font-size:13px;font-weight:600;z-index:300;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
   ✅ Sauvegardé avec succès
 </div>
-
 <script src="data/products.js"></script>
 <script>
 // PAGE NAVIGATION
@@ -612,9 +592,6 @@ function renderAdminProducts() {
     </tr>
   `).join('');
 }
-
-
-  
 // PRODUCT MODAL
 function openProductModal() { document.getElementById('product-modal').classList.add('open'); }
 function closeProductModal() { document.getElementById('product-modal').classList.remove('open'); }
@@ -624,9 +601,6 @@ function editProduct(i) {
   document.getElementById('p-name-en').value = p.name_en;
   document.getElementById('p-cat').value = p.cat;
   document.getElementById('p-icon').value = p.icon;
-
-  
-  
   document.getElementById('p-asin').value = p.amazon_asin || '';
   document.getElementById('p-desc-fr').value = p.desc_fr;
   document.getElementById('p-desc-en').value = p.desc_en;
