@@ -81,8 +81,8 @@ nav{display:flex;align-items:center;gap:24px;}
 /* ── HERO ── */
 .hero{
   min-height:100vh;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:120px 5% 80px;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:90px 5% 80px;
   position:relative;overflow:hidden;
 }
 .hero-bg{
@@ -101,8 +101,10 @@ nav{display:flex;align-items:center;gap:24px;}
   border:1px solid rgba(201,168,76,0.4);
   padding:6px 16px;font-size:10px;letter-spacing:3px;
   color:var(--or);text-transform:uppercase;
-  margin-bottom:32px;width:fit-content;
+  margin-bottom:0;width:fit-content;
+  order:2;align-self:center;margin-top:24px;
 }
+.hero-centre{order:1;}
 .hero-badge::before{content:'';width:6px;height:6px;background:var(--or);border-radius:50%;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 .hero h1{
@@ -427,7 +429,7 @@ footer{
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grille"></div>
-  <div style="position:relative;z-index:1;">
+  <div class="hero-wrapper" style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
     <div class="hero-badge" data-fr="Traduction IA · 150+ Langues · 180 Pays" data-en="AI Translation · 150+ Languages · 180 Countries" data-de="KI-Übersetzung · 150+ Sprachen · 180 Länder" data-it="Traduzione IA · 150+ Lingue · 180 Paesi" data-es="Traducción IA · 150+ Idiomas · 180 Países">
       Traduction IA · 150+ Langues · 180 Pays
     </div>
