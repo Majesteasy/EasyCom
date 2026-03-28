@@ -1,9 +1,9 @@
 // ============================================================
 // EASYCOM — BASE PRODUITS ALIGNÉE SUR index.html
-// Amazon Partner ID : easycom0-21
+// Amazon Partner ID : easycom0ae-21
 // ============================================================
 
-const AMAZON_ID = 'easycom0-21';
+const AMAZON_ID = 'easycom0ae-21';
 
 function amazonUrl(asin) {
   return asin ? `https://www.amazon.fr/dp/${asin}?tag=${AMAZON_ID}` : '';
