@@ -713,23 +713,21 @@ function getUrl(p){
 }
 
 function renderProduits(){
-  const liste = catActive==='tout' ? PRODUITS : PRODUITS.filter(p=>p.cat===catActive);
-  const g = document.getElementById('produits-grid');
-  
-  g.innerHTML = liste.map(p=>{
-    const badge = p['badge_'+lang] || p.badge_en || p.badge_fr || '';
-    const nom = p['nom_'+lang] || p.nom_en || p.nom_fr;
-    const desc = p['desc_'+lang] || p.desc_en || p.desc_fr;
-    const cat = CATS.find(c=>c.id===p.cat)?.[lang] || CATS.find(c=>c.id===p.cat)?.en || '';
-    return const buyLabels = {
+  const buyLabels = {
     fr:'Voir sur Amazon',
     en:'View on Amazon',
     de:'Bei Amazon ansehen',
     it:'Vedi su Amazon',
     es:'Ver en Amazon'
   };
-    
-    <div class="produit-card">
+  const liste = catActive==='tout' ? PRODUITS : PRODUITS.filter(p=>p.cat===catActive);
+  const g = document.getElementById('produits-grid');
+  g.innerHTML = liste.map(p=>{
+    const badge = p['badge_'+lang] || p.badge_en || p.badge_fr || '';
+    const nom = p['nom_'+lang] || p.nom_en || p.nom_fr;
+    const desc = p['desc_'+lang] || p.desc_en || p.desc_fr;
+    return `
+    <div class="produit-card" onclick="ajouterPanier('${p.id}')">
       <div class="produit-img-wrap">
         ${badge ? `<div class="produit-badge">${badge}</div>` : ''}
         <img class="produit-img"
@@ -739,14 +737,16 @@ function renderProduits(){
              onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect width=%22200%22 height=%22200%22 fill=%22%231a1a1a%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2240%22 text-anchor=%22middle%22 dy=%22.3em%22>📦</text></svg>'"
              loading="lazy"/>
       </div>
-              <div class="produit-prix">${
-          lang==='fr' ? 'Voir le prix à jour directement sur Amazon.' :
-          lang==='en' ? 'See the up-to-date price directly on Amazon.' :
-          lang==='de' ? 'Aktuellen Preis direkt bei Amazon ansehen.' :
-          lang==='it' ? 'Vedi il prezzo aggiornato direttamente su Amazon.' :
-          'Ver el precio actualizado directamente en Amazon.'
+      <div class="produit-corps">
+        <div class="produit-nom">${nom}</div>
+        <div class="produit-prix">${
+          lang==='fr' ? 'Voir le prix à jour sur Amazon.' :
+          lang==='en' ? 'See up-to-date price on Amazon.' :
+          lang==='de' ? 'Aktuellen Preis auf Amazon ansehen.' :
+          lang==='it' ? 'Vedi il prezzo aggiornato su Amazon.' :
+          'Ver precio actualizado en Amazon.'
         }</div>
-        <button class="btn-panier" onclick="ajouterPanier('${p.id}')">
+        <button class="btn-panier" onclick="event.stopPropagation();ajouterPanier('${p.id}')">
           ${buyLabels[lang] || buyLabels.en}
         </button>
       </div>
