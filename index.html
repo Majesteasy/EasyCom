@@ -689,7 +689,7 @@ function setLang(l){
       el.textContent = val;
     }
   });
-  renderCats(); renderProduits(); renderPanier();
+  renderCats(); renderProduits();
 }
 
 // ── CATÉGORIES ──
@@ -754,7 +754,7 @@ function renderProduits(){
           <div class="produit-nom">${nom}</div>
           <div class="produit-desc">${desc}</div>
           <div class="produit-prix">${prixTexte}</div>
-          <button class="btn-panier" onclick="event.stopPropagation();window.open(getUrl(p),'_blank')">
+          <button class="btn-panier" onclick="event.stopPropagation();window.open('${getUrl(p)}','_blank')">
             ${buyLabels[lang] || buyLabels.en}
           </button>
         </div>
@@ -909,8 +909,9 @@ function showToast(msg){
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){fermerPanier();fermerCGV();}
 });
-document.getElementById('modal-panier').addEventListener('click',e=>{
-  if(e.target===document.getElementById('modal-panier'))fermerPanier();
+const _mp = document.getElementById('modal-panier');
+if(_mp) _mp.addEventListener('click',e=>{
+  if(e.target===_mp)fermerPanier();
 });
 document.getElementById('modal-cgv').addEventListener('click',e=>{
   if(e.target===document.getElementById('modal-cgv'))fermerCGV();
