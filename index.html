@@ -748,20 +748,20 @@ function renderProduits(){
                alt="${nom}"
                referrerpolicy="no-referrer"
                loading="lazy"
-               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot; viewBox=&quot;0 0 600 600&quot;><rect width=&quot;600&quot; height=&quot;600&quot; fill=&quot;%231a1a1a&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; fill=&quot;%23c9a84c&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot;>EasyCom</text></svg>';">
+               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%231a1a1a&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; fill=&quot;%23c9a84c&quot;>EasyCom</text></svg>'">
         </div>
         <div class="produit-corps">
           <div class="produit-nom">${nom}</div>
           <div class="produit-desc">${desc}</div>
           <div class="produit-prix">${prixTexte}</div>
-          <button class="btn-panier" onclick="event.stopPropagation();window.open('${getUrl(p)}','_blank')">
+          <button class="btn-panier" onclick="event.stopPropagation();window.open(getUrl(p),'_blank')">
+            ${buyLabels[lang] || buyLabels.en}
           </button>
         </div>
       </div>
     `;
-  }).join('');
-}
-
+}).join('');
+  }
 // ── PANIER ──
 function ajouterPanier(id){
   const p = PRODUITS.find(x=>x.id===id);
