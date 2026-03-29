@@ -720,37 +720,45 @@ function renderProduits(){
     it:'Vedi su Amazon',
     es:'Ver en Amazon'
   };
-  const liste = catActive==='tout' ? PRODUITS : PRODUITS.filter(p=>p.cat===catActive);
+
+  const liste = catActive === 'tout'
+    ? PRODUITS
+    : PRODUITS.filter(p => p.cat === catActive);
+
   const g = document.getElementById('produits-grid');
-  g.innerHTML = liste.map(p=>{
+
+  g.innerHTML = liste.map(p => {
     const badge = p['badge_'+lang] || p.badge_en || p.badge_fr || '';
-    const nom = p['nom_'+lang] || p.nom_en || p.nom_fr;
-    const desc = p['desc_'+lang] || p.desc_en || p.desc_fr;
+    const nom = p['nom_'+lang] || p.nom_en || p.nom_fr || '';
+    const desc = p['desc_'+lang] || p.desc_en || p.desc_fr || '';
+
+    const prixTexte =
+      lang === 'fr' ? 'Voir le prix à jour sur Amazon' :
+      lang === 'en' ? 'See up-to-date price on Amazon' :
+      lang === 'de' ? 'Aktuellen Preis auf Amazon sehen' :
+      lang === 'it' ? 'Vedi il prezzo aggiornato su Amazon' :
+      'Ver precio actualizado en Amazon';
+
     return `
-    <div class="produit-card" onclick="ajouterPanier('${p.id}')">
-      <div class="produit-img-wrap">
-        ${badge ? `<div class="produit-badge">${badge}</div>` : ''}
-        <img class="produit-img"
-             src="${p.img}"
-             alt="${nom}"
-             referrerpolicy="no-referrer"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect width=%22200%22 height=%22200%22 fill=%22%231a1a1a%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2240%22 text-anchor=%22middle%22 dy=%22.3em%22>📦</text></svg>'"
-             loading="lazy"/>
+      <div class="produit-card">
+        <div class="produit-img-wrap">
+          ${badge ? `<div class="produit-badge">${badge}</div>` : ''}
+          <img class="produit-img"
+               src="${p.img}"
+               alt="${nom}"
+               referrerpolicy="no-referrer"
+               loading="lazy"
+               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot; viewBox=&quot;0 0 600 600&quot;><rect width=&quot;600&quot; height=&quot;600&quot; fill=&quot;%231a1a1a&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; fill=&quot;%23c9a84c&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot;>EasyCom</text></svg>';">
+        </div>
+        <div class="produit-corps">
+          <div class="produit-nom">${nom}</div>
+          <div class="produit-desc">${desc}</div>
+          <div class="produit-prix">${prixTexte}</div>
+          <button class="btn-panier" onclick="event.stopPropagation();window.open('${getUrl(p)}','_blank')">
+          </button>
+        </div>
       </div>
-      <div class="produit-corps">
-        <div class="produit-nom">${nom}</div>
-        <div class="produit-prix">${
-          lang==='fr' ? 'Voir le prix à jour sur Amazon.' :
-          lang==='en' ? 'See up-to-date price on Amazon.' :
-          lang==='de' ? 'Aktuellen Preis auf Amazon ansehen.' :
-          lang==='it' ? 'Vedi il prezzo aggiornato su Amazon.' :
-          'Ver precio actualizado en Amazon.'
-        }</div>
-        <button class="btn-panier" onclick="event.stopPropagation();ajouterPanier('${p.id}')">
-          ${buyLabels[lang] || buyLabels.en}
-        </button>
-      </div>
-    </div>`;
+    `;
   }).join('');
 }
 
