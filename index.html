@@ -919,12 +919,18 @@ async function envoyerChat(){
     });
     const data=await r.json();
     document.getElementById('typing')?.remove();
+    if(data.error){
+      console.error('Gemini error:',data.error);
+      addChatMsg('bot','⚠️ Erreur API: '+data.error.message);
+      chatBusy=false; return;
+    }
     const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||(fallback[lang]||fallback.en);
     addChatMsg('bot',rep);
     histoChat.push({role:'assistant',content:rep});
-  }catch{
+  }catch(e){
+    console.error('Elion catch:',e);
     document.getElementById('typing')?.remove();
-    addChatMsg('bot', fallback[lang]||fallback.en);
+    addChatMsg('bot','⚠️ '+e.message);
   }
   chatBusy=false;
 }
