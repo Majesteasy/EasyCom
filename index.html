@@ -668,9 +668,6 @@ const CATS = [
   {id:'traceurs',    fr:'Traceurs',    en:'Trackers',  de:'Tracker',     it:'Tracker',      es:'Rastreadores', ico:'🔖'},
 ];
 
-// ── GEMINI CONFIG ──
-const GEMINI_KEY = 'VOTRE_CLÉ_GEMINI_ICI'; // ← Colle ta clé API Gemini ici
-
 // ── ÉTAT ──
 let lang = 'fr';
 let catActive = 'tout';
@@ -825,39 +822,7 @@ function ouvrirCGV(){
 function fermerCGV(){document.getElementById('modal-cgv').classList.remove('ouvert');}
 
 // ── CHATBOT ──
-const SYSTEM_CHAT = `Tu es Elion, le conseiller shopping enthousiaste et expert de la boutique EasyCom, spécialisée en technologies de traduction IA, lunettes connectées, stylos scanner et traceurs GPS.
-
-CATALOGUE PRODUITS (recommande-les avec ces liens exacts) :
-🎧 OREILLETTES TRADUCTION :
-- Timekettle WT2 Edge (289€) – traduction simultanée bidirectionnelle, 40 langues, précision 95% → https://www.amazon.fr/dp/B084NZL8G3?tag=easycom0ae-21
-- Timekettle M3 (153€) – 40 langues, mode hors-ligne, 25h autonomie → https://www.amazon.fr/dp/B0B8NJR625?tag=easycom0ae-21
-- ANFIER A8 (261€) – 144 langues, Bluetooth 6.0, 40h autonomie → https://www.amazon.fr/dp/B0DP2G589V?tag=easycom0ae-21
-
-🕶️ LUNETTES CONNECTÉES :
-- Luckits 115L (33€) – traduction 116 langues, speakers open-ear, filtre lumière bleue → https://www.amazon.fr/dp/B0F62TC6CN?tag=easycom0ae-21
-- BLESSOURCE 116L (25€) – traduction temps réel 116 langues, verres polarisés UV → https://www.amazon.fr/dp/B0DQGD44LC?tag=easycom0ae-21
-
-✏️ STYLOS SCANNER :
-- Stylo Scanner AI (46€) – traduit tout texte imprimé, 42 langues → https://www.amazon.fr/dp/B0DS62X13F?tag=easycom0ae-21
-- IRISPen Reader 8 (134€) – OCR professionnel 130 langues, PC & Mac → https://www.amazon.fr/dp/B0D2JC29Q7?tag=easycom0ae-21
-
-📍 GPS ENFANT :
-- Xplora X6Play (45€) – montre GPS 4G, appels, SOS, suivi parental → https://www.amazon.fr/dp/B0GQHHKCRH?tag=easycom0ae-21
-- EUNICECG 4G (51€) – montre GPS 4G, vidéo HD, IP67 → https://www.amazon.fr/dp/B0DZP1JB4K?tag=easycom0ae-21
-
-🔖 TRACEURS GPS :
-- Invoxia GPS (89€) – 2 mois autonomie, alertes temps réel → https://www.amazon.fr/dp/B0FQYG8J4P?tag=easycom0ae-21
-- Samsung SmartTag2 (15€) – réseau mondial SmartThings, IP67 → https://www.amazon.fr/dp/B0CG7JHFKY?tag=easycom0ae-21
-- Apple AirTag (32€) – réseau Find My 2 milliards d'appareils, IP67 → https://www.amazon.fr/dp/B0GJTCB2QM?tag=easycom0ae-21
-
-INSTRUCTIONS :
-- Réponds TOUJOURS en détectant la langue du client (français ou anglais en priorité, aussi allemand/italien/espagnol)
-- Sois enthousiaste, chaleureux et expert
-- Propose toujours 1-2 produits adaptés au besoin du client avec le lien direct
-- Maximum 4 phrases par réponse
-- Ne mentionne jamais "affilié", "commission" ni "Amazon" seul — dis "disponible ici" ou "commande ici"
-- Dès le premier message, propose proactivement les produits les plus populaires`;
-
+const SYSTEM_CHAT = `Tu es le conseiller de la boutique EasyCom spécialisée en technologies de traduction IA et GPS. Tu aides les clients à choisir le bon produit selon leurs besoins. Sois expert, chaleureux, concis. Max 3 phrases. Ne mentionne jamais Amazon, les affiliés, ni ta nature technique. Réponds en français, anglais, allemand, italien ou espagnol selon la langue du client.`;
 
 function toggleChat(){
   chatOuvert = !chatOuvert;
@@ -896,35 +861,39 @@ async function envoyerChat(){
   ty.className='msg bot';ty.id='typing';
   ty.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
   document.getElementById('chat-msgs').appendChild(ty);
-  const fallback = {
-    fr:'Contactez-nous : contact@easycom-world.ch',
-    en:'Contact us: contact@easycom-world.ch',
-    de:'Kontaktieren Sie uns: contact@easycom-world.ch',
-    it:'Contattaci: contact@easycom-world.ch',
-    es:'Contáctenos: contact@easycom-world.ch'
-  };
   try{
-    const contents = histoChat.slice(-8).map(m=>({
-      role: m.role==='assistant' ? 'model' : 'user',
-      parts:[{text:m.content}]
-    }));
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        system_instruction:{parts:[{text:SYSTEM_CHAT}]},
-        contents,
-        generationConfig:{maxOutputTokens:250,temperature:0.8}
+        model:'claude-sonnet-4-20250514',
+        max_tokens:200,
+        system:SYSTEM_CHAT,
+        messages:histoChat.slice(-8)
       })
     });
     const data=await r.json();
     document.getElementById('typing')?.remove();
-    const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||(fallback[lang]||fallback.en);
+    const fallback = {
+      fr:'Contactez-nous : contact@easycom-world.ch',
+      en:'Contact us: contact@easycom-world.ch',
+      de:'Kontaktieren Sie uns: contact@easycom-world.ch',
+      it:'Contattaci: contact@easycom-world.ch',
+      es:'Contáctenos: contact@easycom-world.ch'
+    };
+    const rep=data.content?.[0]?.text||(fallback[lang] || fallback.en);
     addChatMsg('bot',rep);
     histoChat.push({role:'assistant',content:rep});
   }catch{
     document.getElementById('typing')?.remove();
-    addChatMsg('bot', fallback[lang]||fallback.en);
+    const fallback = {
+      fr:'Contactez-nous : contact@easycom-world.ch',
+      en:'Contact us: contact@easycom-world.ch',
+      de:'Kontaktieren Sie uns: contact@easycom-world.ch',
+      it:'Contattaci: contact@easycom-world.ch',
+      es:'Contáctenos: contact@easycom-world.ch'
+    };
+    addChatMsg('bot', fallback[lang] || fallback.en);
   }
   chatBusy=false;
 }
@@ -952,8 +921,6 @@ document.getElementById('modal-cgv').addEventListener('click',e=>{
 document.addEventListener('DOMContentLoaded',()=>{
   renderCats();
   renderProduits();
-  // Ouverture automatique du chatbot Elion après 4 secondes
-  setTimeout(()=>{ if(!chatOuvert) toggleChat(); }, 4000);
 });
 </script>
 </body>
