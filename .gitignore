@@ -1,0 +1,15 @@
+# Secrets — JAMAIS commiter ces fichiers
+.env
+.env.local
+.env.production
+.env.*.local
+*.key
+*.secret
+secrets.json
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
