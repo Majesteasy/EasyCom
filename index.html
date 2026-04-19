@@ -668,10 +668,8 @@ const CATS = [
   {id:'traceurs',    fr:'Traceurs',    en:'Trackers',  de:'Tracker',     it:'Tracker',      es:'Rastreadores', ico:'🔖'},
 ];
 
-// ── INFOMANIAK AI CONFIG ──
-const INFOMANIAK_KEY = '%%INFOMANIAK_API_KEY%%';
-const INFOMANIAK_URL = 'https://api.infomaniak.com/1/ai-tools/108148/openai/v1/chat/completions';
-const INFOMANIAK_MODEL = 'mistralai/Mistral-Small-3.2-24B-Instruct-2506';
+// ── GEMINI AI CONFIG ──
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=%%GEMINI_API_KEY%%';
 
 // ── ÉTAT ──
 let lang = 'fr';
@@ -906,37 +904,33 @@ async function envoyerChat(){
     es:'Contáctenos: contact@easycom-world.ch'
   };
   try{
-    const messages=[
-      {role:'system', content:SYSTEM_CHAT},
-      ...histoChat.slice(-8)
-    ];
-    const r=await fetch(INFOMANIAK_URL,{
+    const contents=histoChat.slice(-8).map(m=>({
+      role: m.role==='assistant'?'model':'user',
+      parts:[{text:m.content}]
+    }));
+    const r=await fetch(GEMINI_URL,{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer '+INFOMANIAK_KEY
-      },
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:INFOMANIAK_MODEL,
-        messages,
-        max_tokens:250,
-        temperature:0.8
+        system_instruction:{parts:[{text:SYSTEM_CHAT}]},
+        contents,
+        generationConfig:{maxOutputTokens:250,temperature:0.8}
       })
     });
     const data=await r.json();
     document.getElementById('typing')?.remove();
     if(data.error){
-      console.error('Infomaniak AI error:',data.error);
-      addChatMsg('bot','⚠️ Erreur: '+JSON.stringify(data.error));
+      console.error('Gemini error:',data.error);
+      addChatMsg('bot','⚠️ '+(fallback[lang]||fallback.fr));
       chatBusy=false; return;
     }
-    const rep=data.choices?.[0]?.message?.content||(fallback[lang]||fallback.en);
+    const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||(fallback[lang]||fallback.fr);
     addChatMsg('bot',rep);
     histoChat.push({role:'assistant',content:rep});
   }catch(e){
     console.error('Elion catch:',e);
     document.getElementById('typing')?.remove();
-    addChatMsg('bot','⚠️ '+e.message);
+    addChatMsg('bot','⚠️ '+(fallback[lang]||fallback.fr));
   }
   chatBusy=false;
 }
