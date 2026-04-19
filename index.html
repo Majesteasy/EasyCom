@@ -921,7 +921,7 @@ async function envoyerChat(){
     document.getElementById('typing')?.remove();
     if(data.error){
       console.error('Gemini error:',data.error);
-      addChatMsg('bot','⚠️ '+(fallback[lang]||fallback.fr));
+      addChatMsg('bot','⚠️ Erreur: '+data.error.message);
       chatBusy=false; return;
     }
     const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||(fallback[lang]||fallback.fr);
@@ -930,7 +930,7 @@ async function envoyerChat(){
   }catch(e){
     console.error('Elion catch:',e);
     document.getElementById('typing')?.remove();
-    addChatMsg('bot','⚠️ '+(fallback[lang]||fallback.fr));
+    addChatMsg('bot','⚠️ Réseau: '+e.message);
   }
   chatBusy=false;
 }
