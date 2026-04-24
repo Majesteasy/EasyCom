@@ -29,7 +29,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           sed -i "s|%%GEMINI_API_KEY%%|${GEMINI_API_KEY}|g" index.html
-          echo "Cle Gemini injectee depuis GitHub Secrets"
+          echo "Cle Gemini AI injectee depuis GitHub Secrets"
 
       - name: Verify no placeholder remains
         run: |

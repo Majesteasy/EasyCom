@@ -669,8 +669,7 @@ const CATS = [
 ];
 
 // ── GEMINI AI CONFIG ──
-const GEMINI_KEY = '%%GEMINI_API_KEY%%';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=%%GEMINI_API_KEY%%';
 
 // ── ÉTAT ──
 let lang = 'fr';
@@ -906,10 +905,10 @@ async function envoyerChat(){
   };
   try{
     const contents=histoChat.slice(-8).map(m=>({
-      role:m.role==='assistant'?'model':'user',
+      role: m.role==='assistant'?'model':'user',
       parts:[{text:m.content}]
     }));
-    const r=await fetch(GEMINI_URL+'?key='+GEMINI_KEY,{
+    const r=await fetch(GEMINI_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -922,16 +921,18 @@ async function envoyerChat(){
     document.getElementById('typing')?.remove();
     if(data.error){
       console.error('Gemini error:',data.error);
-      addChatMsg('bot','⚠️ Erreur: '+data.error.message);
+      const rateLimitMsgs = {fr:'Elion est très sollicité ! Réessayez dans quelques secondes.',en:'Elion is busy! Please try again in a few seconds.',de:'Elion ist beschäftigt! Bitte versuchen Sie es in wenigen Sekunden erneut.',it:'Elion è occupato! Riprovare tra qualche secondo.',es:'¡Elion está ocupado! Inténtelo de nuevo en unos segundos.'};
+      addChatMsg('bot', rateLimitMsgs[lang]||rateLimitMsgs.fr);
       chatBusy=false; return;
     }
-    const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||(fallback[lang]||fallback.en);
+    const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||(fallback[lang]||fallback.fr);
     addChatMsg('bot',rep);
     histoChat.push({role:'assistant',content:rep});
   }catch(e){
     console.error('Elion catch:',e);
     document.getElementById('typing')?.remove();
-    addChatMsg('bot','⚠️ '+e.message);
+    const fallback={fr:'Contactez-nous : contact@easycom-world.ch',en:'Contact us: contact@easycom-world.ch',de:'Kontaktieren Sie uns: contact@easycom-world.ch',it:'Contattaci: contact@easycom-world.ch',es:'Contáctenos: contact@easycom-world.ch'};
+    addChatMsg('bot','⚠️ '+(fallback[lang]||fallback.fr));
   }
   chatBusy=false;
 }
