@@ -1,0 +1,157 @@
+{
+  "name": "EasyCom — Izzy Post J+2 18h (Google Sheets → Telegram)",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:searchRows",
+      "version": 4,
+      "parameters": {
+        "__IMTCONN__": {
+          "data": {
+            "scoped": "true",
+            "connection": "google"
+          },
+          "label": "Google Sheets — EasyCom Scripts"
+        }
+      },
+      "mapper": {
+        "spreadsheetId": "{{VOTRE_SPREADSHEET_ID}}",
+        "sheetId": "0",
+        "hasHeaders": "yes",
+        "from": "1",
+        "limit": "1",
+        "filter": {
+          "condition": {
+            "a": "{{7}}",
+            "o": "text:equal",
+            "b": "À tourner"
+          }
+        },
+        "sort": [
+          {
+            "field": "1",
+            "order": "asc"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": { "x": 0, "y": 0 },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "Google Sheets — EasyCom Scripts"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:BasicFeeder",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "array": "{{1.rows}}"
+      },
+      "metadata": {
+        "designer": { "x": 300, "y": 0 }
+      }
+    },
+    {
+      "id": 3,
+      "module": "telegram-bot:sendMessage",
+      "version": 5,
+      "parameters": {
+        "__IMTCONN__": {
+          "data": {
+            "scoped": "true",
+            "connection": "telegram-bot"
+          },
+          "label": "Telegram Bot — EasyCom Izzy"
+        }
+      },
+      "mapper": {
+        "chat_id": "{{VOTRE_CHAT_ID}}",
+        "parse_mode": "Markdown",
+        "text": "*📅 Script du {{2.`1`}}*\n\n*🛍 Produit :* {{2.`2`}}\n\n*🎣 Hook :*\n{{2.`3`}}\n\n*📝 Corps :*\n{{2.`4`}}\n\n*👉 CTA :*\n{{2.`5`}}\n\n*#️⃣ Hashtags :*\n{{2.`6`}}",
+        "disable_notification": false
+      },
+      "metadata": {
+        "designer": { "x": 600, "y": 0 },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "Telegram Bot — EasyCom Izzy"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "google-sheets:updateARow",
+      "version": 4,
+      "parameters": {
+        "__IMTCONN__": {
+          "data": {
+            "scoped": "true",
+            "connection": "google"
+          },
+          "label": "Google Sheets — EasyCom Scripts"
+        }
+      },
+      "mapper": {
+        "spreadsheetId": "{{VOTRE_SPREADSHEET_ID}}",
+        "sheetId": "0",
+        "rowNumber": "{{2.rowNumber}}",
+        "serialize": false,
+        "values": {
+          "Statut": "Publié ✅"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 900, "y": 0 },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "Google Sheets — EasyCom Scripts"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": true,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "scheduling": {
+      "type": "INDEFINITELY",
+      "interval": 172800,
+      "startAt": "18:00",
+      "timezone": "Europe/Paris"
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com"
+  },
+  "_setup_instructions": {
+    "step_1_google_sheets": "Créer un spreadsheet Google Sheets, importer le fichier sheets_template.csv, et remplacer VOTRE_SPREADSHEET_ID par l'ID de l'URL (https://docs.google.com/spreadsheets/d/VOTRE_SPREADSHEET_ID/edit)",
+    "step_2_telegram_bot": "Créer un bot Telegram via @BotFather, récupérer le token, ajouter le bot au canal cible, et remplacer VOTRE_CHAT_ID par l'ID du canal (ex: -1001234567890 pour un canal ou @nom_du_canal)",
+    "step_3_make_connections": "Dans Make.com > Connections : créer une connexion Google Sheets (OAuth) et une connexion Telegram Bot (avec le token @BotFather)",
+    "step_4_scheduling": "Dans Make.com : importer ce blueprint, activer le scénario, définir l'heure à 18h00 (Europe/Paris) et l'intervalle à 2 jours",
+    "step_5_test": "Lancer le scénario manuellement une première fois pour vérifier que la ligne 2 est postée sur Telegram et marquée Publié ✅"
+  }
+}
