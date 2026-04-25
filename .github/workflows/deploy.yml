@@ -24,17 +24,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject Make webhook URL from secrets
+      - name: Inject Gemini API key from secrets
         env:
-          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          sed -i "s|%%MAKE_WEBHOOK_URL%%|${MAKE_WEBHOOK_URL}|g" index.html
-          echo "URL webhook Make injectee depuis GitHub Secrets"
+          sed -i "s|%%GEMINI_API_KEY%%|${GEMINI_API_KEY}|g" index.html
+          echo "Cle Gemini injectee depuis GitHub Secrets"
 
       - name: Verify no placeholder remains
         run: |
-          if grep -q "%%MAKE_WEBHOOK_URL%%" index.html; then
-            echo "ERREUR: secret MAKE_WEBHOOK_URL manquant dans les GitHub Secrets"
+          if grep -q "%%GEMINI_API_KEY%%" index.html; then
+            echo "ERREUR: secret GEMINI_API_KEY manquant dans les GitHub Secrets"
             exit 1
           fi
           echo "OK: aucun placeholder en dur dans le fichier deploye"
