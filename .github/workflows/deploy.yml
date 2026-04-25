@@ -28,12 +28,12 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          sed -i "s|%%GEMINI_API_KEY%%|${GEMINI_API_KEY}|g" index.html
+          sed -i "s|process\.env\.GEMINI_API_KEY|${GEMINI_API_KEY}|g" index.html
           echo "Cle Gemini AI injectee depuis GitHub Secrets"
 
       - name: Verify no placeholder remains
         run: |
-          if grep -q "%%GEMINI_API_KEY%%" index.html; then
+          if grep -q "process\.env\.GEMINI_API_KEY" index.html; then
             echo "ERREUR: secret GEMINI_API_KEY manquant dans les GitHub Secrets"
             exit 1
           fi

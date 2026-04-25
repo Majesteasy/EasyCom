@@ -19,6 +19,9 @@
 <script>
 const TAG='easycom0ae-21';
 const ELION_WEBHOOK_URL='MAKE_WEBHOOK_URL';
+const GEMINI_KEY='process.env.GEMINI_API_KEY';
+const GEMINI_URL='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+GEMINI_KEY;
+const ELION_SYSTEM='Tu es Elion, conseiller expert EasyCom (easycom-world.ch). Réponds en 2-4 phrases dans la langue du client. Propose 1-2 produits adaptés avec leur lien Amazon. Catalogue EasyCom (tag easycom0ae-21) : oreillettes Timekettle WT2 https://www.amazon.fr/dp/B084NZL8G3?tag=easycom0ae-21, Timekettle M3 https://www.amazon.fr/dp/B0B8NJR625?tag=easycom0ae-21, ANFIER A8 https://www.amazon.fr/dp/B0DP2G589V?tag=easycom0ae-21 ; lunettes Luckits 115L https://www.amazon.fr/dp/B0F62TC6CN?tag=easycom0ae-21, BLESSOURCE 116L https://www.amazon.fr/dp/B0DQGD44LC?tag=easycom0ae-21 ; stylos Stylo Scanner AI https://www.amazon.fr/dp/B0DS62X13F?tag=easycom0ae-21, IRISPen Reader 8 https://www.amazon.fr/dp/B0D2JC29Q7?tag=easycom0ae-21 ; montres GPS enfant Xplora X6Play https://www.amazon.fr/dp/B0GQHHKCRH?tag=easycom0ae-21, EUNICECG 4G https://www.amazon.fr/dp/B0DZP1JB4K?tag=easycom0ae-21 ; traceurs Invoxia GPS https://www.amazon.fr/dp/B0FQYG8J4P?tag=easycom0ae-21, Samsung SmartTag2 https://www.amazon.fr/dp/B0CG7JHFKY?tag=easycom0ae-21, Apple AirTag https://www.amazon.fr/dp/B0GJTCB2QM?tag=easycom0ae-21.';
 const PRODUCTS=[
 {id:'p1',cat:'traduction',name:'Timekettle WT2 Edge',asin:'B084NZL8G3',desc:'Oreillettes premium pour traduction simultanee en voyage ou reunion.',img:'https://m.media-amazon.com/images/I/41IY0aKP5ZL._AC_UF1000,1000_QL80_.jpg'},
 {id:'p2',cat:'traduction',name:'Timekettle M3',asin:'B0B8NJR625',desc:'Bon choix voyage : traduction, autonomie solide et usage simple.',img:'https://m.media-amazon.com/images/I/514NoCaTWcL._AC_SL1000_.jpg'},
@@ -46,7 +49,29 @@ function linkify(s){return esc(s).replace(/https:\/\/www\.amazon\.fr\/[^\s<]+/g,
 function addMsg(role,text){const d=document.createElement('div');d.className='msg '+role;d.innerHTML=role==='bot'?linkify(text):esc(text);document.getElementById('msgs').appendChild(d);document.getElementById('msgs').scrollTop=999999}
 function pick(q){q=q.toLowerCase();if(/enfant|kids|gps|parent|secur|montre/.test(q))return ['p8','p9'];if(/voyage|tradu|langue|anglais|espagnol|japon|chinois|reunion/.test(q))return ['p2','p1'];if(/tiktok|video|filme|lunette|createur|creator/.test(q))return ['p4','p5'];if(/stylo|scan|livre|texte|document|etudiant/.test(q))return ['p6','p7'];if(/cle|cles|valise|voiture|perdu|traceur|airtag|samsung/.test(q))return ['p12','p11'];return ['p2','p4']}
 function fallback(q){const picks=pick(q).map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);return 'Je vous conseille ces options EasyCom :\n\n'+picks.map(p=>p.name+' - '+p.desc+' '+url(p)).join('\n\n')+'\n\nCliquez sur le produit qui correspond le mieux et verifiez le prix a jour.'}
-async function sendChat(){const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;input.value='';addMsg('user',text);history.push({role:'user',content:text});if(!ELION_WEBHOOK_URL||ELION_WEBHOOK_URL==='MAKE_WEBHOOK_URL'){const rep=fallback(text);addMsg('bot',rep);history.push({role:'assistant',content:rep});return}try{const r=await fetch(ELION_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'elion_chat',message:text,history,products:PRODUCTS.map(p=>({...p,url:url(p)}),page:location.href})});const data=await r.json();const rep=data.reply||data.message||data.text||fallback(text);addMsg('bot',rep);history.push({role:'assistant',content:rep})}catch(e){const rep=fallback(text);addMsg('bot',rep);history.push({role:'assistant',content:rep})}}
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  addMsg('user',text);
+  history.push({role:'user',content:text});
+  // Appel Gemini direct si la clé est injectée par GitHub Actions
+  if(GEMINI_KEY&&GEMINI_KEY!=='process.env.GEMINI_API_KEY'){
+    try{
+      const contents=history.slice(-8).map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+      const r=await fetch(GEMINI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:ELION_SYSTEM}]},contents,generationConfig:{maxOutputTokens:250,temperature:0.8}})});
+      const data=await r.json();
+      if(!data.error){const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||fallback(text);addMsg('bot',rep);history.push({role:'assistant',content:rep});return;}
+    }catch(e){}
+  }
+  // Fallback webhook Make.com
+  if(ELION_WEBHOOK_URL&&ELION_WEBHOOK_URL!=='MAKE_WEBHOOK_URL'){
+    try{const r=await fetch(ELION_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'elion_chat',message:text,history,products:PRODUCTS.map(p=>({...p,url:url(p)})),page:location.href})});const data=await r.json();const rep=data.reply||data.message||data.text||fallback(text);addMsg('bot',rep);history.push({role:'assistant',content:rep});return;}catch(e){}
+  }
+  // Fallback local
+  const rep=fallback(text);addMsg('bot',rep);history.push({role:'assistant',content:rep});
+}
 document.addEventListener('DOMContentLoaded',()=>{renderCats();renderProducts();setTimeout(openChat,3500)});
 </script>
 </body>
