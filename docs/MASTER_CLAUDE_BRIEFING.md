@@ -144,7 +144,7 @@ GitHub → Settings → Secrets and variables → Actions → `GEMINI_API_KEY`
 Elion répond "Contactez-nous" à chaque message → l'appel Gemini échoue.
 
 **Cause probable :** La clé dans GitHub Secrets est soit :
-- La clé révoquée `AIzaSyDGSWhHmiaOtOLHkB2_kDl1H1x3B5yO3GA` (ne fonctionne plus)
+- La clé révoquée `[REVOKED_KEY_REDACTED]` (ne fonctionne plus)
 - Vide ou incorrecte
 
 **Fix en attente :** Une PR est ouverte avec affichage du vrai message d'erreur.

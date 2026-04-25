@@ -2,7 +2,7 @@
 
 ## Outils
 - **Make.com** : organisation Easycom-World
-- **Telegram Bot** : @EasyComCEObot (Chat ID: 1921851243)
+- **Telegram Bot** : @EasyComCEObot (Chat ID: TELEGRAM_CHAT_ID)
 
 ## Automatisations prévues
 

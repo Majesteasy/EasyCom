@@ -1,0 +1,90 @@
+{
+  "_note": "Exemples de payloads Deerflow — structure generique, a adapter selon la documentation officielle Deerflow 2.0. Aucune donnee reelle.",
+
+  "request_generate_script": {
+    "description": "Demander a Deerflow de generer un script Izzy",
+    "method": "POST",
+    "url": "DEERFLOW_API_ENDPOINT/api/workflows/run",
+    "headers": {
+      "Authorization": "Bearer DEERFLOW_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "workflow_id": "DEERFLOW_WORKFLOW_ID",
+      "task": "generate_izzy_script",
+      "inputs": {
+        "product_name": "Timekettle M3",
+        "asin": "B0B8NJR625",
+        "category": "traduction",
+        "angle": "voyage budget",
+        "target_platform": "TikTok",
+        "duration_seconds": 27,
+        "amazon_tag": "easycom0ae-21",
+        "site_url": "https://easycom-world.ch/?src=tiktok"
+      }
+    }
+  },
+
+  "response_generate_script": {
+    "description": "Reponse attendue de Deerflow",
+    "status": 200,
+    "body": {
+      "workflow_id": "DEERFLOW_WORKFLOW_ID",
+      "run_id": "run_example_123",
+      "status": "completed",
+      "output": {
+        "hook": "153 euros pour comprendre n'importe qui dans le monde entier.",
+        "probleme": "Google Trad = sortir le telephone, taper, montrer l'ecran. En 2026 c'est pathetique.",
+        "solution": "Timekettle M3 dans les oreilles. Conversation naturelle. En temps reel. 40 langues.",
+        "preuve": "Connexion Bluetooth stable. Batterie 4h. Autonomie 25h avec boitier.",
+        "cta": "Moins cher qu'un weekend a Paris. Lien en bio.",
+        "hashtags": "#traducteurinstantane #timekettle #voyageurfute #easycom #gadgettech",
+        "full_script": "153 euros pour comprendre n'importe qui dans le monde entier.\n\nGoogle Trad = sortir le telephone, taper, montrer l'ecran. En 2026 c'est pathetique.\n\nTimekettle M3 dans les oreilles. Conversation naturelle. En temps reel. 40 langues.\n\nConnexion Bluetooth stable. Batterie 4h. Autonomie 25h avec boitier.\n\nMoins cher qu'un weekend a Paris. Lien en bio."
+      }
+    }
+  },
+
+  "request_analyze_performance": {
+    "description": "Demander a Deerflow d'analyser les performances des clics",
+    "method": "POST",
+    "url": "DEERFLOW_API_ENDPOINT/api/workflows/run",
+    "headers": {
+      "Authorization": "Bearer DEERFLOW_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "workflow_id": "DEERFLOW_WORKFLOW_ID",
+      "task": "analyze_affiliate_clicks",
+      "inputs": {
+        "clicks_data": [
+          { "product": "Timekettle M3", "asin": "B0B8NJR625", "source": "tiktok_bio", "count": 45 },
+          { "product": "Luckits 115L", "asin": "B0F62TC6CN", "source": "instagram_dm", "count": 23 },
+          { "product": "Apple AirTag", "asin": "B0GJTCB2QM", "source": "easycom-world.ch", "count": 67 }
+        ],
+        "period": "last_7_days",
+        "target": "optimize_content_for_clicks"
+      }
+    }
+  },
+
+  "request_next_videos": {
+    "description": "Demander a Deerflow de proposer les prochaines videos",
+    "method": "POST",
+    "url": "DEERFLOW_API_ENDPOINT/api/workflows/run",
+    "headers": {
+      "Authorization": "Bearer DEERFLOW_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "workflow_id": "DEERFLOW_WORKFLOW_ID",
+      "task": "propose_next_videos",
+      "inputs": {
+        "published_scripts": ["WT2 - Script Voyage", "Luckits - Script Createur"],
+        "best_performers": ["Apple AirTag", "Timekettle M3"],
+        "count_to_propose": 5,
+        "platforms": ["TikTok", "Instagram"],
+        "amazon_tag": "easycom0ae-21"
+      }
+    }
+  }
+}

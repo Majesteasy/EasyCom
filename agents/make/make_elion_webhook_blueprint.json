@@ -1,0 +1,124 @@
+{
+  "name": "EasyCom — Elion Chat Webhook",
+  "description": "Recoit les messages d'Elion, appelle une IA, renvoie la reponse. Aussi gere le tracking des clics affilies.",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": "MAKE_WEBHOOK_URL",
+        "maxResults": 1
+      },
+      "metadata": {
+        "designer": { "x": 0, "y": 0 },
+        "restore": { "expect": { "type": { "label": "Choose" } } },
+        "expect": [
+          { "name": "type", "type": "text", "label": "type" },
+          { "name": "message", "type": "text", "label": "message" },
+          { "name": "history", "type": "array", "label": "history" },
+          { "name": "products", "type": "array", "label": "products" },
+          { "name": "product", "type": "text", "label": "product" },
+          { "name": "asin", "type": "text", "label": "asin" },
+          { "name": "clickSource", "type": "text", "label": "clickSource" },
+          { "name": "page", "type": "text", "label": "page" },
+          { "name": "ts", "type": "text", "label": "ts" }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "routes": [
+        {
+          "label": "Route Elion Chat",
+          "filter": {
+            "name": "type == elion_chat",
+            "conditions": [
+              [{ "a": "{{1.type}}", "b": "elion_chat", "o": "text:equal" }]
+            ]
+          },
+          "flow": [
+            {
+              "id": 3,
+              "module": "openai-gpt-4:CreateCompletion",
+              "version": 1,
+              "parameters": {
+                "model": "gpt-4o-mini",
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "Tu es Elion, conseiller shopping EasyCom. Tu recommandes des produits tech pour voyager, traduire, securiser les enfants et tracker des objets. Reponds en 2-3 phrases max avec un lien Amazon (tag: easycom0ae-21). Produits disponibles: {{1.products}}."
+                  },
+                  {
+                    "role": "user",
+                    "content": "{{1.message}}"
+                  }
+                ],
+                "max_tokens": 300,
+                "temperature": 0.7
+              },
+              "metadata": {
+                "designer": { "x": 300, "y": -100 }
+              }
+            },
+            {
+              "id": 4,
+              "module": "gateway:WebhookRespond",
+              "version": 1,
+              "parameters": {
+                "status": 200,
+                "body": "{\"reply\": \"{{3.choices[].message.content}}\"}",
+                "headers": [
+                  { "key": "Content-Type", "value": "application/json" },
+                  { "key": "Access-Control-Allow-Origin", "value": "https://easycom-world.ch" }
+                ]
+              },
+              "metadata": {
+                "designer": { "x": 600, "y": -100 }
+              }
+            }
+          ]
+        },
+        {
+          "label": "Route Tracking Clic",
+          "filter": {
+            "name": "type == affiliate_click",
+            "conditions": [
+              [{ "a": "{{1.type}}", "b": "affiliate_click", "o": "text:equal" }]
+            ]
+          },
+          "flow": [
+            {
+              "id": 5,
+              "module": "google-sheets:addRow",
+              "version": 2,
+              "parameters": {
+                "spreadsheetId": "GOOGLE_SHEET_ID",
+                "sheetId": "Clics",
+                "values": {
+                  "Date": "{{1.ts}}",
+                  "Source": "{{1.source}}",
+                  "Produit": "{{1.product}}",
+                  "ASIN": "{{1.asin}}",
+                  "Page": "{{1.page}}",
+                  "ClickSource": "{{1.clickSource}}"
+                }
+              },
+              "metadata": {
+                "designer": { "x": 300, "y": 100 }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "note": "IMPORTANT: Remplacer MAKE_WEBHOOK_URL, GOOGLE_SHEET_ID et configurer la connexion OpenAI dans Make. Ne jamais commiter de token reel."
+  }
+}

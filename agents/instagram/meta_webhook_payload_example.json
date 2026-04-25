@@ -1,0 +1,51 @@
+{
+  "_comment": "Exemple de payload recu par le webhook Make.com depuis Meta Instagram Messaging API. Aucune donnee reelle — structure uniquement.",
+
+  "object": "instagram",
+  "entry": [
+    {
+      "id": "INSTAGRAM_PAGE_ID",
+      "time": 1714000000,
+      "messaging": [
+        {
+          "sender": {
+            "id": "USER_SCOPED_ID"
+          },
+          "recipient": {
+            "id": "INSTAGRAM_PAGE_ID"
+          },
+          "timestamp": 1714000000000,
+          "message": {
+            "mid": "mid.example123456",
+            "text": "Avez-vous des oreillettes de traduction pour le Japon?"
+          }
+        }
+      ]
+    }
+  ],
+
+  "_verification_challenge_example": {
+    "description": "Meta envoie cette requete GET lors de la configuration du webhook",
+    "method": "GET",
+    "params": {
+      "hub.mode": "subscribe",
+      "hub.challenge": "1234567890",
+      "hub.verify_token": "INSTAGRAM_VERIFY_TOKEN"
+    },
+    "expected_response": "1234567890"
+  },
+
+  "_send_message_example": {
+    "description": "Format de la requete POST pour envoyer un DM en reponse",
+    "method": "POST",
+    "url": "https://graph.facebook.com/v19.0/me/messages",
+    "headers": {
+      "Authorization": "Bearer INSTAGRAM_ACCESS_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "recipient": { "id": "USER_SCOPED_ID" },
+      "message": { "text": "Bonjour ! Pour votre voyage au Japon..." }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "name": "EasyCom — Izzy Google Sheets vers Telegram",
+  "description": "Lit les scripts Izzy avec statut 'A tourner' et les envoie sur Telegram pour approbation.",
+  "flow": [
+    {
+      "id": 1,
+      "module": "util:SetVariable2",
+      "version": 1,
+      "parameters": {
+        "name": "trigger",
+        "type": "schedule",
+        "schedule": {
+          "interval": 1440,
+          "startDate": "2026-04-25T09:00:00.000Z",
+          "timezone": "Europe/Zurich"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 0, "y": 0 },
+        "restore": {},
+        "parameters": [{ "name": "interval", "type": "number", "label": "Intervalle (minutes)" }]
+      }
+    },
+    {
+      "id": 2,
+      "module": "google-sheets:searchRows",
+      "version": 2,
+      "parameters": {
+        "spreadsheetId": "GOOGLE_SHEET_ID",
+        "sheetId": "Scripts",
+        "filter": {
+          "conditions": [
+            [{ "a": "Statut", "b": "A tourner", "o": "text:equal" }]
+          ]
+        },
+        "limit": 5
+      },
+      "metadata": {
+        "designer": { "x": 200, "y": 0 }
+      }
+    },
+    {
+      "id": 3,
+      "module": "telegram-bot-api:sendMessage",
+      "version": 1,
+      "parameters": {
+        "token": "TELEGRAM_BOT_TOKEN",
+        "chat_id": "TELEGRAM_CHAT_ID",
+        "text": "🎬 *SCRIPT IZZY — {{2.Produit}}*\n\n📅 Date : {{2.Date}}\n📱 Plateforme : {{2.Plateforme}}\n🛒 ASIN : {{2.ASIN}}\n\n🪝 *HOOK* : {{2.Hook}}\n\n📝 *CORPS* : {{2.Corps}}\n\n📣 *CTA* : {{2.CTA}}\n\n#️⃣ *HASHTAGS* : {{2.Hashtags}}\n\n🔗 Site : {{2.URL_Site}}\n🛍️ Amazon : {{2.URL_Amazon}}",
+        "parse_mode": "Markdown"
+      },
+      "metadata": {
+        "designer": { "x": 400, "y": 0 }
+      }
+    },
+    {
+      "id": 4,
+      "module": "google-sheets:updateRow",
+      "version": 2,
+      "parameters": {
+        "spreadsheetId": "GOOGLE_SHEET_ID",
+        "sheetId": "Scripts",
+        "rowNumber": "{{2.rowNumber}}",
+        "values": {
+          "Statut": "Envoye Telegram"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 600, "y": 0 }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "note": "IMPORTANT: Remplacer GOOGLE_SHEET_ID, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID par les vraies valeurs dans les connexions Make. Ne jamais commiter de valeurs reelles."
+  }
+}
