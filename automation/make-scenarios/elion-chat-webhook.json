@@ -1,0 +1,72 @@
+{
+  "name": "ELION — Chat Webhook Handler",
+  "description": "Reçoit les messages du chatbot Elion (site easycom-world.ch), génère une réponse via Claude API et la retourne au visiteur.",
+  "version": "1.0",
+
+  "variables": {
+    "MAKE_WEBHOOK_URL": "À copier dans index.html › const ELION_WEBHOOK_URL",
+    "TELEGRAM_BOT_TOKEN": "À configurer dans Make.com › Telegram module",
+    "TELEGRAM_CHAT_ID": "À configurer pour alertes optionnelles"
+  },
+
+  "trigger": {
+    "type": "webhook",
+    "method": "POST",
+    "payload_example": {
+      "type": "elion_chat",
+      "message": "Je cherche un cadeau pour mon fils qui voyage seul",
+      "history": [],
+      "products": [],
+      "page": "https://easycom-world.ch"
+    },
+    "response_mode": "synchronous"
+  },
+
+  "modules": [
+    {
+      "id": 1,
+      "name": "Webhook — Réception message Elion",
+      "type": "webhook:CustomWebHook",
+      "config": {
+        "url": "MAKE_WEBHOOK_URL",
+        "method": "POST",
+        "response_type": "json"
+      }
+    },
+    {
+      "id": 2,
+      "name": "HTTP — Réponse Claude (Elion IA)",
+      "type": "http:ActionSendData",
+      "config": {
+        "url": "https://api.anthropic.com/v1/messages",
+        "method": "POST",
+        "headers": [
+          { "name": "x-api-key", "value": "{{connection.ANTHROPIC_API_KEY}}" },
+          { "name": "anthropic-version", "value": "2023-06-01" },
+          { "name": "content-type", "value": "application/json" }
+        ],
+        "body": {
+          "model": "claude-haiku-4-5-20251001",
+          "max_tokens": 300,
+          "system": "Tu es Elion, le conseiller shopping IA d'EasyCom (easycom-world.ch). Réponds en 2-3 phrases maximum. Recommande 1 ou 2 produits parmi : Timekettle WT2 Edge (traduction, 289€, ASIN B084NZL8G3), Timekettle M3 (traduction, 153€, ASIN B0B8NJR625), ANFIER A8 (traduction offline, 261€, ASIN B0DP2G589V), Luckits 115L (lunettes caméra, 33€, ASIN B0F62TC6CN), BLESSOURCE 116L (lunettes, 25€, ASIN B0DQGD44LC), Stylo Scanner AI (46€, ASIN B0DS62X13F), IRISPen Reader 8 (134€, ASIN B0D2JC29Q7), Xplora X6Play (GPS enfant, 45€, ASIN B0GQHHKCRH), EUNICECG 4G (GPS enfant, 51€, ASIN B0DZP1JB4K), Invoxia GPS (traceur, 89€, ASIN B0FQYG8J4P), Samsung SmartTag2 (traceur, 15€, ASIN B0CG7JHFKY), Apple AirTag (traceur, 32€, ASIN B0GJTCB2QM). Tous les liens : https://www.amazon.fr/dp/{ASIN}?tag=easycom0ae-21. Réponds en français sauf si le visiteur écrit dans une autre langue.",
+          "messages": "{{1.history}}"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "Webhook — Réponse synchrone au site",
+      "type": "webhook:CustomWebHookResponse",
+      "config": {
+        "status": 200,
+        "headers": [
+          { "name": "Content-Type", "value": "application/json" },
+          { "name": "Access-Control-Allow-Origin", "value": "https://easycom-world.ch" }
+        ],
+        "body": {
+          "reply": "{{2.content[0].text}}"
+        }
+      }
+    }
+  ]
+}

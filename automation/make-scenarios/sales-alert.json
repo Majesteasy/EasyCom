@@ -1,0 +1,76 @@
+{
+  "name": "EasyCom — Alerte Vente Affiliée Amazon",
+  "description": "Vérifie les rapports Amazon Associates et notifie le CEO via Telegram à chaque nouvelle vente.",
+  "version": "1.0",
+
+  "trigger": {
+    "type": "schedule",
+    "interval": "every_1_hour",
+    "description": "Interroge Amazon Associates API ou Google Sheet importé pour détecter nouvelles ventes"
+  },
+
+  "variables": {
+    "GOOGLE_SHEET_ID": "À configurer — importer le rapport Amazon Associates",
+    "TELEGRAM_BOT_TOKEN": "À configurer dans Make.com › Telegram module",
+    "TELEGRAM_CHAT_ID": "À configurer dans Make.com › Telegram module",
+    "AMAZON_TAG": "easycom0ae-21"
+  },
+
+  "modules": [
+    {
+      "id": 1,
+      "name": "Schedule — Déclencheur horaire",
+      "type": "builtin:BasicTrigger",
+      "config": {
+        "interval": 60
+      }
+    },
+    {
+      "id": 2,
+      "name": "Google Sheets — Lecture rapport ventes Amazon",
+      "type": "google-sheets:ActionGetRows",
+      "config": {
+        "spreadsheet_id": "GOOGLE_SHEET_ID",
+        "sheet_name": "Rapport_Ventes",
+        "filter": "Date = aujourd'hui",
+        "description": "Amazon Associates exporte les rapports → importer dans Google Sheets via Make"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Filtre — Nouvelles ventes uniquement",
+      "type": "builtin:BasicFilter",
+      "config": {
+        "conditions": [
+          { "field": "{{2.Statut}}", "operator": "equals", "value": "Validée" }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "Telegram — Alerte vente CEO",
+      "type": "telegram-bot-api:ActionSendMessage",
+      "config": {
+        "token": "TELEGRAM_BOT_TOKEN",
+        "chat_id": "TELEGRAM_CHAT_ID",
+        "text": "💰 VENTE AFFILIÉE AMAZON !\n\nProduit : {{2.Produit}}\nCommission : {{2.Commission}} €\nDate : {{2.Date}}\nTag : easycom0ae-21\n\nTotal du jour : {{sum(2.Commission)}} €\n\n🎯 Objectif : 3 premières ventes"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Notion — Enregistrement vente (optionnel)",
+      "type": "notion:ActionCreatePage",
+      "config": {
+        "database_id": "NOTION_DATABASE_ID",
+        "properties": {
+          "Produit": "{{2.Produit}}",
+          "ASIN": "{{2.ASIN}}",
+          "Commission": "{{2.Commission}}",
+          "Date": "{{2.Date}}",
+          "Tag": "easycom0ae-21"
+        },
+        "description": "Journalise chaque vente dans Notion pour suivi CEO"
+      }
+    }
+  ]
+}

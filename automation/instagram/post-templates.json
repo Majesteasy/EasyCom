@@ -1,0 +1,133 @@
+{
+  "description": "Templates de posts Instagram EasyCom — utilisés par IZZY via Make.com",
+  "amazon_tag": "easycom0ae-21",
+  "instagram_handle": "@easycom_world",
+
+  "hashtags": {
+    "traduction": ["#traducteurinstantané", "#voyageurfuté", "#barrièredelalangue", "#timekettle", "#gadgettech", "#easycom", "#amazonfrance", "#bonplan", "#tech2026"],
+    "lunettes": ["#lunettesconnectées", "#contentcreator", "#vlog", "#gadget", "#easycom", "#amazonfrance", "#raybanmeta", "#techpascher"],
+    "stylos": ["#stylotech", "#ocr", "#scanner", "#étudiant", "#gadget2026", "#easycom", "#amazonfrance"],
+    "gps_enfant": ["#gpskids", "#securiteenfant", "#parentalité", "#montre4G", "#tranquillité", "#easycom", "#amazonfrance"],
+    "traceurs": ["#airtag", "#traceur", "#samsung", "#antivol", "#valise", "#easycom", "#amazonfrance", "#techpascher"],
+    "general": ["#easycom", "#amazonfrance", "#bonplan", "#techfrançais", "#gadgetutile", "#tech2026"]
+  },
+
+  "caption_templates": {
+    "traduction": "🎧 {hook}\n\n{problem}\n\n✅ {solution}\n\n💡 {proof}\n\n👉 Lien en bio → Amazon.fr ({price}€)\n\n{hashtags}",
+    "lunettes": "👓 {hook}\n\n{problem}\n\n✅ {solution}\n\n💡 {proof}\n\n👉 Lien en bio → Amazon.fr ({price}€)\n\n{hashtags}",
+    "stylos": "✏️ {hook}\n\n{problem}\n\n✅ {solution}\n\n💡 {proof}\n\n👉 Lien en bio → Amazon.fr ({price}€)\n\n{hashtags}",
+    "gps_enfant": "📍 {hook}\n\n{problem}\n\n✅ {solution}\n\n💡 {proof}\n\n👉 Lien en bio → Amazon.fr ({price}€)\n\n{hashtags}",
+    "traceurs": "🔍 {hook}\n\n{problem}\n\n✅ {solution}\n\n💡 {proof}\n\n👉 Lien en bio → Amazon.fr ({price}€)\n\n{hashtags}"
+  },
+
+  "products": [
+    {
+      "id": "p1",
+      "name": "Timekettle WT2 Edge",
+      "asin": "B084NZL8G3",
+      "price": 289,
+      "category": "traduction",
+      "amazon_url": "https://www.amazon.fr/dp/B084NZL8G3?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/41IY0aKP5ZL._AC_UF1000,1000_QL80_.jpg"
+    },
+    {
+      "id": "p2",
+      "name": "Timekettle M3",
+      "asin": "B0B8NJR625",
+      "price": 153,
+      "category": "traduction",
+      "amazon_url": "https://www.amazon.fr/dp/B0B8NJR625?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/514NoCaTWcL._AC_SL1000_.jpg"
+    },
+    {
+      "id": "p3",
+      "name": "ANFIER A8",
+      "asin": "B0DP2G589V",
+      "price": 261,
+      "category": "traduction",
+      "amazon_url": "https://www.amazon.fr/dp/B0DP2G589V?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/71nznNP16WL._AC_SX679_.jpg"
+    },
+    {
+      "id": "p4",
+      "name": "Luckits 115L",
+      "asin": "B0F62TC6CN",
+      "price": 33,
+      "category": "lunettes",
+      "amazon_url": "https://www.amazon.fr/dp/B0F62TC6CN?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/61Q58bAapTL._AC_SX679_.jpg"
+    },
+    {
+      "id": "p5",
+      "name": "BLESSOURCE 116L",
+      "asin": "B0DQGD44LC",
+      "price": 25,
+      "category": "lunettes",
+      "amazon_url": "https://www.amazon.fr/dp/B0DQGD44LC?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/61X4lSxnFgL._AC_SX679_.jpg"
+    },
+    {
+      "id": "p6",
+      "name": "Stylo Scanner AI",
+      "asin": "B0DS62X13F",
+      "price": 46,
+      "category": "stylos",
+      "amazon_url": "https://www.amazon.fr/dp/B0DS62X13F?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/61O1kSy99PL._AC_SX679_.jpg"
+    },
+    {
+      "id": "p7",
+      "name": "IRISPen Reader 8",
+      "asin": "B0D2JC29Q7",
+      "price": 134,
+      "category": "stylos",
+      "amazon_url": "https://www.amazon.fr/dp/B0D2JC29Q7?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/510mBhOrbNL._AC_SY300_SX300_QL70_ML2_.jpg"
+    },
+    {
+      "id": "p8",
+      "name": "Xplora X6Play",
+      "asin": "B0GQHHKCRH",
+      "price": 45,
+      "category": "gps_enfant",
+      "amazon_url": "https://www.amazon.fr/dp/B0GQHHKCRH?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/71LnGdSS9YL._AC_SY300_SX300_QL70_ML2_.jpg"
+    },
+    {
+      "id": "p9",
+      "name": "EUNICECG 4G",
+      "asin": "B0DZP1JB4K",
+      "price": 51,
+      "category": "gps_enfant",
+      "amazon_url": "https://www.amazon.fr/dp/B0DZP1JB4K?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/71xk+jt+AnL._AC_SY300_SX300_QL70_ML2_.jpg"
+    },
+    {
+      "id": "p10",
+      "name": "Invoxia GPS",
+      "asin": "B0FQYG8J4P",
+      "price": 89,
+      "category": "traceurs",
+      "amazon_url": "https://www.amazon.fr/dp/B0FQYG8J4P?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/61N3q3tHYfL._AC_SX679_.jpg"
+    },
+    {
+      "id": "p11",
+      "name": "Samsung SmartTag2",
+      "asin": "B0CG7JHFKY",
+      "price": 15,
+      "category": "traceurs",
+      "amazon_url": "https://www.amazon.fr/dp/B0CG7JHFKY?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/51AZQFwHowL._AC_SX679_.jpg"
+    },
+    {
+      "id": "p12",
+      "name": "Apple AirTag",
+      "asin": "B0GJTCB2QM",
+      "price": 32,
+      "category": "traceurs",
+      "amazon_url": "https://www.amazon.fr/dp/B0GJTCB2QM?tag=easycom0ae-21",
+      "image_url": "https://m.media-amazon.com/images/I/61lBuevDnnL._AC_SX679_.jpg"
+    }
+  ]
+}
