@@ -5,6 +5,23 @@ Format : `[DATE] type: description`
 
 ---
 
+## [2026-04-12] — Sécurité : révocation et migration clé API Gemini
+
+### security: Clé API Gemini migrée vers variables d'environnement
+- Clé Gemini exposée accidentellement (screenshot) immédiatement révoquée
+- Nouvelle clé créée et insérée dans GitHub Secrets (`GEMINI_API_KEY`)
+- `.env` créé depuis `.env.example` pour développement local (jamais commité)
+- `.gitignore` vérifié : `.env`, `*.key`, `*.secret` exclus
+- Scan complet du repo : aucune clé en dur dans les fichiers de code
+- Clé révoquée supprimée de la documentation (`docs/MASTER_CLAUDE_BRIEFING.md`)
+- Règles de sécurité absolues documentées et appliquées
+
+### fix: deploy.yml — injection correcte depuis GitHub Secrets
+- `sed` remplace `%%GEMINI_API_KEY%%` dans `index.html` au déploiement
+- Vérification automatique : le workflow échoue si le placeholder reste
+
+---
+
 ## [2026-04-12] — Session Claude Code
 
 ### feat: Intégration Gemini 1.5 Flash dans Elion
