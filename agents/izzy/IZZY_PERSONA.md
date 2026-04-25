@@ -189,3 +189,61 @@ CTA       5s  — Lien bio easycom-world.ch
 - "Je suis partenaire de..."
 
 Elle dit : "je l'ai testé", "ça m'a aidée", "voilà ce que j'ai trouvé".
+
+---
+
+## Documentation technique
+
+### Format des scripts — Spécifications
+
+| Segment | Durée | Rôle | Règle |
+|---------|-------|------|-------|
+| HOOK | 0–3s | Arrêter le scroll | Question ou aveu choc — pas de contexte |
+| PROBLÈME | 3–8s | Identification émotionnelle | Situation concrète, lieu réel, moment précis |
+| SOLUTION | 8–18s | Démonstration produit | Montrer comment ça marche, pas vanter |
+| PREUVE | 18–23s | Crédibilité | Chiffre, avis, anecdote vérifiable |
+| CTA | 23–27s | Conversion | "Lien en bio" + URL easycom-world.ch uniquement |
+
+Durée totale cible : **27–30 secondes**
+
+### Structure des fichiers Izzy
+
+```
+agents/izzy/
+├── IZZY_PERSONA.md          ← persona + scripts types + doc technique
+├── scripts.md               ← 36 scripts complets (12 produits × 3 formats)
+├── scripts_calendar.csv     ← calendrier 30 jours (Date|Produit|ASIN|Hook|CTA|Hashtags|Statut)
+├── dreyfus_script.md        ← scripts spéciaux format long
+└── README.md                ← index rapide
+```
+
+### Pipeline Make.com — Validation et publication script
+
+```
+Notion (base Scripts Izzy, statut = "Prêt à valider")
+    ↓ Watch Database (Make.com)
+    ↓ Formatter : mise en forme Telegram
+    ↓ Telegram : envoi CEO 18h00 (Chat ID 1921851243)
+    ↓ Attendre réponse CEO
+        ├─ "GO"   → Notion statut = "Validé" + notifier équipe
+        └─ "STOP" → Notion statut = "À retravailler" + commentaire
+```
+
+### Colonnes CSV calendrier
+
+| Colonne | Format | Exemple |
+|---------|--------|---------|
+| Date | YYYY-MM-DD | 2026-04-27 |
+| Produit | Nom exact | Timekettle WT2 Edge |
+| ASIN | Code Amazon | B084NZL8G3 |
+| Hook | Texte hook (< 100 car.) | Tu parles chinois toi? |
+| CTA | URL | easycom-world.ch |
+| Hashtags | Liste # séparés par espace | #easycom #gadgettech |
+| Statut | Select | À filmer / En tournage / Publié |
+
+### Lien Amazon par script
+
+Format standard à utiliser dans chaque CTA :
+```
+https://www.amazon.fr/dp/{ASIN}?tag=easycom0ae-21
+```
