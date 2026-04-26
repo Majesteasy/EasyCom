@@ -5,6 +5,38 @@ Format : `[DATE] type: description`
 
 ---
 
+## [2026-04-26] — Session Claude Code
+
+### docs: MASTER_CLAUDE_BRIEFING mis à jour
+- Date de passation : 26 avril 2026
+- Ajout bugs 9-11 (CORS Infomaniak, gemini-2.0-flash, encodage)
+- État global du projet mis à jour (tableau section 15)
+- Elion : modèle stable = gemini-1.5-flash, appel direct sans proxy
+
+---
+
+## [2026-04-12 → 2026-04-26] — Correctifs Elion (PRs #9 à #11)
+
+### fix: Bascule Elion de proxy Infomaniak vers Gemini direct
+- Erreur CORS résolue en appelant directement `generativelanguage.googleapis.com`
+- Suppression du proxy Infomaniak
+
+### feat: Elion — message d'erreur convivial si quota dépassé
+- Affichage d'un message lisible si quota Gemini épuisé (au lieu de crash silencieux)
+
+### debug: Affichage erreur Gemini exacte pour diagnostic
+- Commit temporaire pour identifier les erreurs API
+
+### fix: Encodage site corrompu + réparation Elion
+- Restauration depuis commit stable `90e2016`
+- Réapplication des correctifs Elion sur base propre
+
+### fix: Elion — bascule gemini-2.0-flash → gemini-1.5-flash (PR #11)
+- gemini-2.0-flash testé : instable, rejeté
+- Retour à gemini-1.5-flash : état stable confirmé
+
+---
+
 ## [2026-04-12] — Session Claude Code
 
 ### feat: Intégration Gemini 1.5 Flash dans Elion
@@ -64,7 +96,9 @@ Format : `[DATE] type: description`
 | 12 produits affichés | ✅ Corrigé |
 | Images Amazon | ✅ Visibles |
 | Tag affilié `easycom0ae-21` | ✅ Partout |
-| Chatbot Elion (Gemini) | ⚠️ Clé API à insérer |
+| Chatbot Elion (Gemini 1.5 Flash) | ⚠️ Vérifier clé GitHub Secrets |
+| Elion appel direct (sans proxy) | ✅ CORS résolu |
+| Elion modèle stable | ✅ gemini-1.5-flash |
 | Ouverture auto Elion | ✅ 4 secondes |
 | Notion MASTER | ⏳ À créer/synchroniser |
 | Agent IZZY (TikTok) | ⏳ À développer |
