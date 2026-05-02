@@ -1,6 +1,6 @@
 # MASTER BRIEFING — Projet EasyCom
 # Document de passation pour Claude
-# Dernière mise à jour : 12 avril 2026
+# Dernière mise à jour : 26 avril 2026
 
 ---
 
@@ -30,7 +30,7 @@ Le site affiche 12 produits tech. Quand le visiteur clique → il va sur Amazon 
 | Domaine | easycom-world.ch (DNS Infomaniak → GitHub Pages) |
 | Fichier principal | `index.html` (~940 lignes, tout-en-un) |
 | Déploiement | GitHub Actions (`.github/workflows/deploy.yml`) |
-| Chatbot | Elion — Google Gemini 1.5 Flash (client-side) |
+| Chatbot | Elion — Google Gemini 1.5 Flash (client-side, direct API) |
 | Tag affilié | `easycom0ae-21` dans TOUS les liens Amazon |
 
 ---
@@ -102,8 +102,8 @@ EasyCom/
 ## 6. VARIABLES CLÉS DANS index.html
 
 ```javascript
-const TAG = 'easycom0ae-21';        // ligne ~543 — TAG affilié Amazon
-const GEMINI_KEY = '%%GEMINI_API_KEY%%'; // ligne ~672 — injecté par GitHub Actions
+const TAG = 'easycom0ae-21';             // ligne ~543 — TAG affilié Amazon
+const GEMINI_KEY = '%%GEMINI_API_KEY%%'; // ligne 672 — injecté par GitHub Actions
 ```
 
 **Important :** `%%GEMINI_API_KEY%%` est un placeholder remplacé automatiquement
@@ -131,29 +131,30 @@ GitHub → Settings → Secrets and variables → Actions → `GEMINI_API_KEY`
 
 ---
 
-## 8. CHATBOT ELION — ÉTAT ACTUEL
+## 8. CHATBOT ELION — ÉTAT AU 26 AVRIL 2026
 
-### Ce qui est codé
-- Backend : Gemini 1.5 Flash (`generativelanguage.googleapis.com`)
+### Architecture actuelle
+- **API** : Google Gemini 1.5 Flash — appel direct côté client (plus de proxy Infomaniak)
+- **Endpoint** : `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=CLE`
+- **Clé** : injectée par GitHub Actions via secret `GEMINI_API_KEY`
 - S'ouvre automatiquement après 4 secondes sur le site
 - System prompt : inclut les 12 produits avec liens affiliés `easycom0ae-21`
 - Répond en FR/EN/DE/IT/ES selon la langue du visiteur
 - Historique 8 messages conservé
 
-### Problème actuel (12 avril 2026)
-Elion répond "Contactez-nous" à chaque message → l'appel Gemini échoue.
+### Historique des changements Elion (depuis avril 2026)
+1. **Bascule Infomaniak → Gemini direct** — correction erreur CORS
+2. **Passage gemini-2.0-flash** — testé, rejeté (instabilité)
+3. **Retour gemini-1.5-flash** — état stable actuel (PR #11 mergée)
 
-**Cause probable :** La clé dans GitHub Secrets est soit :
-- La clé révoquée `AIzaSyDGSWhHmiaOtOLHkB2_kDl1H1x3B5yO3GA` (ne fonctionne plus)
-- Vide ou incorrecte
+### Statut actuel
+Le chatbot fonctionne techniquement. Si Elion répond "Contactez-nous" →
+la clé dans GitHub Secrets est soit vide, soit révoquée.
 
-**Fix en attente :** Une PR est ouverte avec affichage du vrai message d'erreur.
-Après merge, Elion affichera l'erreur exacte au lieu de "Contactez-nous".
-
-**Solution :**
-1. Aller sur `aistudio.google.com/app/apikey` → créer une nouvelle clé
+**Vérification :**
+1. `aistudio.google.com/app/apikey` → créer ou copier une clé valide
 2. GitHub → Settings → Secrets → `GEMINI_API_KEY` → mettre à jour
-3. Re-déclencher le déploiement (ou pusher un commit sur main)
+3. Re-push sur main pour déclencher un déploiement
 
 ### Appel API Gemini (format exact)
 ```javascript
@@ -206,6 +207,18 @@ Réponse:
 - **Cause :** `easycom0-21` (lettre `ae` manquante)
 - **Fix :** `easycom0ae-21`
 
+### Bug 9 : CORS Elion via proxy Infomaniak
+- **Cause :** Appel API passait par un proxy Infomaniak → erreur CORS
+- **Fix :** Appel direct à l'API Gemini côté client (suppression du proxy)
+
+### Bug 10 : Elion instable avec gemini-2.0-flash
+- **Cause :** Modèle 2.0-flash introduit → comportement instable
+- **Fix :** Retour à gemini-1.5-flash (PR #11 mergée)
+
+### Bug 11 : Encodage site corrompu
+- **Cause :** Corruption d'encodage dans index.html après modifications
+- **Fix :** Restauration depuis commit stable `90e2016`, puis réapplication des fixes
+
 ---
 
 ## 10. RÈGLES DE SÉCURITÉ ABSOLUES
@@ -242,21 +255,22 @@ Le proxy git de l'environnement Claude Code **n'autorise que les pushs vers des 
 - Mission : scripts TikTok 15-30s, légendes Instagram
 - Style : hook 3s, problème, solution, CTA
 - Structure prête dans `/agents/izzy/`
+- Produits prioritaires : Timekettle WT2 Edge, Luckits 115L, Apple AirTag, Xplora X6Play
 
 ### Make.com + Telegram — Non configuré
 - Bot Telegram : @EasyComCEObot (Chat ID: 1921851243)
-- Scénarios prévus : alerte ventes, pipeline contenu IZZY
+- Scénarios prévus : alerte ventes, pipeline contenu IZZY, monitoring site
+- Webhook Make.com : à créer
 
 ---
 
 ## 13. PROCHAINES ÉTAPES PRIORITAIRES
 
-1. **URGENT** — Corriger la clé Gemini dans GitHub Secrets → Elion fonctionnel
+1. **URGENT** — Vérifier/renouveler la clé Gemini dans GitHub Secrets → Elion pleinement fonctionnel
 2. Restreindre la clé Gemini sur Google Cloud Console (referrers : easycom-world.ch)
-3. Merger la PR debug ouverte (branche `claude/fix-index-github-infomaniak-PkmtT`)
-4. Développer IZZY (scripts TikTok)
-5. Configurer Make.com → Telegram bot alertes
-6. Obtenir 3 ventes pour valider Amazon Associates
+3. Développer IZZY (scripts TikTok — 4 produits prioritaires)
+4. Configurer Make.com → Telegram bot alertes ventes
+5. Obtenir 3 ventes pour valider Amazon Associates
 
 ---
 
@@ -268,7 +282,24 @@ Espace Notion connecté. Pages trouvées :
 - `Guide_Kit_EasyCom` — guide de démarrage
 - Elion défini dans Notion comme "Chef de projet IA" (rôle différent du chatbot)
 
-Pas de page "MASTER EasyCom" trouvée — à créer.
+---
+
+## 15. ÉTAT GLOBAL DU PROJET (26 avril 2026)
+
+| Élément | Statut |
+|---------|--------|
+| Site easycom-world.ch | ✅ En ligne |
+| 12 produits affichés | ✅ Opérationnel |
+| Images Amazon | ✅ Visibles |
+| Tag affilié `easycom0ae-21` | ✅ Partout |
+| Chatbot Elion (Gemini 1.5 Flash) | ⚠️ Vérifier clé GitHub Secrets |
+| Elion appel direct (sans proxy) | ✅ CORS résolu |
+| Elion modèle stable | ✅ gemini-1.5-flash (2.0-flash rejeté) |
+| Agent IZZY (TikTok) | ⏳ À développer |
+| Automation Make.com | ⏳ À configurer |
+| Telegram bot alertes | ⏳ À configurer |
+| Notion synchronisation | ⏳ À créer/synchroniser |
+| Amazon Associates validé | ⏳ 3 ventes requises |
 
 ---
 
