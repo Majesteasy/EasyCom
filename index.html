@@ -471,6 +471,17 @@ footer{
 </section>
 
 <!-- COLLECTION -->
+<section class="section" id="moins100">
+  <div class="section-titre">
+    <h2><em>Moins de</em> <span>100€</span></h2>
+    <p data-fr="Sélection high-tech abordable — qualité premium, prix accessibles" data-en="Affordable high-tech selection — premium quality, accessible prices" data-de="Erschwingliche High-Tech-Auswahl — Premium-Qualität, zugängliche Preise" data-it="Selezione high-tech conveniente — qualità premium, prezzi accessibili" data-es="Selección high-tech asequible — calidad premium, precios accesibles">
+      Sélection high-tech abordable — qualité premium, prix accessibles
+    </p>
+    <div class="separateur"></div>
+  </div>
+  <div class="produits-grid" id="budget-grid"></div>
+</section>
+
 <section class="section" id="collection">
   <div class="section-titre">
     <h2><em data-fr="Notre" data-en="Our">Notre</em> <span data-fr="collection" data-en="collection">collection</span></h2>
@@ -656,11 +667,42 @@ const PRODUITS = [
     prix:31.53,
     asin:'B0GJTCB2QM',
     img:'https://m.media-amazon.com/images/I/61lBuevDnnL._AC_SX679_.jpg'
+  },
+  {
+    id:'p13', cat:'budget',
+    nom_fr:'Timekettle M2',nom_en:'Timekettle M2',
+    desc_fr:'Traducteur vocal instantané, 40 langues et 93 accents. 7 langues offline. Écouteurs Bluetooth pour musique et appels. Compatible iOS & Android.',
+    desc_en:'Instant voice translator, 40 languages & 93 accents. 7 offline languages. Bluetooth earphones for music and calls. iOS & Android compatible.',
+    prix:79.00,
+    badge_fr:'Moins de 100€',badge_en:'Under 100€',
+    asin:'B08K8PV4CB',
+    img:'https://m.media-amazon.com/images/I/51CRaxPGIJL._AC_SY300_SX300_.jpg'
+  },
+  {
+    id:'p14', cat:'budget',
+    nom_fr:'Vormor X5',nom_en:'Vormor X5',
+    desc_fr:'Stylo scanner traducteur, 112 langues, OCR, Wi-Fi/Bluetooth. Lit et traduit instantanément tout texte imprimé. Idéal étudiants et voyageurs.',
+    desc_en:'Scanner translator pen, 112 languages, OCR, Wi-Fi/Bluetooth. Instantly reads and translates any printed text. Ideal for students and travellers.',
+    prix:39.00,
+    badge_fr:'Moins de 100€',badge_en:'Under 100€',
+    asin:'B07SX8H8PS',
+    img:'https://m.media-amazon.com/images/I/71h4kaxotnL._AC_SX679_.jpg'
+  },
+  {
+    id:'p15', cat:'budget',
+    nom_fr:'Travis Touch Go',nom_en:'Travis Touch Go',
+    desc_fr:'Traducteur de poche 155 langues avec eSIM 4G LTE intégré. Traduction bidirectionnelle instantanée. Hotspot WiFi inclus pour voyager connecté.',
+    desc_en:'Pocket translator 155 languages with built-in 4G LTE eSIM. Instant two-way translation. WiFi hotspot included for connected travel.',
+    prix:69.00,
+    badge_fr:'Moins de 100€',badge_en:'Under 100€',
+    asin:'B07NDBSG8T',
+    img:'https://m.media-amazon.com/images/I/61DWDXaYOmL._AC_SX679_.jpg'
   }
 ];
 
 const CATS = [
   {id:'tout',  fr:'Tout voir',      en:'All',          de:'Alle',        it:'Tutto',        es:'Todo',        ico:'✦'},
+  {id:'budget', fr:'Moins de 100€', en:'Under 100€',   de:'Unter 100€',  it:'Sotto 100€',   es:'Menos de 100€', ico:'💰'},
   {id:'oreillettes', fr:'Oreillettes', en:'Earpieces', de:'Ohrhörer',    it:'Auricolari',   es:'Auriculares', ico:'🎧'},
   {id:'lunettes',    fr:'Lunettes',    en:'Glasses',   de:'Brillen',     it:'Occhiali',     es:'Gafas',       ico:'🕶️'},
   {id:'stylos',      fr:'Stylos',      en:'Pens',      de:'Scanner-Stifte', it:'Penne scanner', es:'Bolígrafos escáner', ico:'✏️'},
@@ -692,7 +734,7 @@ function setLang(l){
       el.textContent = val;
     }
   });
-  renderCats(); renderProduits();
+  renderCats(); renderProduits(); renderBudget();
 }
 
 // ── CATÉGORIES ──
@@ -706,6 +748,36 @@ function renderCats(){
   `).join('');
 }
 function setCat(id){catActive=id; renderCats(); renderProduits();}
+
+// ── BUDGET SPOTLIGHT ──
+function renderBudget(){
+  const buyLabels = {fr:'Voir sur Amazon',en:'View on Amazon',de:'Bei Amazon ansehen',it:'Vedi su Amazon',es:'Ver en Amazon'};
+  const prixTexte = lang==='fr' ? 'Voir le prix à jour sur Amazon' : lang==='en' ? 'See up-to-date price on Amazon' : lang==='de' ? 'Aktuellen Preis auf Amazon sehen' : lang==='it' ? 'Vedi il prezzo aggiornato su Amazon' : 'Ver precio actualizado en Amazon';
+  const g = document.getElementById('budget-grid');
+  if(!g) return;
+  const liste = PRODUITS.filter(p => p.cat === 'budget');
+  g.innerHTML = liste.map(p => {
+    const badge = p['badge_'+lang] || p.badge_en || p.badge_fr || '';
+    const nom = p['nom_'+lang] || p.nom_en || p.nom_fr || '';
+    const desc = p['desc_'+lang] || p.desc_en || p.desc_fr || '';
+    return `
+      <div class="produit-card">
+        <div class="produit-img-wrap">
+          ${badge ? `<div class="produit-badge">${badge}</div>` : ''}
+          <img class="produit-img" src="${p.img}" alt="${nom}" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%231a1a1a&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; fill=&quot;%23c9a84c&quot;>EasyCom</text></svg>'">
+        </div>
+        <div class="produit-corps">
+          <div class="produit-nom">${nom}</div>
+          <div class="produit-desc">${desc}</div>
+          <div class="produit-prix">${prixTexte}</div>
+          <button class="btn-panier" onclick="event.stopPropagation();window.open('${getUrl(p)}','_blank')">
+            ${buyLabels[lang] || buyLabels.en}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
 // ── PRODUITS ──
 function getUrl(p){
@@ -857,6 +929,13 @@ PRODUITS DISPONIBLES (utilise uniquement ces liens) :
 - EUNICECG 4G (56,97€) – montre GPS 4G, vidéo HD, IP67 → https://www.amazon.fr/dp/B0CMQK9XKZ?tag=easycom0ae-21
 
 🔖 TRACEURS GPS :
+- Samsung SmartTag2 (15€) – réseau mondial SmartThings, IP67 → https://www.amazon.fr/dp/B0CG7JHFKY?tag=easycom0ae-21
+- Apple AirTag (32€) – réseau Find My 2 milliards d'appareils, IP67 → https://www.amazon.fr/dp/B0GJTCB2QM?tag=easycom0ae-21
+
+💰 BUDGET MOINS DE 100€ :
+- Timekettle M2 (79€) – traducteur vocal 40 langues, 7 offline, Bluetooth → https://www.amazon.fr/dp/B08K8PV4CB?tag=easycom0ae-21
+- Vormor X5 (39€) – stylo scanner 112 langues, OCR, Wi-Fi → https://www.amazon.fr/dp/B07SX8H8PS?tag=easycom0ae-21
+- Travis Touch Go (69€) – traducteur de poche 155 langues, eSIM 4G, hotspot → https://www.amazon.fr/dp/B07NDBSG8T?tag=easycom0ae-21
 - Invoxia GPS (89€) – 2 mois autonomie, alertes temps réel → https://www.amazon.fr/dp/B0FQYG8J4P?tag=easycom0ae-21
 - Samsung SmartTag2 (15€) – réseau mondial SmartThings, IP67 → https://www.amazon.fr/dp/B0CG7JHFKY?tag=easycom0ae-21
 - Apple AirTag (32€) – réseau Find My 2 milliards d'appareils, IP67 → https://www.amazon.fr/dp/B0GJTCB2QM?tag=easycom0ae-21`;
@@ -961,6 +1040,7 @@ document.getElementById('modal-cgv').addEventListener('click',e=>{
 document.addEventListener('DOMContentLoaded',()=>{
   renderCats();
   renderProduits();
+  renderBudget();
   // Ouverture automatique du chatbot Elion après 4 secondes
   setTimeout(()=>{ if(!chatOuvert) toggleChat(); }, 4000);
 });
