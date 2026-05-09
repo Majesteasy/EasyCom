@@ -14,23 +14,23 @@
   --or:#C9A84C;
   --or-clair:#e2c47a;
   --or-sombre:#8a6f2e;
-  --gris:#1a1a1a;
-  --gris2:#2a2a2a;
-  --blanc:#f5f0e8;
-  --texte:#c8bfa8;
+  --gris:#f2f2f2;
+  --gris2:#e5e5e5;
+  --blanc:#111111;
+  --texte:#555555;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--noir);color:var(--blanc);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden;}
+body{background:#ffffff;color:var(--blanc);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden;}
 
 /* ── HEADER ── */
 header{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 5%;
-  background:rgba(8,8,8,0.92);
+  background:rgba(255,255,255,0.95);
   backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(201,168,76,0.15);
+  border-bottom:1px solid rgba(201,168,76,0.3);
 }
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
 
@@ -93,8 +93,8 @@ nav{display:flex;align-items:center;gap:24px;}
 }
 .hero-grille{
   position:absolute;inset:0;
-  background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(201,168,76,0.10) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(201,168,76,0.10) 1px,transparent 1px);
   background-size:60px 60px;
 }
 .hero-badge{
@@ -199,7 +199,7 @@ nav{display:flex;align-items:center;gap:24px;}
 
 .produit-img-wrap{
   position:relative;overflow:hidden;
-  height:220px;background:#111;
+  height:220px;background:#e8e8e8;
 }
 .produit-img-wrap::after{
   content:'';position:absolute;inset:0;
@@ -302,7 +302,7 @@ nav{display:flex;align-items:center;gap:24px;}
 .modal-corps{padding:20px 24px;overflow-y:auto;flex:1;}
 .panier-ligne{
   display:flex;justify-content:space-between;align-items:center;
-  padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.08);
   font-size:13px;
 }
 .panier-ligne-nom{color:var(--blanc);flex:1;}
@@ -333,56 +333,6 @@ nav{display:flex;align-items:center;gap:24px;}
   font-family:'Cormorant Garamond',serif;
   font-size:18px;color:var(--or);margin:20px 0 8px;font-weight:400;
 }
-
-/* ── CHATBOT ── */
-.chat-bulle{
-  position:fixed;bottom:92px;right:24px;z-index:200;
-  width:52px;height:52px;border-radius:50%;
-  background:var(--gris2);border:1px solid var(--or);
-  color:var(--or);cursor:pointer;font-size:22px;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .3s;
-}
-.chat-bulle:hover{background:var(--or);color:var(--noir);}
-.chat-fenetre{
-  display:none;position:fixed;bottom:160px;right:24px;z-index:200;
-  width:320px;background:var(--gris);
-  border:1px solid rgba(201,168,76,0.3);
-  border-top:2px solid var(--or);
-  flex-direction:column;max-height:420px;
-}
-.chat-fenetre.ouvert{display:flex;}
-.chat-entete{
-  padding:12px 16px;background:rgba(201,168,76,0.08);
-  border-bottom:1px solid rgba(201,168,76,0.15);
-  display:flex;justify-content:space-between;align-items:center;
-}
-.chat-entete span{font-size:12px;letter-spacing:1px;color:var(--or);}
-.chat-fermer{background:none;border:none;color:var(--texte);cursor:pointer;}
-.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
-.msg{max-width:85%;font-size:12px;line-height:1.5;padding:8px 12px;}
-.msg.bot{background:rgba(201,168,76,0.08);color:var(--blanc);border-left:2px solid var(--or);align-self:flex-start;}
-.msg.user{background:var(--or);color:var(--noir);align-self:flex-end;}
-.chat-saisie{
-  padding:10px;border-top:1px solid rgba(201,168,76,0.15);
-  display:flex;gap:8px;
-}
-.chat-input{
-  flex:1;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(201,168,76,0.2);
-  color:var(--blanc);padding:8px 12px;font-size:12px;
-  font-family:'Jost',sans-serif;
-}
-.chat-input:focus{outline:none;border-color:var(--or);}
-.chat-envoyer{
-  background:var(--or);border:none;color:var(--noir);
-  padding:8px 14px;cursor:pointer;font-size:14px;
-}
-.typing{display:flex;gap:4px;align-items:center;padding:4px 0;}
-.typing span{width:5px;height:5px;background:var(--or);border-radius:50%;animation:bounce .8s infinite;}
-.typing span:nth-child(2){animation-delay:.15s;}
-.typing span:nth-child(3){animation-delay:.3s;}
-@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
 
 /* ── FOOTER ── */
 footer{
@@ -472,13 +422,6 @@ footer{
 
 <!-- COLLECTION -->
 <section class="section" id="moins100">
-  <div class="section-titre">
-    <h2><em>Moins de</em> <span>100€</span></h2>
-    <p data-fr="Sélection high-tech abordable — qualité premium, prix accessibles" data-en="Affordable high-tech selection — premium quality, accessible prices" data-de="Erschwingliche High-Tech-Auswahl — Premium-Qualität, zugängliche Preise" data-it="Selezione high-tech conveniente — qualità premium, prezzi accessibili" data-es="Selección high-tech asequible — calidad premium, precios accesibles">
-      Sélection high-tech abordable — qualité premium, prix accessibles
-    </p>
-    <div class="separateur"></div>
-  </div>
   <div class="produits-grid" id="budget-grid"></div>
 </section>
 
@@ -515,22 +458,6 @@ footer{
     <div class="f-badge" data-fr="Multilingue & assisté par IA" data-en="Multilingual & AI-assisted" data-de="Mehrsprachig & KI-gestützt" data-it="Multilingue e assistito da IA" data-es="Multilingüe y asistido por IA">Livraison EU</div>
   </div>
 </footer>
-
-
-
-<!-- CHATBOT -->
-<button class="chat-bulle" onclick="toggleChat()" aria-label="Chat">💬</button>
-<div class="chat-fenetre" id="chat-win">
-  <div class="chat-entete">
-    <span data-fr="Conseiller EasyCom" data-en="EasyCom Advisor" data-de="EasyCom Berater" data-it="Consulente EasyCom" data-es="Asesor EasyCom">Conseiller EasyCom</span>
-    <button class="chat-fermer" onclick="toggleChat()">✕</button>
-  </div>
-  <div class="chat-msgs" id="chat-msgs"></div>
-  <div class="chat-saisie">
-    <input class="chat-input" id="chat-input" placeholder="Votre question..." onkeydown="chatKeydown(event)"/>
-    <button class="chat-envoyer" onclick="envoyerChat()">→</button>
-  </div>
-</div>
 
 
 
@@ -702,7 +629,6 @@ const PRODUITS = [
 
 const CATS = [
   {id:'tout',  fr:'Tout voir',      en:'All',          de:'Alle',        it:'Tutto',        es:'Todo',        ico:'✦'},
-  {id:'budget', fr:'Moins de 100€', en:'Under 100€',   de:'Unter 100€',  it:'Sotto 100€',   es:'Menos de 100€', ico:'💰'},
   {id:'oreillettes', fr:'Oreillettes', en:'Earpieces', de:'Ohrhörer',    it:'Auricolari',   es:'Auriculares', ico:'🎧'},
   {id:'lunettes',    fr:'Lunettes',    en:'Glasses',   de:'Brillen',     it:'Occhiali',     es:'Gafas',       ico:'🕶️'},
   {id:'stylos',      fr:'Stylos',      en:'Pens',      de:'Scanner-Stifte', it:'Penne scanner', es:'Bolígrafos escáner', ico:'✏️'},
@@ -710,29 +636,18 @@ const CATS = [
   {id:'traceurs',    fr:'Traceurs',    en:'Trackers',  de:'Tracker',     it:'Tracker',      es:'Rastreadores', ico:'🔖'},
 ];
 
-// ── GEMINI CONFIG ──
-const GEMINI_KEY = '%%GEMINI_API_KEY%%';
-
 // ── ÉTAT ──
 let lang = 'fr';
 let catActive = 'tout';
 let panier = [];
-let chatOuvert = false;
-let chatBusy = false;
-let histoChat = [];
 
 // ── LANGUE ──
 function setLang(l){
   lang = l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('actif', b.textContent===l.toUpperCase()));
   document.querySelectorAll('[data-fr]').forEach(el=>{
-    if(el.tagName==='INPUT'){
-      const placeholders = {fr:'Votre question...',en:'Your question...',de:'Ihre Frage...',it:'La sua domanda...',es:'Su pregunta...'};
-      el.placeholder = placeholders[l] || 'Your question...';
-    } else {
-      const val = el.getAttribute('data-'+l) || el.getAttribute('data-en') || el.getAttribute('data-fr');
-      el.textContent = val;
-    }
+    const val = el.getAttribute('data-'+l) || el.getAttribute('data-en') || el.getAttribute('data-fr');
+    el.textContent = val;
   });
   renderCats(); renderProduits(); renderBudget();
 }
@@ -764,7 +679,7 @@ function renderBudget(){
       <div class="produit-card">
         <div class="produit-img-wrap">
           ${badge ? `<div class="produit-badge">${badge}</div>` : ''}
-          <img class="produit-img" src="${p.img}" alt="${nom}" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%231a1a1a&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; fill=&quot;%23c9a84c&quot;>EasyCom</text></svg>'">
+          <img class="produit-img" src="${p.img}" alt="${nom}" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23e8e8e8&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; fill=&quot;%23c9a84c&quot;>EasyCom</text></svg>'">
         </div>
         <div class="produit-corps">
           <div class="produit-nom">${nom}</div>
@@ -823,7 +738,7 @@ function renderProduits(){
                alt="${nom}"
                referrerpolicy="no-referrer"
                loading="lazy"
-               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%231a1a1a&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; fill=&quot;%23c9a84c&quot;>EasyCom</text></svg>'">
+               onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;600&quot; height=&quot;600&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23e8e8e8&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;28&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; fill=&quot;%23c9a84c&quot;>EasyCom</text></svg>'">
         </div>
         <div class="produit-corps">
           <div class="produit-nom">${nom}</div>
@@ -896,127 +811,6 @@ function ouvrirCGV(){
 }
 function fermerCGV(){document.getElementById('modal-cgv').classList.remove('ouvert');}
 
-// ── CHATBOT ──
-const SYSTEM_CHAT = `Tu es Elion, conseiller commercial EasyCom. Ton seul objectif est de convertir chaque visiteur en acheteur Amazon.
-
-RÈGLES STRICTES :
-- Ne présente JAMAIS un produit épuisé
-- Après 2 échanges, propose toujours un produit spécifique avec son lien Amazon (tag easycom0ae-21)
-- Identifie le besoin en 1 question maximum : "C'est pour traduire, localiser ou autre ?"
-- Crée l'urgence : stock limité, meilleur prix du moment
-- Si le visiteur hésite, propose la comparaison entre 2 produits
-- Termine toujours par un lien cliquable Amazon
-- Tu parles la langue du visiteur automatiquement
-- Maximum 4 phrases par réponse
-- Ne mentionne jamais "affilié" ni "commission"
-
-PRODUITS DISPONIBLES (utilise uniquement ces liens) :
-🎧 OREILLETTES TRADUCTION :
-- Timekettle WT2 Edge (289€) – traduction simultanée bidirectionnelle, 40 langues, précision 95% → https://www.amazon.fr/dp/B084NZL8G3?tag=easycom0ae-21
-- Timekettle M3 (153€) – 40 langues, mode hors-ligne, 25h autonomie → https://www.amazon.fr/dp/B0B8NJR625?tag=easycom0ae-21
-- ANFIER A8 (261€) – 144 langues, Bluetooth 6.0, 40h autonomie → https://www.amazon.fr/dp/B0DP2G589V?tag=easycom0ae-21
-
-🕶️ LUNETTES CONNECTÉES :
-- Luckits 115L (33€) – traduction 116 langues, speakers open-ear, filtre lumière bleue → https://www.amazon.fr/dp/B0F62TC6CN?tag=easycom0ae-21
-- BLESSOURCE 116L (25€) – traduction temps réel 116 langues, verres polarisés UV → https://www.amazon.fr/dp/B0DQGD44LC?tag=easycom0ae-21
-
-✏️ STYLOS SCANNER :
-- Stylo Scanner AI (46€) – traduit tout texte imprimé, 42 langues → https://www.amazon.fr/dp/B0DS62X13F?tag=easycom0ae-21
-- IRISPen Reader 8 (134€) – OCR professionnel 130 langues, PC & Mac → https://www.amazon.fr/dp/B0D2JC29Q7?tag=easycom0ae-21
-
-📍 GPS ENFANT :
-- Xplora X6Play (45€) – montre GPS 4G, appels, SOS, suivi parental → https://www.amazon.fr/dp/B0GQHHKCRH?tag=easycom0ae-21
-- EUNICECG 4G (56,97€) – montre GPS 4G, vidéo HD, IP67 → https://www.amazon.fr/dp/B0CMQK9XKZ?tag=easycom0ae-21
-
-🔖 TRACEURS GPS :
-- Samsung SmartTag2 (15€) – réseau mondial SmartThings, IP67 → https://www.amazon.fr/dp/B0CG7JHFKY?tag=easycom0ae-21
-- Apple AirTag (32€) – réseau Find My 2 milliards d'appareils, IP67 → https://www.amazon.fr/dp/B0GJTCB2QM?tag=easycom0ae-21
-
-💰 BUDGET MOINS DE 100€ (EN STOCK) :
-- Lexibook Interpretor 3 (~92€) – traducteur vocal 137 langues, photo, mémos, Wi-Fi/offline → https://www.amazon.fr/dp/B08BLLT33T?tag=easycom0ae-21
-- Loriatech (~82€) – écouteur traducteur clip-on Bluetooth 5.4, 144 langues temps réel → https://www.amazon.fr/dp/B0FB321J5P?tag=easycom0ae-21
-- Bewinner J7 (~8€) – écouteurs traducteur IA Bluetooth 5.2, 84 langues, 5 modes → https://www.amazon.fr/dp/B0B6Q7FH44?tag=easycom0ae-21
-- Invoxia GPS (89€) – 2 mois autonomie, alertes temps réel → https://www.amazon.fr/dp/B0FQYG8J4P?tag=easycom0ae-21
-- Samsung SmartTag2 (15€) – réseau mondial SmartThings, IP67 → https://www.amazon.fr/dp/B0CG7JHFKY?tag=easycom0ae-21
-- Apple AirTag (32€) – réseau Find My 2 milliards d'appareils, IP67 → https://www.amazon.fr/dp/B0GJTCB2QM?tag=easycom0ae-21`;
-
-
-function toggleChat(){
-  chatOuvert = !chatOuvert;
-  const w = document.getElementById('chat-win');
-  w.classList.toggle('ouvert', chatOuvert) ;
-  if(chatOuvert && histoChat.length===0){
-    const welcomes = {
-      fr:'✦ Bonjour, bienvenue chez EasyCom. Comment puis-je vous aider ?',
-      en:'✦ Welcome to EasyCom. How may I assist you today?',
-      de:'✦ Willkommen bei EasyCom. Wie kann ich Ihnen helfen?',
-      it:'✦ Benvenuto su EasyCom. Come posso aiutarla?',
-      es:'✦ Bienvenido a EasyCom. ¿Cómo puedo ayudarle?'
-    };
-    addChatMsg('bot', welcomes[lang] || welcomes.en);
-  }
-}
-function chatKeydown(e){if(e.key==='Enter')envoyerChat();}
-function addChatMsg(role, txt){
-  const d=document.createElement('div');
-  d.className='msg '+role;
-  d.textContent=txt;
-  const m=document.getElementById('chat-msgs');
-  m.appendChild(d);m.scrollTop=m.scrollHeight;
-}
-async function envoyerChat(){
-  if(chatBusy) return;
-  const inp=document.getElementById('chat-input');
-  const txt=inp.value.trim();
-  if(!txt) return;
-  inp.value='';
-  addChatMsg('user',txt);
-  histoChat.push({role:'user',content:txt});
-  chatBusy=true;
-  // Typing indicator
-  const ty=document.createElement('div');
-  ty.className='msg bot';ty.id='typing';
-  ty.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
-  document.getElementById('chat-msgs').appendChild(ty);
-  const fallback = {
-    fr:'Contactez-nous : contact@easycom-world.ch',
-    en:'Contact us: contact@easycom-world.ch',
-    de:'Kontaktieren Sie uns: contact@easycom-world.ch',
-    it:'Contattaci: contact@easycom-world.ch',
-    es:'Contáctenos: contact@easycom-world.ch'
-  };
-  try{
-    const contents = histoChat.slice(-8).map(m=>({
-      role: m.role==='assistant' ? 'model' : 'user',
-      parts:[{text:m.content}]
-    }));
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_KEY}`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        system_instruction:{parts:[{text:SYSTEM_CHAT}]},
-        contents,
-        generationConfig:{maxOutputTokens:250,temperature:0.8}
-      })
-    });
-    const data=await r.json();
-    document.getElementById('typing')?.remove();
-    if(data.error){
-      console.error('Gemini error:',data.error);
-      addChatMsg('bot','⚠️ Erreur API: '+data.error.message);
-      chatBusy=false; return;
-    }
-    const rep=data.candidates?.[0]?.content?.parts?.[0]?.text||(fallback[lang]||fallback.en);
-    addChatMsg('bot',rep);
-    histoChat.push({role:'assistant',content:rep});
-  }catch(e){
-    console.error('Elion catch:',e);
-    document.getElementById('typing')?.remove();
-    addChatMsg('bot','⚠️ '+e.message);
-  }
-  chatBusy=false;
-}
-
 // ── TOAST ──
 function showToast(msg){
   const t=document.getElementById('toast');
@@ -1041,8 +835,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderCats();
   renderProduits();
   renderBudget();
-  // Ouverture automatique du chatbot Elion après 4 secondes
-  setTimeout(()=>{ if(!chatOuvert) toggleChat(); }, 4000);
 });
 </script>
 </body>
