@@ -31,9 +31,9 @@ header{
   border-bottom:1px solid rgba(201,168,76,0.2);
 }
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
-.logo-globe{width:36px;height:36px;border:1.5px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--or);font-size:18px;}
+.logo-globe{display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .logo-texte{display:flex;flex-direction:column;}
-.logo-nom{font-family:'Cormorant Garamond',serif;font-size:20px;color:#111111;letter-spacing:2px;line-height:1;}
+.logo-nom{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:#111111;letter-spacing:2px;line-height:1;}
 .logo-slogan{font-size:9px;letter-spacing:3px;color:#888888;text-transform:uppercase;}
 nav{display:flex;align-items:center;gap:20px;}
 .nav-lien{color:var(--texte);text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:color .3s;}
@@ -67,7 +67,7 @@ nav{display:flex;align-items:center;gap:20px;}
   gap:24px;
 }
 .hero-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:8px;}
-.hero-globe{width:80px;height:80px;border:2px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--or);font-size:36px;}
+.hero-globe{display:flex;align-items:center;justify-content:center;}
 .hero-nom{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,8vw,5rem);color:var(--or);letter-spacing:5px;line-height:1;}
 .hero h1{
   font-family:'Cormorant Garamond',serif;
@@ -296,9 +296,17 @@ footer{
 <!-- HEADER -->
 <header>
   <a class="logo" href="#">
-    <div class="logo-globe">🌐</div>
+    <div class="logo-globe">
+      <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <circle cx="18" cy="18" r="16.5" fill="#fef9f0" stroke="#C9A84C" stroke-width="1.5"/>
+        <ellipse cx="18" cy="18" rx="8" ry="16.5" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="1.5" y1="18" x2="34.5" y2="18" stroke="#C9A84C" stroke-width="1"/>
+        <path d="M3.5 11.5 Q18 8 32.5 11.5" stroke="#C9A84C" stroke-width="0.8"/>
+        <path d="M3.5 24.5 Q18 28 32.5 24.5" stroke="#C9A84C" stroke-width="0.8"/>
+      </svg>
+    </div>
     <div class="logo-texte">
-      <span class="logo-nom">EasyCom</span>
+      <span class="logo-nom">Easy Com</span>
       <span class="logo-slogan">Brisons la barrière des langues</span>
     </div>
   </a>
@@ -322,14 +330,22 @@ footer{
   <div class="hero-grille"></div>
   <div class="hero-inner">
     <div class="hero-logo-wrap">
-      <div class="hero-globe">🌐</div>
-      <div class="hero-nom">EasyCom</div>
+      <div class="hero-globe">
+        <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <circle cx="40" cy="40" r="37" fill="#fef9f0" stroke="#C9A84C" stroke-width="2"/>
+          <ellipse cx="40" cy="40" rx="18" ry="37" stroke="#C9A84C" stroke-width="1.5"/>
+          <line x1="3" y1="40" x2="77" y2="40" stroke="#C9A84C" stroke-width="1.5"/>
+          <path d="M8 25 Q40 17 72 25" stroke="#C9A84C" stroke-width="1"/>
+          <path d="M8 55 Q40 63 72 55" stroke="#C9A84C" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="hero-nom">Easy Com</div>
     </div>
-    <h1 data-fr="Parlez toutes les langues avec l'IA."
-        data-en="Speak every language with AI."
-        data-de="Sprechen Sie alle Sprachen mit KI."
-        data-it="Parla tutte le lingue con l'IA."
-        data-es="Habla todos los idiomas con IA.">Parlez toutes les langues avec l'IA.</h1>
+    <h1 data-fr="Comprendre et parler plusieurs langues, c'est possible."
+        data-en="Understanding and speaking multiple languages is possible."
+        data-de="Mehrere Sprachen verstehen und sprechen — das ist möglich."
+        data-it="Capire e parlare più lingue è possibile."
+        data-es="Entender y hablar varios idiomas es posible.">Comprendre et parler plusieurs langues, c'est possible.</h1>
     <p class="hero-desc"
        data-fr="EasyCom World sélectionne les meilleurs outils de traduction IA pour voyager, étudier et communiquer partout dans le monde."
        data-en="EasyCom World selects the best AI translation tools for travelling, studying and communicating anywhere in the world."
@@ -401,9 +417,17 @@ footer{
   <div class="footer-top">
     <div class="footer-brand">
       <div class="footer-logo">
-        <div class="logo-globe">🌐</div>
+        <div class="logo-globe">
+          <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <circle cx="18" cy="18" r="16.5" fill="#fef9f0" stroke="#C9A84C" stroke-width="1.5"/>
+            <ellipse cx="18" cy="18" rx="8" ry="16.5" stroke="#C9A84C" stroke-width="1"/>
+            <line x1="1.5" y1="18" x2="34.5" y2="18" stroke="#C9A84C" stroke-width="1"/>
+            <path d="M3.5 11.5 Q18 8 32.5 11.5" stroke="#C9A84C" stroke-width="0.8"/>
+            <path d="M3.5 24.5 Q18 28 32.5 24.5" stroke="#C9A84C" stroke-width="0.8"/>
+          </svg>
+        </div>
         <div class="logo-texte">
-          <span class="logo-nom">EasyCom</span>
+          <span class="logo-nom">Easy Com</span>
         </div>
       </div>
       <p class="footer-slogan"
@@ -629,7 +653,7 @@ const PRODUITS = [
     desc_es:'Traductor de voz instantáneo 137 idiomas. Pantalla táctil, Wi-Fi y sin conexión. Portátil y profesional.',
     prix:92.00,
     asin:'B08BLLT33T',
-    img:'https://m.media-amazon.com/images/I/61lBBfgpTAL._AC_SX679_.jpg'
+    img:'https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B08BLLT33T&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250'
   },
   {
     id:'p14', cat:'oreillettes',
@@ -641,7 +665,7 @@ const PRODUITS = [
     desc_es:'Auricular traductor Bluetooth 5.4 clip-on, 144 idiomas. Ideal para viajes y aprendizaje.',
     prix:82.00,
     asin:'B0FB321J5P',
-    img:'https://m.media-amazon.com/images/I/71Q2PtORCFL._AC_SX679_.jpg'
+    img:'https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0FB321J5P&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250'
   },
   {
     id:'p15', cat:'oreillettes',
@@ -651,9 +675,9 @@ const PRODUITS = [
     desc_de:'Bluetooth 5.2 Übersetzer-Earbuds, 84 Sprachen, 5 Modi. Eingebaute Lautsprecher, Geräuschunterdrückung.',
     desc_it:'Auricolari traduttore Bluetooth 5.2, 84 lingue, 5 modalità. Altoparlanti integrati, cancellazione rumore.',
     desc_es:'Auriculares traductor Bluetooth 5.2, 84 idiomas, 5 modos. Altavoces integrados, cancelación de ruido.',
-    prix:8.00,
-    asin:'B0B6Q7FH44',
-    img:'https://m.media-amazon.com/images/I/61ht6aDZMML._AC_SX679_.jpg'
+    prix:0,
+    asin:'B0BGX7Z1FH',
+    img:'https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0BGX7Z1FH&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250'
   },
   {
     id:'p16', cat:'oreillettes',
@@ -768,7 +792,7 @@ function renderProduits(){
       <div class="produit-card">
         <div class="produit-img-wrap">
           ${badge ? `<div class="produit-badge">${badge}</div>` : ''}
-          <img class="produit-img" src="${p.img}" alt="${nom}" referrerpolicy="no-referrer" loading="lazy"
+          <img class="produit-img" src="${p.img}" alt="${nom}" referrerpolicy="origin" loading="lazy"
                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;400&quot; height=&quot;400&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23f5f5f5&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; font-size=&quot;20&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; fill=&quot;%23c9a84c&quot;>EasyCom</text></svg>'">
         </div>
         <div class="produit-corps">
