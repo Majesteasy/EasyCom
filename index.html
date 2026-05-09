@@ -14,8 +14,8 @@
   --or:#C9A84C;
   --or-clair:#e2c47a;
   --or-sombre:#8a6f2e;
-  --gris:#f2f2f2;
-  --gris2:#e5e5e5;
+  --gris:#ffffff;
+  --gris2:#f5f5f5;
   --blanc:#111111;
   --texte:#555555;
 }
@@ -70,8 +70,8 @@ header{
 
 .logo-globe{width:36px;height:36px;border:1.5px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--or);font-size:18px;}
 .logo-texte{display:flex;flex-direction:column;}
-.logo-nom{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--or);letter-spacing:2px;line-height:1;}
-.logo-slogan{font-size:9px;letter-spacing:3px;color:var(--texte);text-transform:uppercase;}
+.logo-nom{font-family:'Cormorant Garamond',serif;font-size:20px;color:#111111;letter-spacing:2px;line-height:1;}
+.logo-slogan{font-size:9px;letter-spacing:3px;color:#444444;text-transform:uppercase;}
 nav{display:flex;align-items:center;gap:24px;}
 .nav-lien{color:var(--texte);text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:color .3s;}
 .nav-lien:hover{color:var(--or);}
@@ -164,10 +164,10 @@ nav{display:flex;align-items:center;gap:24px;}
 .cats-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:2px;margin-bottom:60px;
+  gap:8px;margin-bottom:60px;
 }
 .cat-btn{
-  background:var(--gris);border:none;
+  background:#ffffff;border:1px solid #e5e5e5;
   padding:20px 16px;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:8px;
   transition:all .3s;color:var(--texte);
@@ -176,7 +176,8 @@ nav{display:flex;align-items:center;gap:24px;}
   border-bottom:2px solid transparent;
 }
 .cat-btn:hover,.cat-btn.actif{
-  background:var(--gris2);
+  background:#ffffff;
+  border-color:var(--or);
   border-bottom-color:var(--or);
   color:var(--or);
 }
@@ -186,20 +187,21 @@ nav{display:flex;align-items:center;gap:24px;}
 .produits-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:2px;
+  gap:16px;
 }
 .produit-card{
-  background:var(--gris);
+  background:#ffffff;
+  border:1px solid #e0e0e0;
   display:flex;flex-direction:column;
   transition:all .4s;overflow:hidden;
   position:relative;
 }
-.produit-card:hover{background:var(--gris2);}
+.produit-card:hover{background:#ffffff;border-color:var(--or);box-shadow:0 4px 20px rgba(201,168,76,0.12);}
 .produit-card:hover .produit-img-wrap::after{opacity:1;}
 
 .produit-img-wrap{
   position:relative;overflow:hidden;
-  height:220px;background:#e8e8e8;
+  height:220px;background:#f8f8f8;border-bottom:1px solid #eeeeee;
 }
 .produit-img-wrap::after{
   content:'';position:absolute;inset:0;
@@ -637,6 +639,54 @@ const PRODUITS = [
     asin:'B0B6Q7FH44',
     img:'https://m.media-amazon.com/images/I/61ht6aDZMML._AC_SX679_.jpg'
   }
+  {id:'p16', cat:'oreillettes',
+    nom_fr:'MONODEAL M62 Conduction Osseuse',nom_en:'MONODEAL M62 Bone Conduction',
+    nom_de:'MONODEAL M62 Knochenleitung',nom_it:'MONODEAL M62 Conduzione Ossea',nom_es:'MONODEAL M62 Conducción Ósea',
+    desc_fr:'134 langues, open ear sport, Bluetooth 5.4, conduction osseuse. Idéal running et voyage.',
+    desc_en:'134 languages, open ear sport, Bluetooth 5.4, bone conduction. Perfect for running and travel.',
+    desc_de:'134 Sprachen, Open-Ear-Sport, Bluetooth 5.4, Knochenleitung.',
+    desc_it:'134 lingue, open ear sport, Bluetooth 5.4, conduzione ossea.',
+    desc_es:'134 idiomas, open ear deporte, Bluetooth 5.4, conducción ósea.',
+    asin:'B0DQP5WNFW', prix:0,
+    badge_fr:'NOUVEAU',badge_en:'NEW',badge_de:'NEU',badge_it:'NUOVO',badge_es:'NUEVO',
+    img:'https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DQP5WNFW&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250'
+  },
+  {id:'p17', cat:'oreillettes',
+    nom_fr:'MONODEAL Écouteur Clip 156 Langues',nom_en:'MONODEAL Clip Translator 156 Languages',
+    nom_de:'MONODEAL Clip 156 Sprachen',nom_it:'MONODEAL Clip 156 Lingue',nom_es:'MONODEAL Clip 156 Idiomas',
+    desc_fr:'156 langues, 42h autonomie totale, design clip 3-en-1 discret, traduction temps réel.',
+    desc_en:'156 languages, 42h total battery life, discreet 3-in-1 clip design, real-time translation.',
+    desc_de:'156 Sprachen, 42h Akkulaufzeit, diskretes Clip-Design.',
+    desc_it:'156 lingue, 42h autonomia, design clip 3 in 1.',
+    desc_es:'156 idiomas, 42h batería, diseño clip 3 en 1.',
+    asin:'B0FJXCBZQN', prix:0,
+    badge_fr:'NOUVEAU',badge_en:'NEW',badge_de:'NEU',badge_it:'NUOVO',badge_es:'NUEVO',
+    img:'https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0FJXCBZQN&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250'
+  },
+  {id:'p18', cat:'oreillettes',
+    nom_fr:'MONODEAL Open Ear 164 Langues',nom_en:'MONODEAL Open Ear 164 Languages',
+    nom_de:'MONODEAL Open Ear 164 Sprachen',nom_it:'MONODEAL Open Ear 164 Lingue',nom_es:'MONODEAL Open Ear 164 Idiomas',
+    desc_fr:'164 langues, design open ear confortable, idéal voyage et affaires, traduction instantanée.',
+    desc_en:'164 languages, comfortable open ear design, ideal for travel and business, instant translation.',
+    desc_de:'164 Sprachen, Open-Ear-Design, ideal für Reise und Geschäft.',
+    desc_it:'164 lingue, design open ear, ideale per viaggi e affari.',
+    desc_es:'164 idiomas, diseño open ear, ideal para viajes y negocios.',
+    asin:'B0DQTLRCSW', prix:0,
+    badge_fr:'NOUVEAU',badge_en:'NEW',badge_de:'NEU',badge_it:'NUOVO',badge_es:'NUEVO',
+    img:'https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DQTLRCSW&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250'
+  },
+  {id:'p19', cat:'oreillettes',
+    nom_fr:'Écouteur Clip Traducteur 144 Langues',nom_en:'Clip Translator Earphone 144 Languages',
+    nom_de:'Clip Übersetzer 144 Sprachen',nom_it:'Clip Traduttore 144 Lingue',nom_es:'Auricular Clip 144 Idiomas',
+    desc_fr:'144 langues, Bluetooth 5.4, design coloré clip-on, parfait pour le voyage et les langues.',
+    desc_en:'144 languages, Bluetooth 5.4, colorful clip-on design, perfect for travel and language learning.',
+    desc_de:'144 Sprachen, Bluetooth 5.4, Clip-On Design, perfekt für Reise.',
+    desc_it:'144 lingue, Bluetooth 5.4, design clip colorato.',
+    desc_es:'144 idiomas, Bluetooth 5.4, diseño clip colorido.',
+    asin:'B0DL5RCC6B', prix:0,
+    badge_fr:'NOUVEAU',badge_en:'NEW',badge_de:'NEU',badge_it:'NUOVO',badge_es:'NUEVO',
+    img:'https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DL5RCC6B&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250'
+  },
 ];
 
 const CATS = [
