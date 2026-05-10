@@ -53,6 +53,20 @@ const PRODUCTS = [
     images: ['https://m.media-amazon.com/images/I/71nznNP16WL._AC_SX679_.jpg']
   },
   {
+    id: 'p13',
+    cat: 'earbuds',
+    icon: '🎧',
+    badge: 'Budget',
+    name_fr: 'Traducteur 114 langues BT 5.3',
+    name_en: 'Translator 114 languages BT 5.3',
+    desc_fr: 'Écouteur traducteur instantané, 114 langues, Bluetooth 5.3. Traduction en temps réel avec haut-parleur intégré. 3 modes de traduction.',
+    desc_en: 'Instant translator earphone, 114 languages, Bluetooth 5.3. Real-time translation with built-in speaker. 3 translation modes.',
+    supplier: 'Amazon',
+    amazon_asin: 'B0BGX7Z1FH',
+    amazon_url: amazonUrl('B0BGX7Z1FH'),
+    images: ['https://m.media-amazon.com/images/I/51JSmNsYPnL.AC_SX679.jpg']
+  },
+  {
     id: 'p4',
     cat: 'glasses',
     icon: '🥽',
