@@ -1,6 +1,6 @@
 # MASTER BRIEFING — Projet EasyCom
 # Document de passation pour Claude
-# Dernière mise à jour : 26 avril 2026
+# Dernière mise à jour : 9 mai 2026
 
 ---
 
@@ -43,6 +43,7 @@ Le site affiche 12 produits tech. Quand le visiteur clique → il va sur Amazon 
 | Timekettle WT2 Edge | B084NZL8G3 | 289€ |
 | Timekettle M3 | B0B8NJR625 | 153€ |
 | ANFIER A8 | B0DP2G589V | 261€ |
+| Traducteur 114 langues BT 5.3 | B0BGX7Z1FH | 27,04€ |
 
 ### Lunettes connectées
 | Produit | ASIN | Prix |
@@ -231,8 +232,9 @@ Réponse:
 
 ---
 
-## 11. CONTRAINTE IMPORTANTE POUR CLAUDE CODE
+## 11. CONTRAINTES DE BRANCHES PAR AGENT IA
 
+### Claude Code (Anthropic)
 Le proxy git de l'environnement Claude Code **n'autorise que les pushs vers des branches `claude/`**.
 
 ```
@@ -245,6 +247,23 @@ Le proxy git de l'environnement Claude Code **n'autorise que les pushs vers des 
 2. Pushe sur cette branche
 3. Vanessa crée la PR sur GitHub et merge dans main
 4. GitHub Actions déploie automatiquement
+
+### Codex / ChatGPT (OpenAI)
+Codex doit travailler sur des branches `codex/*` et ouvrir des PRs.
+
+```
+❌ git push origin main        → interdit (règle de sécurité)
+✅ git push origin codex/xxx   → OK
+```
+
+**Workflow Codex :**
+1. Codex crée une branche `codex/description-tâche`
+2. Fait les modifications demandées par Vanessa
+3. Ouvre une PR vers `main`
+4. Vanessa valide et merge
+5. GitHub Actions déploie automatiquement
+
+**Voir aussi :** `docs/CODEX_BRIEFING.md` pour le guide complet Codex.
 
 ---
 
