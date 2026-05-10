@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "OpenLegi-Legifrance": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@latest",
+        "https://mcp.openlegi.fr/legifrance/mcp?token=VOTRE_TOKEN_OPENLEGI"
+      ]
+    }
+  }
+}

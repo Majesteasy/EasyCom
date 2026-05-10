@@ -1,3 +1,6 @@
+# MCP — contient le token, ne jamais commiter
+.mcp.json
+
 # Secrets — JAMAIS commiter ces fichiers
 .env
 .env.local

@@ -248,7 +248,57 @@ Le proxy git de l'environnement Claude Code **n'autorise que les pushs vers des 
 
 ---
 
-## 12. AGENTS À DÉVELOPPER
+## 12. CONNECTEUR MCP — OPENLEGI (LÉGIFRANCE)
+
+### Présentation
+OpenLegi est un serveur MCP créé par Raphaël d'Assignies (avocat au barreau de Paris).
+Il connecte Claude aux sources juridiques officielles françaises via l'API PISTE/Légifrance.
+
+**Service actif :** Légifrance — JORF, Codes, Jurisprudence, LODA
+
+**Ce que ça permet :**
+- Interroger les 73 codes juridiques français en langage naturel
+- Accéder à la jurisprudence (Cour de cassation, Conseil d'État)
+- Consulter les décisions CNIL, conventions collectives, Journal Officiel
+- Claude cite les sources officielles avec liens Légifrance à jour
+
+### Configuration (Claude Code Desktop — machine locale)
+
+**Prérequis :** Plan Claude Pro, Max, Team ou Enterprise
+
+La config est stockée dans `~/.claude.json` (ajoutée via `claude mcp add`).
+Commande pour re-configurer sur une nouvelle machine :
+
+```bash
+claude mcp add --scope user "OpenLegi-Legifrance" -- npx -y mcp-remote@latest "https://mcp.openlegi.fr/legifrance/mcp?token=VOTRE_TOKEN"
+```
+
+Le token se trouve sur le dashboard openlegi.fr → section "Token d'authentification".
+
+**Template pour le projet :** `.mcp.json.example` (à copier en `.mcp.json` localement, jamais commité)
+
+### Limites importantes
+1. OpenLegi n'est pas Légifrance directement — toujours vérifier le lien fourni
+2. Articles renumérotés : vérifier qu'on a la bonne version
+3. Textes très longs peuvent être tronqués — ouvrir le lien Légifrance
+4. Statut VIGUEUR pas toujours complet
+5. Décalage de cache possible (24-48h)
+6. Droit européen hors périmètre (utiliser EUR-Lex)
+7. Doctrine privée non couverte (Lexis, Dalloz, Lamy, Lefebvre)
+
+**Règle d'or :** traiter chaque réponse Claude + MCP comme un collaborateur brillant mais faillible — vérifier systématiquement le lien Légifrance fourni.
+
+### Statut
+| Élément | Valeur |
+|---------|--------|
+| Token | Configuré dans `~/.claude.json` (user scope) |
+| Transport | stdio via `mcp-remote@latest` |
+| Service | Légifrance (JORF, Codes, Jurisprudence, LODA) — Actif |
+| Plan gratuit | 50 requêtes / 5 minutes |
+
+---
+
+## 13. AGENTS À DÉVELOPPER
 
 ### IZZY (TikTok) — Non démarré
 - Compte cible : @easycomworld
@@ -264,7 +314,7 @@ Le proxy git de l'environnement Claude Code **n'autorise que les pushs vers des 
 
 ---
 
-## 13. PROCHAINES ÉTAPES PRIORITAIRES
+## 14. PROCHAINES ÉTAPES PRIORITAIRES
 
 1. **URGENT** — Vérifier/renouveler la clé Gemini dans GitHub Secrets → Elion pleinement fonctionnel
 2. Restreindre la clé Gemini sur Google Cloud Console (referrers : easycom-world.ch)
@@ -274,7 +324,7 @@ Le proxy git de l'environnement Claude Code **n'autorise que les pushs vers des 
 
 ---
 
-## 14. NOTION
+## 15. NOTION
 
 Espace Notion connecté. Pages trouvées :
 - `agents_easycom_43_autonomes` — base de données agents IA
@@ -284,7 +334,7 @@ Espace Notion connecté. Pages trouvées :
 
 ---
 
-## 15. ÉTAT GLOBAL DU PROJET (26 avril 2026)
+## 16. ÉTAT GLOBAL DU PROJET (26 avril 2026)
 
 | Élément | Statut |
 |---------|--------|
@@ -295,6 +345,7 @@ Espace Notion connecté. Pages trouvées :
 | Chatbot Elion (Gemini 1.5 Flash) | ⚠️ Vérifier clé GitHub Secrets |
 | Elion appel direct (sans proxy) | ✅ CORS résolu |
 | Elion modèle stable | ✅ gemini-1.5-flash (2.0-flash rejeté) |
+| MCP OpenLegi (Légifrance) | ✅ Configuré (fonctionne en local) |
 | Agent IZZY (TikTok) | ⏳ À développer |
 | Automation Make.com | ⏳ À configurer |
 | Telegram bot alertes | ⏳ À configurer |
