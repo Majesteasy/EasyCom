@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="referrer" content="no-referrer"/>
+<meta name="description" content="Standard IA EasyCom — Assistance multi-agents spécialisés en tech de communication."/>
+<title>Standard IA — EasyCom World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --or: #C9A84C;
+  --or-clair: #e2c47a;
+  --or-sombre: #8a6f2e;
+  --bg: #0d0d0d;
+  --bg-panel: #161616;
+  --bg-card: #1e1e1e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+body {
+  background:var(--bg);
+  color:#f0f0f0;
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ── HEADER ── */
+.hdr {
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 24px;
+  background:var(--bg-panel);
+  border-bottom:1px solid rgba(201,168,76,.2);
+}
+.hdr-logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.hdr-nom { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:var(--or); letter-spacing:2px; }
+.hdr-badge {
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:#666; border:1px solid rgba(201,168,76,.25); padding:3px 8px;
+}
+.hdr-back {
+  color:#555; text-decoration:none; font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  transition:color .3s;
+}
+.hdr-back:hover { color:var(--or); }
+
+/* ── LAYOUT ── */
+.layout { flex:1; display:flex; overflow:hidden; }
+
+/* ── SWITCHBOARD PANEL ── */
+.panel {
+  width:200px; flex-shrink:0;
+  background:var(--bg-panel);
+  border-right:1px solid rgba(201,168,76,.15);
+  display:flex; flex-direction:column;
+  overflow-y:auto;
+}
+.panel-title {
+  padding:18px 14px 10px;
+  font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#444;
+  border-bottom:1px solid rgba(201,168,76,.1);
+}
+.ext-list { padding:10px 8px; display:flex; flex-direction:column; gap:5px; flex:1; }
+
+.ext {
+  display:flex; align-items:center; gap:9px;
+  padding:11px 10px;
+  border:1px solid transparent; border-radius:3px;
+  transition:all .25s; cursor:default; position:relative;
+}
+.ext.is-active {
+  background:rgba(201,168,76,.1);
+  border-color:rgba(201,168,76,.35);
+}
+.ext.is-ringing { animation:ring-pulse .7s ease-in-out infinite; }
+@keyframes ring-pulse {
+  0%,100% { background:rgba(201,168,76,.04); border-color:rgba(201,168,76,.15); }
+  50% { background:rgba(201,168,76,.22); border-color:var(--or); }
+}
+.ext-icon { font-size:17px; flex-shrink:0; }
+.ext-body { flex:1; min-width:0; }
+.ext-name {
+  font-size:11px; letter-spacing:1px; text-transform:uppercase;
+  color:#bbb; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.ext-sub { font-size:10px; color:#555; margin-top:1px; }
+.ext.is-active .ext-name { color:var(--or); }
+.ext.is-active .ext-sub { color:var(--or-sombre); }
+
+.ext-led {
+  width:7px; height:7px; border-radius:50%;
+  background:#2a2a2a; flex-shrink:0; transition:all .25s;
+}
+.ext.is-active .ext-led { background:var(--or); box-shadow:0 0 7px var(--or); }
+.ext.is-ringing .ext-led { background:#e74c3c; box-shadow:0 0 7px #e74c3c; }
+
+.panel-footer {
+  padding:14px 12px;
+  border-top:1px solid rgba(201,168,76,.1);
+  font-size:10px; color:#3a3a3a; text-align:center; line-height:1.6;
+}
+
+/* ── CHAT ── */
+.chat { flex:1; display:flex; flex-direction:column; background:#0f0f0f; overflow:hidden; }
+
+.agent-bar {
+  flex-shrink:0; display:flex; align-items:center; gap:14px;
+  padding:14px 22px;
+  background:var(--bg-panel);
+  border-bottom:1px solid rgba(201,168,76,.15);
+}
+.agent-ava {
+  width:40px; height:40px; border-radius:50%;
+  background:linear-gradient(135deg,var(--or-sombre),var(--or));
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.agent-meta { flex:1; }
+.agent-nm {
+  font-family:'Cormorant Garamond',serif; font-size:16px;
+  color:var(--or); font-weight:600; letter-spacing:1px;
+}
+.agent-st { font-size:11px; color:#4caf50; margin-top:2px; }
+
+.msgs {
+  flex:1; padding:22px; overflow-y:auto;
+  display:flex; flex-direction:column; gap:14px;
+}
+.msgs::-webkit-scrollbar { width:4px; }
+.msgs::-webkit-scrollbar-track { background:transparent; }
+.msgs::-webkit-scrollbar-thumb { background:rgba(201,168,76,.2); border-radius:2px; }
+
+.msg { max-width:78%; animation:fade-up .3s ease; }
+@keyframes fade-up {
+  from { opacity:0; transform:translateY(6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.msg-agent { align-self:flex-start; }
+.msg-user  { align-self:flex-end; }
+
+.msg-lbl {
+  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#444;
+  margin-bottom:5px;
+}
+.msg-user .msg-lbl { text-align:right; }
+
+.msg-bub {
+  padding:13px 17px; border-radius:2px;
+  font-size:14px; line-height:1.75;
+}
+.msg-agent .msg-bub {
+  background:var(--bg-card);
+  border-left:2px solid var(--or);
+  color:#ddd;
+}
+.msg-user .msg-bub {
+  background:rgba(201,168,76,.12);
+  border-right:2px solid var(--or);
+  color:#f0f0f0; text-align:right;
+}
+.msg-bub a { color:var(--or); text-decoration:none; }
+.msg-bub a:hover { color:var(--or-clair); text-decoration:underline; }
+
+.route-notif {
+  align-self:center;
+  background:rgba(201,168,76,.07);
+  border:1px solid rgba(201,168,76,.22);
+  padding:7px 20px;
+  font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--or);
+  border-radius:20px;
+  animation:fade-up .4s ease;
+}
+
+/* typing */
+.typing-wrap { align-self:flex-start; max-width:78%; }
+.typing-bub {
+  display:flex; gap:5px; align-items:center;
+  padding:13px 17px;
+  background:var(--bg-card);
+  border-left:2px solid var(--or);
+  border-radius:2px;
+}
+.t-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:var(--or); opacity:.4;
+  animation:t-bounce 1s ease-in-out infinite;
+}
+.t-dot:nth-child(2) { animation-delay:.15s; }
+.t-dot:nth-child(3) { animation-delay:.3s; }
+@keyframes t-bounce {
+  0%,80%,100% { transform:translateY(0); opacity:.4; }
+  40% { transform:translateY(-7px); opacity:1; }
+}
+
+/* ── INPUT ── */
+.inp-area {
+  flex-shrink:0; display:flex; gap:10px; align-items:flex-end;
+  padding:16px 22px;
+  background:var(--bg-panel);
+  border-top:1px solid rgba(201,168,76,.15);
+}
+#chat-input {
+  flex:1; background:rgba(255,255,255,.03);
+  border:1px solid rgba(201,168,76,.2); color:#f0f0f0;
+  padding:11px 15px; font-family:'Jost',sans-serif; font-size:14px; font-weight:300;
+  resize:none; min-height:44px; max-height:120px; border-radius:2px;
+  outline:none; transition:border-color .3s; line-height:1.5;
+}
+#chat-input:focus { border-color:rgba(201,168,76,.5); }
+#chat-input::placeholder { color:#383838; }
+#send-btn {
+  background:var(--or); border:none; color:#111;
+  width:44px; height:44px; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; border-radius:2px; transition:background .3s; flex-shrink:0;
+}
+#send-btn:hover { background:var(--or-clair); }
+#send-btn:disabled { background:#252525; color:#444; cursor:not-allowed; }
+
+/* ── MOBILE ── */
+@media (max-width:600px) {
+  .panel { width:52px; }
+  .ext-body,.panel-title,.panel-footer,.ext-sub { display:none; }
+  .ext { padding:12px 6px; justify-content:center; }
+  .ext-led { display:none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <a class="hdr-logo" href="/">
+    <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="18" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+      <ellipse cx="20" cy="20" rx="8" ry="18" stroke="#C9A84C" stroke-width="1" fill="none"/>
+      <line x1="2" y1="20" x2="38" y2="20" stroke="#C9A84C" stroke-width="1"/>
+      <path d="M5 12 Q20 16 35 12" stroke="#C9A84C" stroke-width="0.8" fill="none"/>
+      <path d="M5 28 Q20 24 35 28" stroke="#C9A84C" stroke-width="0.8" fill="none"/>
+    </svg>
+    <span class="hdr-nom">EASYCOM</span>
+    <span class="hdr-badge">Standard IA</span>
+  </a>
+  <a class="hdr-back" href="/">← Boutique</a>
+</header>
+
+<div class="layout">
+
+  <aside class="panel">
+    <div class="panel-title">Extensions</div>
+    <div class="ext-list" id="ext-list"></div>
+    <div class="panel-footer">Standard EasyCom<br>Gemini AI</div>
+  </aside>
+
+  <div class="chat">
+    <div class="agent-bar">
+      <div class="agent-ava" id="ava">👋</div>
+      <div class="agent-meta">
+        <div class="agent-nm" id="agent-nm">ELION</div>
+        <div class="agent-st" id="agent-st">Réceptionniste · En ligne</div>
+      </div>
+    </div>
+
+    <div class="msgs" id="msgs"></div>
+
+    <div class="inp-area">
+      <textarea id="chat-input" placeholder="Décrivez votre besoin…" rows="1"></textarea>
+      <button id="send-btn" title="Envoyer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const GEMINI_KEY = '%%GEMINI_API_KEY%%';
+const TAG = 'easycom0ae-21';
+
+const EXTS = [
+  { id:'accueil',    icon:'👋', name:'Accueil',    sub:'Réceptionniste', key:'receptionist' },
+  { id:'traduction', icon:'🎧', name:'Traduction', sub:'Oreillettes IA', key:'traduction' },
+  { id:'vision',     icon:'👓', name:'Vision',     sub:'Lunettes connectées', key:'vision' },
+  { id:'lecture',    icon:'✏️', name:'Lecture',    sub:'Stylos scanner', key:'lecture' },
+  { id:'gps_enfant', icon:'🛡️', name:'GPS Enfant', sub:'Montres GPS', key:'gps_enfant' },
+  { id:'traceurs',   icon:'📡', name:'Traceurs',   sub:'Traceurs GPS', key:'traceurs' },
+];
+
+const AGENTS = {
+  receptionist: {
+    name:'ELION', icon:'👋', status:'Réceptionniste · En ligne', extId:'accueil',
+    system:`Tu es ELION, réceptionniste virtuelle chaleureuse et professionnelle d'EasyCom World, boutique tech premium spécialisée en outils IA de communication.
+
+EasyCom propose 5 départements spécialisés :
+— TRADUCTION : oreillettes traducteurs IA (Timekettle WT2 Edge, Timekettle M3, ANFIER A8, MONODEAL M62, MONODEAL Clip 156 langues, MONODEAL Open Ear 164 langues, MONODEAL Clip 144 langues)
+— VISION : lunettes connectées (Luckits 115L, BLESSOURCE 116L)
+— LECTURE : stylos scanner (Stylo Scanner AI, IRISPen Reader 8)
+— GPS_ENFANT : montres GPS enfant (Xplora X6Play, EUNICECG 4G)
+— TRACEURS : traceurs GPS (Invoxia GPS, Samsung SmartTag2, Apple AirTag)
+
+Ton rôle : accueillir le visiteur, comprendre son besoin, l'orienter vers le bon département.
+
+RÈGLE IMPORTANTE : quand tu comprends clairement le besoin, termine ton message par [ROUTE:NOM_DEPT] (parmi TRADUCTION, VISION, LECTURE, GPS_ENFANT, TRACEURS). Exemple : "Je vous transfère à notre experte oreillettes ! [ROUTE:TRADUCTION]". Si tu n'es pas certain, pose UNE courte question de clarification sans ajouter [ROUTE:...].
+
+Réponds dans la langue du visiteur (FR/EN/DE/IT/ES). Sois chaleureuse, brève, élégante. 2-3 lignes maximum.`
+  },
+  traduction: {
+    name:'LÉXI — Experte Traduction', icon:'🎧', status:'Département Traduction · En ligne', extId:'traduction',
+    system:`Tu es LÉXI, experte oreillettes traducteurs IA d'EasyCom World.
+
+Catalogue (tag affilié : ${TAG}) :
+• Timekettle WT2 Edge — ASIN B084NZL8G3, ~289€ — traduction simultanée bilatérale, 2 oreillettes
+• Timekettle M3 — ASIN B0B8NJR625, ~153€ — bidirectionnel, 40 langues, 93 accents
+• ANFIER A8 — ASIN B0DP2G589V, ~261€ — 84 langues, 5 modes, Bluetooth 5.2
+• MONODEAL M62 Conduction Osseuse — ASIN B0DQP5WNFW — 134 langues, sport, open-ear
+• MONODEAL Clip 156 Langues — ASIN B0FJXCBZQN — 156 langues, 42h autonomie, design clip 3-en-1
+• MONODEAL Open Ear 164 Langues — ASIN B0DQTLRCSW — 164 langues, open ear, voyage & affaires
+• MONODEAL Clip 144 Langues — ASIN B0DL5RCC6B — 144 langues, Bluetooth 5.4, coloré
+
+Lien Amazon : https://www.amazon.fr/dp/{ASIN}?tag=${TAG}
+
+Conseille selon : budget, usage (voyage/business/sport/apprentissage), langues cibles. Inclus toujours des liens Amazon cliquables. Réponds dans la langue du visiteur. Sois précise, passionnée, utile.`
+  },
+  vision: {
+    name:'VISTA — Experte Vision', icon:'👓', status:'Département Vision · En ligne', extId:'vision',
+    system:`Tu es VISTA, experte lunettes connectées d'EasyCom World.
+
+Catalogue (tag affilié : ${TAG}) :
+• Luckits 115L — ASIN B0F62TC6CN, ~33€ — lunettes connectées légères, photo/vidéo discrète, design élégant
+• BLESSOURCE 116L — ASIN B0DQGD44LC, ~25€ — lunettes intelligentes, audio intégré, usage quotidien
+
+Lien Amazon : https://www.amazon.fr/dp/{ASIN}?tag=${TAG}
+
+Conseille selon : usage (mode, discrétion, enregistrement, audio), budget. Inclus des liens Amazon. Réponds dans la langue du visiteur. Sois enthousiaste, précise, professionnelle.`
+  },
+  lecture: {
+    name:'SCAN — Expert Lecture', icon:'✏️', status:'Département Lecture · En ligne', extId:'lecture',
+    system:`Tu es SCAN, expert stylos scanner d'EasyCom World.
+
+Catalogue (tag affilié : ${TAG}) :
+• Stylo Scanner AI — ASIN B0DS62X13F, ~46€ — numérisation instantanée, IA intégrée, compact, étudiant/pro
+• IRISPen Reader 8 — ASIN B0D2JC29Q7, ~134€ — stylo scanner professionnel, 130 langues, OCR haute précision
+
+Lien Amazon : https://www.amazon.fr/dp/{ASIN}?tag=${TAG}
+
+Conseille selon : usage (étudiant, professionnel, traducteur, dyslexie), budget. Inclus des liens Amazon. Réponds dans la langue du visiteur. Sois précis, utile, professionnel.`
+  },
+  gps_enfant: {
+    name:'SÉCU — Experte GPS Enfant', icon:'🛡️', status:'Département GPS Enfant · En ligne', extId:'gps_enfant',
+    system:`Tu es SÉCU, experte montres GPS enfant d'EasyCom World.
+
+Catalogue (tag affilié : ${TAG}) :
+• Xplora X6Play — ASIN B0GQHHKCRH, ~45€ — montre GPS enfant 4G, appels, SOS, géofencing, réseau familial
+• EUNICECG 4G — ASIN B0DZP1JB4K, ~51€ — montre GPS enfant 4G, caméra intégrée, suivi temps réel, SOS
+
+Lien Amazon : https://www.amazon.fr/dp/{ASIN}?tag=${TAG}
+
+Rassure les parents. Conseille selon : âge de l'enfant, fonctionnalités prioritaires (SOS/appels/caméra), budget. Inclus des liens Amazon. Réponds dans la langue du visiteur. Sois rassurante, précise, chaleureuse.`
+  },
+  traceurs: {
+    name:'TRACK — Expert Traceurs', icon:'📡', status:'Département Traceurs GPS · En ligne', extId:'traceurs',
+    system:`Tu es TRACK, expert traceurs GPS d'EasyCom World.
+
+Catalogue (tag affilié : ${TAG}) :
+• Invoxia GPS — ASIN B0FQYG8J4P, ~89€ — traceur GPS avec abonnement mensuel, voiture/moto/vélo, longue autonomie
+• Samsung SmartTag2 — ASIN B0CG7JHFKY, ~15€ — traceur Bluetooth Samsung, réseau Find My Samsung, compact
+• Apple AirTag — ASIN B0GJTCB2QM, ~32€ — traceur Apple, réseau Find My (iPhone requis), précision UWB
+
+Lien Amazon : https://www.amazon.fr/dp/{ASIN}?tag=${TAG}
+
+Conseille selon : objet à tracker (voiture/bagage/clés/vélo/animal), écosystème (Apple/Samsung/autre), budget, besoin GPS ou Bluetooth. Inclus des liens Amazon. Réponds dans la langue du visiteur. Sois précis, expert, utile.`
+  }
+};
+
+const ROUTE_LABELS = {
+  traduction: '🎧 Transfert vers le département Traduction…',
+  vision:     '👓 Transfert vers le département Vision…',
+  lecture:    '✏️ Transfert vers le département Lecture…',
+  gps_enfant: '🛡️ Transfert vers GPS Enfant…',
+  traceurs:   '📡 Transfert vers les Traceurs GPS…',
+};
+
+let currentAgent = 'receptionist';
+let history = [];
+let busy = false;
+
+/* ── RENDER EXTENSIONS ── */
+function renderExts() {
+  const activeExtId = AGENTS[currentAgent].extId;
+  document.getElementById('ext-list').innerHTML = EXTS.map(e => `
+    <div class="ext ${AGENTS[e.key].extId === activeExtId ? 'is-active' : ''}" id="ext-${e.id}">
+      <span class="ext-icon">${e.icon}</span>
+      <div class="ext-body">
+        <div class="ext-name">${e.name}</div>
+        <div class="ext-sub">${e.sub}</div>
+      </div>
+      <div class="ext-led"></div>
+    </div>
+  `).join('');
+}
+
+function updateBanner() {
+  const a = AGENTS[currentAgent];
+  document.getElementById('ava').textContent = a.icon;
+  document.getElementById('agent-nm').textContent = a.name;
+  document.getElementById('agent-st').textContent = a.status;
+  renderExts();
+}
+
+/* ── MESSAGES ── */
+function addMsg(role, html) {
+  const box = document.getElementById('msgs');
+  if (role === 'route') {
+    const el = document.createElement('div');
+    el.className = 'route-notif';
+    el.textContent = html;
+    box.appendChild(el);
+    box.scrollTop = box.scrollHeight;
+    return;
+  }
+  const lbl = role === 'agent'
+    ? AGENTS[currentAgent].name.split(' — ')[0]
+    : 'Vous';
+  const el = document.createElement('div');
+  el.className = `msg msg-${role}`;
+  el.innerHTML = `<div class="msg-lbl">${lbl}</div><div class="msg-bub">${fmt(html)}</div>`;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+
+function fmt(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/(https?:\/\/[^\s<&"]+)/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/\n/g,'<br>');
+}
+
+function showTyping() {
+  const box = document.getElementById('msgs');
+  const el = document.createElement('div');
+  el.className = 'typing-wrap'; el.id = 'typing';
+  el.innerHTML = `<div class="msg-lbl">${AGENTS[currentAgent].name.split(' — ')[0]}</div>
+    <div class="typing-bub"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div>`;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+function hideTyping() { document.getElementById('typing')?.remove(); }
+
+/* ── GEMINI CALL ── */
+async function callGemini(userText) {
+  const msgs = history.map(m => ({
+    role: m.role === 'agent' ? 'model' : 'user',
+    parts: [{ text: m.text }]
+  }));
+  msgs.push({ role:'user', parts:[{ text: userText }] });
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+    {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts:[{ text: AGENTS[currentAgent].system }] },
+        contents: msgs,
+        generationConfig: { maxOutputTokens:450, temperature:0.8 }
+      })
+    }
+  );
+  if (!res.ok) throw new Error(`Gemini ${res.status}`);
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '…';
+}
+
+function parseRoute(txt) {
+  const m = txt.match(/\[ROUTE:(TRADUCTION|VISION|LECTURE|GPS_ENFANT|TRACEURS)\]/i);
+  return m ? m[1].toLowerCase() : null;
+}
+
+const delay = ms => new Promise(r => setTimeout(r, ms));
+
+/* ── SEND ── */
+async function send() {
+  const inp = document.getElementById('chat-input');
+  const text = inp.value.trim();
+  if (!text || busy) return;
+
+  inp.value = ''; inp.style.height = 'auto';
+  busy = true;
+  document.getElementById('send-btn').disabled = true;
+
+  addMsg('user', text);
+  history.push({ role:'user', text });
+  showTyping();
+
+  try {
+    const reply = await callGemini(text);
+    hideTyping();
+
+    const route = parseRoute(reply);
+    const clean = reply.replace(/\[ROUTE:[A-Z_]+\]/gi,'').trim();
+
+    addMsg('agent', clean);
+    history.push({ role:'agent', text: clean });
+
+    if (route && AGENTS[route]) {
+      await delay(500);
+      const targetEl = document.getElementById('ext-' + AGENTS[route].extId);
+      if (targetEl) { targetEl.classList.add('is-ringing'); }
+      await delay(1100);
+      if (targetEl) { targetEl.classList.remove('is-ringing'); }
+
+      addMsg('route', ROUTE_LABELS[route]);
+      currentAgent = route;
+      history = [];
+      updateBanner();
+
+      await delay(350);
+      showTyping();
+      const greeting = await callGemini('(Tu viens de recevoir un transfert depuis la réception. Accueille brièvement ce nouveau visiteur dans sa langue, présente ton expertise. 2 lignes max.)');
+      hideTyping();
+      addMsg('agent', greeting);
+      history.push({ role:'agent', text: greeting });
+    }
+  } catch (err) {
+    hideTyping();
+    addMsg('agent', 'Une erreur est survenue. Vérifiez votre connexion et réessayez.');
+    console.error(err);
+  }
+
+  busy = false;
+  document.getElementById('send-btn').disabled = false;
+  inp.focus();
+}
+
+/* ── INIT ── */
+updateBanner();
+
+const inp = document.getElementById('chat-input');
+inp.addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+inp.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+});
+document.getElementById('send-btn').addEventListener('click', send);
+
+/* ── WELCOME ── */
+setTimeout(async () => {
+  showTyping();
+  try {
+    const w = await callGemini('(Accueillez le visiteur en français. Présentez EasyCom World et ses 5 catégories de produits en 2-3 lignes élégantes. Demandez comment vous pouvez aider.)');
+    hideTyping();
+    addMsg('agent', w);
+    history.push({ role:'agent', text: w });
+  } catch {
+    hideTyping();
+    const fallback = 'Bienvenue chez EasyCom World ! 👋 Je suis ELION, votre réceptionniste. Nous proposons des oreillettes traducteurs, lunettes connectées, stylos scanner et traceurs GPS. Comment puis-je vous orienter ?';
+    addMsg('agent', fallback);
+    history.push({ role:'agent', text: fallback });
+  }
+}, 700);
+</script>
+</body>
+</html>
