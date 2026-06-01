@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Standard IA — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --or:#C9A84C; --or-l:#e2c47a; --or-d:#8a6f2e;
+  --bg:#0d0d0d; --panel:#161616; --card:#1e1e1e; --border:rgba(201,168,76,.15);
+  --text:#e0e0e0; --muted:#666; --green:#4caf50; --red:#e74c3c; --blue:#3498db;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;display:flex;}
+
+/* ── LOGIN ── */
+#login-screen{
+  position:fixed;inset:0;z-index:999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.login-box{
+  background:var(--panel);border:1px solid var(--border);
+  padding:48px;width:360px;text-align:center;
+}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--or);letter-spacing:3px;margin-bottom:6px;}
+.login-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:36px;}
+.login-box input{
+  width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--text);padding:12px 14px;font-family:'Jost',sans-serif;font-size:14px;
+  margin-bottom:14px;outline:none;transition:border .3s;
+}
+.login-box input:focus{border-color:rgba(201,168,76,.5);}
+.btn-or{
+  width:100%;background:var(--or);border:none;color:#111;
+  padding:12px;font-family:'Jost',sans-serif;font-size:12px;
+  letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .3s;
+}
+.btn-or:hover{background:var(--or-l);}
+.login-err{color:var(--red);font-size:12px;margin-top:12px;min-height:18px;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:220px;flex-shrink:0;background:var(--panel);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100%;
+}
+.sb-logo{padding:22px 18px 16px;border-bottom:1px solid var(--border);}
+.sb-logo-nm{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--or);letter-spacing:2px;}
+.sb-logo-tag{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:2px;}
+.sb-nav{padding:14px 8px;flex:1;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 12px;border-radius:3px;cursor:pointer;
+  transition:all .2s;font-size:13px;color:#aaa;
+  border:1px solid transparent;
+}
+.nav-item:hover{background:rgba(201,168,76,.05);color:var(--text);}
+.nav-item.active{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.25);color:var(--or);}
+.nav-icon{font-size:15px;flex-shrink:0;width:18px;text-align:center;}
+.nav-badge{
+  margin-left:auto;background:var(--red);color:#fff;
+  font-size:10px;padding:2px 6px;border-radius:10px;font-weight:500;
+}
+.sb-client{
+  padding:14px 12px;border-top:1px solid var(--border);
+  font-size:11px;color:var(--muted);
+}
+.sb-client select{
+  width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--text);padding:7px 10px;font-family:'Jost',sans-serif;font-size:12px;
+  margin-top:6px;outline:none;cursor:pointer;
+}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.main::-webkit-scrollbar{width:4px;}
+.main::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px;}
+
+/* PAGE */
+.page{display:none;padding:28px 32px;animation:fade-in .2s ease;}
+.page.active{display:block;}
+@keyframes fade-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.page-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;
+}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--or);font-weight:600;}
+.page-sub{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:3px;}
+
+/* ── CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
+.card{
+  background:var(--card);border:1px solid var(--border);padding:22px 20px;
+}
+.card-val{font-family:'Cormorant Garamond',serif;font-size:38px;color:var(--or);line-height:1;}
+.card-lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+.card-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;}
+.dot-green{background:var(--green);}
+.dot-red{background:var(--red);}
+.dot-gold{background:var(--or);}
+
+/* ── TABLE ── */
+.tbl-wrap{background:var(--card);border:1px solid var(--border);overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead{background:rgba(201,168,76,.06);}
+th{
+  padding:11px 16px;text-align:left;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+  font-weight:500;border-bottom:1px solid var(--border);
+}
+td{
+  padding:13px 16px;font-size:13px;border-bottom:1px solid rgba(201,168,76,.06);
+  vertical-align:top;
+}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(201,168,76,.03);}
+
+.badge{
+  display:inline-block;font-size:10px;letter-spacing:1px;
+  text-transform:uppercase;padding:3px 8px;border-radius:2px;
+}
+.badge-pending{background:rgba(255,165,0,.15);color:orange;}
+.badge-confirmed{background:rgba(76,175,80,.15);color:var(--green);}
+.badge-cancelled{background:rgba(231,76,60,.15);color:var(--red);}
+.badge-active{background:rgba(201,168,76,.15);color:var(--or);}
+.badge-ended{background:rgba(100,100,100,.2);color:#777;}
+.badge-unread{background:rgba(52,152,219,.15);color:var(--blue);}
+
+/* ── ACTIONS ── */
+.act-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.btn-sm{
+  padding:5px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  border:1px solid;cursor:pointer;background:none;font-family:'Jost',sans-serif;
+  transition:all .2s;
+}
+.btn-confirm{border-color:rgba(76,175,80,.4);color:var(--green);}
+.btn-confirm:hover{background:rgba(76,175,80,.15);}
+.btn-cancel{border-color:rgba(231,76,60,.4);color:var(--red);}
+.btn-cancel:hover{background:rgba(231,76,60,.1);}
+.btn-read{border-color:rgba(201,168,76,.4);color:var(--or);}
+.btn-read:hover{background:rgba(201,168,76,.1);}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-row{display:flex;flex-direction:column;gap:6px;}
+.form-row.full{grid-column:1/-1;}
+label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+input[type=text],input[type=password],textarea,select.fsel{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--text);padding:10px 12px;font-family:'Jost',sans-serif;font-size:13px;
+  outline:none;transition:border .3s;width:100%;
+}
+input:focus,textarea:focus,select.fsel:focus{border-color:rgba(201,168,76,.5);}
+textarea{resize:vertical;min-height:100px;}
+.form-actions{margin-top:20px;display:flex;gap:10px;}
+.btn-save{
+  padding:11px 24px;background:var(--or);border:none;color:#111;
+  font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:background .3s;
+}
+.btn-save:hover{background:var(--or-l);}
+.section-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:20px 0 12px;}
+
+/* ── TRANSCRIPT ── */
+.transcript-btn{background:none;border:1px solid rgba(201,168,76,.25);color:var(--or);font-size:10px;padding:3px 8px;cursor:pointer;letter-spacing:1px;}
+.transcript-popup{
+  position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;
+}
+.transcript-popup.open{display:flex;}
+.transcript-box{
+  background:var(--panel);border:1px solid var(--border);
+  width:560px;max-width:95vw;max-height:80vh;display:flex;flex-direction:column;
+}
+.transcript-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.transcript-hdr h3{font-family:'Cormorant Garamond',serif;color:var(--or);font-size:16px;}
+.transcript-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;}
+.transcript-body{padding:16px 20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px;}
+.tr-msg{padding:8px 12px;border-radius:2px;font-size:13px;line-height:1.6;max-width:85%;}
+.tr-user{background:rgba(201,168,76,.1);border-right:2px solid var(--or);align-self:flex-end;text-align:right;}
+.tr-assistant{background:var(--card);border-left:2px solid var(--or);align-self:flex-start;}
+.tr-ts{font-size:10px;color:var(--muted);margin-top:3px;}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:48px;color:var(--muted);font-size:13px;}
+.empty-icon{font-size:36px;margin-bottom:12px;}
+
+/* ── REFRESH ── */
+.refresh-btn{
+  padding:7px 14px;border:1px solid var(--border);background:none;color:var(--muted);
+  font-family:'Jost',sans-serif;font-size:11px;letter-spacing:1px;cursor:pointer;transition:all .2s;
+}
+.refresh-btn:hover{border-color:rgba(201,168,76,.4);color:var(--or);}
+.last-refresh{font-size:10px;color:var(--muted);margin-left:10px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">EASYCOM</div>
+    <div class="login-sub">Standard IA · Dashboard</div>
+    <input type="password" id="key-input" placeholder="Clé d'accès admin" autocomplete="current-password"/>
+    <button class="btn-or" onclick="doLogin()">Accéder au dashboard</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-nm">EASYCOM</div>
+    <div class="sb-logo-tag">Standard IA · Admin</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-item active" onclick="nav('dashboard')" id="nav-dashboard">
+      <span class="nav-icon">📊</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="nav('messages')" id="nav-messages">
+      <span class="nav-icon">✉️</span> Messages
+      <span class="nav-badge" id="badge-msg" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="nav('reservations')" id="nav-reservations">
+      <span class="nav-icon">📅</span> Réservations
+      <span class="nav-badge" id="badge-res" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="nav('calls')" id="nav-calls">
+      <span class="nav-icon">📞</span> Appels
+    </div>
+    <div class="nav-item" onclick="nav('config')" id="nav-config">
+      <span class="nav-icon">⚙️</span> Configuration
+    </div>
+    <div class="nav-item" onclick="nav('clients')" id="nav-clients">
+      <span class="nav-icon">🏢</span> Clients
+    </div>
+  </nav>
+  <div class="sb-client">
+    <div>Client actif</div>
+    <select id="client-select" onchange="switchClient()">
+      <option value="default">EasyCom World</option>
+    </select>
+  </div>
+</aside>
+
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-sub">Vue d'ensemble · Standard téléphonique</div>
+      </div>
+      <div style="display:flex;align-items:center">
+        <button class="refresh-btn" onclick="loadAll()">↻ Actualiser</button>
+        <span class="last-refresh" id="last-refresh"></span>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-val" id="stat-calls-today">—</div>
+        <div class="card-lbl"><span class="card-dot dot-gold"></span>Appels aujourd'hui</div>
+      </div>
+      <div class="card">
+        <div class="card-val" id="stat-unread">—</div>
+        <div class="card-lbl"><span class="card-dot dot-red"></span>Messages non lus</div>
+      </div>
+      <div class="card">
+        <div class="card-val" id="stat-pending">—</div>
+        <div class="card-lbl"><span class="card-dot dot-green"></span>Réservations en attente</div>
+      </div>
+      <div class="card">
+        <div class="card-val" id="stat-total">—</div>
+        <div class="card-lbl"><span class="card-dot dot-gold"></span>Appels total</div>
+      </div>
+    </div>
+
+    <div class="section-title">Derniers messages</div>
+    <div class="tbl-wrap" id="dash-msgs-wrap">
+      <div class="empty"><div class="empty-icon">✉️</div>Aucun message</div>
+    </div>
+
+    <div class="section-title" style="margin-top:24px">Prochaines réservations</div>
+    <div class="tbl-wrap" id="dash-res-wrap">
+      <div class="empty"><div class="empty-icon">📅</div>Aucune réservation</div>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="page" id="page-messages">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Messages</div>
+        <div class="page-sub">Messages vocaux laissés par les appelants</div>
+      </div>
+      <button class="refresh-btn" onclick="loadMessages()">↻ Actualiser</button>
+    </div>
+    <div class="tbl-wrap" id="msgs-wrap">
+      <div class="empty"><div class="empty-icon">✉️</div>Aucun message</div>
+    </div>
+  </div>
+
+  <!-- RESERVATIONS -->
+  <div class="page" id="page-reservations">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Réservations</div>
+        <div class="page-sub">Réservations prises par le standard IA</div>
+      </div>
+      <button class="refresh-btn" onclick="loadReservations()">↻ Actualiser</button>
+    </div>
+    <div class="tbl-wrap" id="res-wrap">
+      <div class="empty"><div class="empty-icon">📅</div>Aucune réservation</div>
+    </div>
+  </div>
+
+  <!-- CALLS -->
+  <div class="page" id="page-calls">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Historique des appels</div>
+        <div class="page-sub">Tous les appels avec transcriptions</div>
+      </div>
+      <button class="refresh-btn" onclick="loadCalls()">↻ Actualiser</button>
+    </div>
+    <div class="tbl-wrap" id="calls-wrap">
+      <div class="empty"><div class="empty-icon">📞</div>Aucun appel</div>
+    </div>
+  </div>
+
+  <!-- CONFIG -->
+  <div class="page" id="page-config">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Configuration</div>
+        <div class="page-sub">Paramètres du standard IA actif</div>
+      </div>
+    </div>
+    <div id="config-form-wrap">
+      <div class="form-grid">
+        <div class="form-row">
+          <label>Nom de l'entreprise</label>
+          <input type="text" id="cfg-name" placeholder="EasyCom World"/>
+        </div>
+        <div class="form-row">
+          <label>Nom de l'assistante IA</label>
+          <input type="text" id="cfg-persona" placeholder="ELION"/>
+        </div>
+        <div class="form-row">
+          <label>Numéro Twilio</label>
+          <input type="text" id="cfg-phone" placeholder="+41 XX XXX XX XX"/>
+        </div>
+        <div class="form-row full">
+          <label>Instructions personnalisées (optionnel)</label>
+          <textarea id="cfg-prompt" placeholder="Ajoute ici des infos spécifiques : horaires, services, tarifs, règles..."></textarea>
+        </div>
+        <div class="form-row full">
+          <label>Numéros de transfert (format JSON: {"direction":"numéro"})</label>
+          <input type="text" id="cfg-transfers" placeholder='{"direction":"+33600000000","manager":"+41760000000"}'/>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" onclick="saveConfig()">Sauvegarder</button>
+      </div>
+      <div id="cfg-msg" style="margin-top:12px;font-size:12px;color:var(--green);"></div>
+    </div>
+  </div>
+
+  <!-- CLIENTS -->
+  <div class="page" id="page-clients">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Clients</div>
+        <div class="page-sub">Gérer les standards pour vos clients (100€/mois/client)</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" id="clients-wrap" style="margin-bottom:28px">
+      <div class="empty"><div class="empty-icon">🏢</div>Chargement…</div>
+    </div>
+
+    <div class="section-title">Ajouter un nouveau client</div>
+    <div class="form-grid" style="background:var(--card);border:1px solid var(--border);padding:22px;">
+      <div class="form-row">
+        <label>Nom de l'entreprise *</label>
+        <input type="text" id="new-name" placeholder="Restaurant Le Bienvenu"/>
+      </div>
+      <div class="form-row">
+        <label>Nom de l'IA *</label>
+        <input type="text" id="new-persona" placeholder="SOPHIA"/>
+      </div>
+      <div class="form-row">
+        <label>Numéro Twilio</label>
+        <input type="text" id="new-phone" placeholder="+33 1 23 45 67 89"/>
+      </div>
+      <div class="form-row full">
+        <label>Instructions (services, horaires, tarifs…)</label>
+        <textarea id="new-prompt" placeholder="Ce restaurant propose... Horaires : lun-sam 12h-14h et 19h-22h..."></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-save" onclick="createClient()">Créer le client</button>
+    </div>
+    <div id="client-msg" style="margin-top:12px;font-size:12px;color:var(--green);"></div>
+  </div>
+
+</main>
+
+<!-- TRANSCRIPT POPUP -->
+<div class="transcript-popup" id="transcript-popup" onclick="closeTranscript(event)">
+  <div class="transcript-box">
+    <div class="transcript-hdr">
+      <h3>Transcription de l'appel</h3>
+      <button class="transcript-close" onclick="closeTranscript(null)">✕</button>
+    </div>
+    <div class="transcript-body" id="transcript-body"></div>
+  </div>
+</div>
+
+<script>
+let ADMIN_KEY = '';
+let CURRENT_CLIENT = 'default';
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+
+async function doLogin() {
+  const key = document.getElementById('key-input').value.trim();
+  if (!key) return;
+  try {
+    const res = await fetch('/api/stats?client_id=default', {
+      headers: { 'X-Admin-Key': key }
+    });
+    if (res.ok) {
+      ADMIN_KEY = key;
+      document.getElementById('login-screen').style.display = 'none';
+      loadAll();
+      setInterval(loadAll, 30000);
+    } else {
+      document.getElementById('login-err').textContent = 'Clé incorrecte.';
+    }
+  } catch {
+    document.getElementById('login-err').textContent = 'Impossible de contacter le serveur.';
+  }
+}
+document.getElementById('key-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+
+  if (page === 'messages') loadMessages();
+  else if (page === 'reservations') loadReservations();
+  else if (page === 'calls') loadCalls();
+  else if (page === 'config') loadConfig();
+  else if (page === 'clients') loadClients();
+}
+
+function switchClient() {
+  CURRENT_CLIENT = document.getElementById('client-select').value;
+  loadAll();
+}
+
+// ── API ───────────────────────────────────────────────────────────────────────
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, {
+    ...opts,
+    headers: { 'X-Admin-Key': ADMIN_KEY, 'Content-Type': 'application/json', ...(opts.headers || {}) }
+  });
+  if (!res.ok) throw new Error(`API ${res.status}`);
+  return res.json();
+}
+
+// ── Load All ──────────────────────────────────────────────────────────────────
+
+async function loadAll() {
+  await Promise.all([loadStats(), loadMessages(), loadReservations(), loadCalls(), loadClients()]);
+  document.getElementById('last-refresh').textContent =
+    'Actualisé à ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────────
+
+async function loadStats() {
+  try {
+    const s = await api(`/api/stats?client_id=${CURRENT_CLIENT}`);
+    document.getElementById('stat-calls-today').textContent = s.calls_today;
+    document.getElementById('stat-unread').textContent = s.unread_messages;
+    document.getElementById('stat-pending').textContent = s.pending_reservations;
+    document.getElementById('stat-total').textContent = s.total_calls;
+
+    const badgeMsg = document.getElementById('badge-msg');
+    badgeMsg.textContent = s.unread_messages;
+    badgeMsg.style.display = s.unread_messages > 0 ? '' : 'none';
+
+    const badgeRes = document.getElementById('badge-res');
+    badgeRes.textContent = s.pending_reservations;
+    badgeRes.style.display = s.pending_reservations > 0 ? '' : 'none';
+  } catch {}
+}
+
+// ── Messages ──────────────────────────────────────────────────────────────────
+
+async function loadMessages() {
+  try {
+    const msgs = await api(`/api/messages?client_id=${CURRENT_CLIENT}`);
+    const dash = renderMsgsTable(msgs.slice(0, 5), true);
+    document.getElementById('dash-msgs-wrap').innerHTML = dash;
+    document.getElementById('msgs-wrap').innerHTML = renderMsgsTable(msgs, false);
+  } catch {}
+}
+
+function renderMsgsTable(msgs, compact) {
+  if (!msgs.length) return `<div class="empty"><div class="empty-icon">✉️</div>Aucun message</div>`;
+  const rows = msgs.map(m => `
+    <tr>
+      <td><strong>${esc(m.caller_name || '?')}</strong></td>
+      <td>${esc(m.phone || '—')}</td>
+      <td style="max-width:340px">${esc(m.content)}</td>
+      ${!compact ? `<td>${esc(m.created_at?.slice(0,16).replace('T',' ') || '')}</td>` : ''}
+      <td>
+        ${m.is_read ? '<span class="badge badge-confirmed">Lu</span>' :
+          `<span class="badge badge-unread">Non lu</span>`}
+      </td>
+      <td>
+        ${!m.is_read ? `<button class="btn-sm btn-read" onclick="markRead(${m.id})">Marquer lu</button>` : ''}
+      </td>
+    </tr>
+  `).join('');
+  const hdrs = compact
+    ? '<tr><th>Nom</th><th>Téléphone</th><th>Message</th><th>Statut</th><th></th></tr>'
+    : '<tr><th>Nom</th><th>Téléphone</th><th>Message</th><th>Date</th><th>Statut</th><th></th></tr>';
+  return `<table><thead>${hdrs}</thead><tbody>${rows}</tbody></table>`;
+}
+
+async function markRead(id) {
+  await api(`/api/messages/${id}/read`, { method: 'POST', body: '{}' });
+  loadMessages(); loadStats();
+}
+
+// ── Reservations ──────────────────────────────────────────────────────────────
+
+async function loadReservations() {
+  try {
+    const res = await api(`/api/reservations?client_id=${CURRENT_CLIENT}`);
+    const dash = renderResTable(res.filter(r => r.status === 'pending').slice(0, 5), true);
+    document.getElementById('dash-res-wrap').innerHTML = dash;
+    document.getElementById('res-wrap').innerHTML = renderResTable(res, false);
+  } catch {}
+}
+
+function renderResTable(items, compact) {
+  if (!items.length) return `<div class="empty"><div class="empty-icon">📅</div>Aucune réservation</div>`;
+  const rows = items.map(r => `
+    <tr>
+      <td><strong>${esc(r.caller_name || '?')}</strong></td>
+      <td>${esc(r.phone || '—')}</td>
+      <td>${esc(r.date || '—')} ${esc(r.time || '')}</td>
+      <td>${esc(r.service || '—')}</td>
+      ${r.party_size ? `<td>${r.party_size}p</td>` : (!compact ? '<td>—</td>' : '')}
+      ${!compact ? `<td style="max-width:200px;color:var(--muted);font-size:12px">${esc(r.notes || '')}</td>` : ''}
+      <td><span class="badge badge-${r.status}">${r.status}</span></td>
+      <td>
+        <div class="act-btns">
+          ${r.status === 'pending' ? `
+            <button class="btn-sm btn-confirm" onclick="updateRes(${r.id},'confirmed')">✓ Confirmer</button>
+            <button class="btn-sm btn-cancel" onclick="updateRes(${r.id},'cancelled')">✕ Annuler</button>
+          ` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  const hdrs = compact
+    ? '<tr><th>Nom</th><th>Tél</th><th>Date/Heure</th><th>Service</th><th>Statut</th><th></th></tr>'
+    : '<tr><th>Nom</th><th>Tél</th><th>Date/Heure</th><th>Service</th><th>Pers.</th><th>Notes</th><th>Statut</th><th>Actions</th></tr>';
+  return `<table><thead>${hdrs}</thead><tbody>${rows}</tbody></table>`;
+}
+
+async function updateRes(id, status) {
+  await api(`/api/reservations/${id}/status`, { method: 'POST', body: JSON.stringify({ status }) });
+  loadReservations(); loadStats();
+}
+
+// ── Calls ─────────────────────────────────────────────────────────────────────
+
+async function loadCalls() {
+  try {
+    const calls = await api(`/api/calls?client_id=${CURRENT_CLIENT}`);
+    if (!calls.length) {
+      document.getElementById('calls-wrap').innerHTML =
+        `<div class="empty"><div class="empty-icon">📞</div>Aucun appel enregistré</div>`;
+      return;
+    }
+    const rows = calls.map(c => `
+      <tr>
+        <td>${esc(c.from_number || '?')}</td>
+        <td>${esc(c.started_at?.slice(0,16).replace('T',' ') || '')}</td>
+        <td>${formatDuration(c.duration)}</td>
+        <td>${c.intent ? `<span class="badge badge-active">${esc(c.intent)}</span>` : '—'}</td>
+        <td><span class="badge badge-${c.status}">${c.status}</span></td>
+        <td>
+          ${(c.transcript||[]).length
+            ? `<button class="transcript-btn" onclick="showTranscript(${JSON.stringify(JSON.stringify(c.transcript))})">
+                 📄 ${(c.transcript||[]).length} échanges
+               </button>`
+            : '<span style="color:var(--muted);font-size:12px">—</span>'}
+        </td>
+      </tr>
+    `).join('');
+    document.getElementById('calls-wrap').innerHTML = `
+      <table>
+        <thead><tr><th>Numéro</th><th>Date</th><th>Durée</th><th>Sujet</th><th>Statut</th><th>Transcription</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } catch {}
+}
+
+function formatDuration(s) {
+  if (!s) return '—';
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return m > 0 ? `${m}min ${sec}s` : `${sec}s`;
+}
+
+function showTranscript(json_str) {
+  const transcript = JSON.parse(json_str);
+  const body = document.getElementById('transcript-body');
+  body.innerHTML = transcript.map(m => `
+    <div>
+      <div class="tr-msg tr-${m.role}">${esc(m.text)}</div>
+      <div class="tr-ts" style="${m.role==='user'?'text-align:right':''}">${m.role==='user'?'👤 Appelant':'🤖 IA'} · ${(m.ts||'').slice(11,16)}</div>
+    </div>
+  `).join('');
+  document.getElementById('transcript-popup').classList.add('open');
+}
+function closeTranscript(e) {
+  if (!e || e.target === document.getElementById('transcript-popup')) {
+    document.getElementById('transcript-popup').classList.remove('open');
+  }
+}
+
+// ── Config ────────────────────────────────────────────────────────────────────
+
+async function loadConfig() {
+  try {
+    const clients = await api('/api/clients');
+    const client = clients.find(c => c.id === CURRENT_CLIENT);
+    if (!client) return;
+    document.getElementById('cfg-name').value = client.name || '';
+    document.getElementById('cfg-persona').value = client.persona_name || '';
+    document.getElementById('cfg-phone').value = client.phone || '';
+    document.getElementById('cfg-prompt').value = client.system_prompt || '';
+    document.getElementById('cfg-transfers').value =
+      client.transfer_numbers && Object.keys(client.transfer_numbers).length
+        ? JSON.stringify(client.transfer_numbers) : '';
+  } catch {}
+}
+
+async function saveConfig() {
+  const data = {
+    id: CURRENT_CLIENT,
+    name: document.getElementById('cfg-name').value,
+    persona_name: document.getElementById('cfg-persona').value,
+    phone: document.getElementById('cfg-phone').value,
+    system_prompt: document.getElementById('cfg-prompt').value,
+    transfer_numbers: {},
+  };
+  const tf = document.getElementById('cfg-transfers').value.trim();
+  if (tf) { try { data.transfer_numbers = JSON.parse(tf); } catch {} }
+  try {
+    await api('/api/clients', { method: 'POST', body: JSON.stringify(data) });
+    document.getElementById('cfg-msg').textContent = '✓ Sauvegardé avec succès';
+    setTimeout(() => document.getElementById('cfg-msg').textContent = '', 3000);
+    loadClients();
+  } catch {
+    document.getElementById('cfg-msg').style.color = 'var(--red)';
+    document.getElementById('cfg-msg').textContent = '✕ Erreur lors de la sauvegarde';
+  }
+}
+
+// ── Clients ───────────────────────────────────────────────────────────────────
+
+async function loadClients() {
+  try {
+    const clients = await api('/api/clients');
+    // Update sidebar select
+    const sel = document.getElementById('client-select');
+    const current = sel.value;
+    sel.innerHTML = clients.map(c =>
+      `<option value="${c.id}">${esc(c.name)}</option>`
+    ).join('');
+    sel.value = current;
+
+    if (!clients.length) {
+      document.getElementById('clients-wrap').innerHTML =
+        `<div class="empty"><div class="empty-icon">🏢</div>Aucun client</div>`;
+      return;
+    }
+    const rows = clients.map(c => `
+      <tr>
+        <td><strong>${esc(c.name)}</strong><br><span style="color:var(--muted);font-size:11px">${c.id}</span></td>
+        <td>${esc(c.persona_name)}</td>
+        <td>${esc(c.phone || '—')}</td>
+        <td>${c.active ? '<span class="badge badge-confirmed">Actif</span>' : '<span class="badge badge-cancelled">Inactif</span>'}</td>
+        <td><button class="btn-sm btn-read" onclick="switchToClient('${c.id}')">Piloter</button></td>
+      </tr>
+    `).join('');
+    document.getElementById('clients-wrap').innerHTML = `
+      <table>
+        <thead><tr><th>Client</th><th>IA</th><th>Téléphone</th><th>Statut</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } catch {}
+}
+
+function switchToClient(id) {
+  CURRENT_CLIENT = id;
+  document.getElementById('client-select').value = id;
+  loadAll();
+  nav('dashboard');
+}
+
+async function createClient() {
+  const data = {
+    name: document.getElementById('new-name').value.trim(),
+    persona_name: document.getElementById('new-persona').value.trim() || 'ELION',
+    phone: document.getElementById('new-phone').value.trim(),
+    system_prompt: document.getElementById('new-prompt').value.trim(),
+  };
+  if (!data.name) { alert('Nom requis'); return; }
+  try {
+    await api('/api/clients', { method: 'POST', body: JSON.stringify(data) });
+    document.getElementById('client-msg').textContent = `✓ Client "${data.name}" créé`;
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-persona').value = '';
+    document.getElementById('new-phone').value = '';
+    document.getElementById('new-prompt').value = '';
+    setTimeout(() => document.getElementById('client-msg').textContent = '', 3000);
+    loadClients();
+  } catch {
+    document.getElementById('client-msg').style.color = 'var(--red)';
+    document.getElementById('client-msg').textContent = '✕ Erreur';
+  }
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────────
+
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

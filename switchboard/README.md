@@ -1,30 +1,32 @@
-# EasyCom Standard IA — Serveur Téléphonique
+# EasyCom Standard IA — v2.0
 
-Standard téléphonique IA qui décroche automatiquement les appels entrants.
+Standard téléphonique IA complet : routing, réservations, messages, dashboard admin.
+Commercialisable à 100€/mois par client.
+
+## Ce que ça fait
+
+- **Décroche automatiquement** les appels via Twilio
+- **Comprend la demande** (Grok Voice Think Fast 1.8)
+- **Route les appels** vers le bon département
+- **Prend les réservations** (nom, téléphone, date, heure, service)
+- **Enregistre les messages** pour rappel
+- **Transcrit les appels** automatiquement
+- **Dashboard admin** pour piloter depuis n'importe quel navigateur
+- **Multi-clients** : gérer plusieurs entreprises depuis un seul serveur
 
 ## Architecture
 
 ```
-Appelant
-   ↓  (appel téléphonique)
-Twilio (numéro de téléphone)
-   ↓  (WebSocket audio mulaw)
-Ce serveur Python (VPS)
-   ↓  (WebSocket Grok Voice API)
-Grok Voice Think Fast (xAI)
+Appelant → Twilio (numéro) → VPS (ce serveur) → Grok Voice API
+                                    ↓
+                              SQLite (DB)
+                                    ↓
+                          Dashboard Admin (/admin)
 ```
 
-## Prérequis
+## Installation rapide (VPS)
 
-| Service | Usage | Coût estimé |
-|---------|-------|-------------|
-| VPS (Hostinger, OVH…) | Héberge ce serveur | ~5-10€/mois |
-| Twilio | Numéro de téléphone + appels | ~15-30€/mois |
-| xAI (Grok Voice) | IA vocale | ~0.05$/min environ |
-
-## Installation sur VPS
-
-### 1. Installer Python et les dépendances
+### 1. Cloner et installer
 
 ```bash
 git clone https://github.com/Majesteasy/EasyCom.git
@@ -32,45 +34,38 @@ cd EasyCom/switchboard
 pip install -r requirements.txt
 ```
 
-### 2. Configurer les variables d'environnement
+### 2. Configurer
 
 ```bash
 cp .env.example .env
 nano .env
 ```
 
-Remplir :
-- `XAI_API_KEY` → clé API depuis [console.x.ai](https://console.x.ai/)
-- `GROK_MODEL` → `grok-voice-think-fast-1.8` (recommandé)
-- `PORT` → `5050` (ou adapter selon VPS)
+Variables à remplir :
+| Variable | Description |
+|----------|-------------|
+| `XAI_API_KEY` | Clé depuis [console.x.ai](https://console.x.ai/) |
+| `ADMIN_KEY` | Mot de passe pour le dashboard (choisir fort) |
+| `PORT` | Port (défaut: 5050) |
 
-### 3. Lancer le serveur
+### 3. Lancer
 
 ```bash
 # Test
 python server.py
 
-# Production (avec SSL/HTTPS via nginx + certbot)
+# Production avec systemd (voir ci-dessous)
 uvicorn server:app --host 0.0.0.0 --port 5050
 ```
 
-### 4. Exposer le serveur (HTTPS obligatoire pour Twilio)
+### 4. Configurer HTTPS (Nginx + Let's Encrypt)
 
-**Option A — ngrok (test local) :**
-```bash
-ngrok http 5050
-```
-Copier l'URL `https://xxxx.ngrok.io`
-
-**Option B — VPS avec nginx + Let's Encrypt (production) :**
 ```nginx
 server {
     listen 443 ssl;
-    server_name standard.easycom-world.ch;
-
-    ssl_certificate /etc/letsencrypt/live/standard.easycom-world.ch/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/standard.easycom-world.ch/privkey.pem;
-
+    server_name standard.mon-domaine.com;
+    ssl_certificate /etc/letsencrypt/live/standard.mon-domaine.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/standard.mon-domaine.com/privkey.pem;
     location / {
         proxy_pass http://127.0.0.1:5050;
         proxy_http_version 1.1;
@@ -81,37 +76,45 @@ server {
 }
 ```
 
+```bash
+certbot --nginx -d standard.mon-domaine.com
+```
+
 ### 5. Configurer Twilio
 
-1. Aller sur [console.twilio.com](https://console.twilio.com/)
-2. Acheter un numéro de téléphone
-3. Dans les paramètres du numéro :
-   - **Voice webhook (POST)** → `https://votre-serveur.com/incoming-call`
-4. Tester en appelant le numéro !
+1. [console.twilio.com](https://console.twilio.com/) → Acheter un numéro
+2. Dans les paramètres du numéro :
+   - **Voice webhook (POST)** → `https://standard.mon-domaine.com/incoming-call`
+3. Appeler le numéro → le standard décroche tout seul !
 
-## Test sans téléphone
+### 6. Accéder au dashboard
 
-Ouvrir `switchboard.html` dans un navigateur pour tester la version web (utilise Gemini).
+Ouvrir `https://standard.mon-domaine.com/admin`
+→ Saisir votre `ADMIN_KEY`
 
-## Variables d'environnement
+## Dashboard Admin — Fonctionnalités
 
-| Variable | Requis | Description |
-|----------|--------|-------------|
-| `XAI_API_KEY` | ✅ | Clé API xAI (Grok Voice) |
-| `GROK_MODEL` | Non | Modèle vocal (défaut: `grok-voice-think-fast-1.8`) |
-| `PORT` | Non | Port serveur (défaut: `5050`) |
-| `SYSTEM_PROMPT` | Non | Remplace le prompt EasyCom par défaut |
+| Onglet | Description |
+|--------|-------------|
+| **Dashboard** | Vue d'ensemble : appels, messages, réservations |
+| **Messages** | Messages laissés par les appelants, marquer comme lu |
+| **Réservations** | Confirmer / annuler les réservations |
+| **Appels** | Historique avec transcriptions complètes |
+| **Configuration** | Personnaliser le prompt IA, les numéros de transfert |
+| **Clients** | Gérer plusieurs entreprises (commercialisation) |
 
-## Personnaliser le prompt
+## Commercialisation (100€/mois/client)
 
-Par défaut, le serveur utilise un prompt EasyCom World complet (voir `server.py`).
+Chaque client a :
+- Son propre profil (nom entreprise, nom IA, prompt personnalisé)
+- Ses données séparées (appels, messages, réservations)
+- Son propre numéro Twilio
 
-Pour adapter à votre métier, modifier `SYSTEM_PROMPT` dans `.env` :
-```
-SYSTEM_PROMPT=Tu es le standard téléphonique de [VOTRE ENTREPRISE]...
-```
+Créer un client via le dashboard → onglet **Clients** → formulaire **Ajouter**.
 
-## Lancer en production (systemd)
+Webhook Twilio du client : `https://votre-serveur.com/incoming-call?client_id=ID_CLIENT`
+
+## Systemd (production)
 
 ```ini
 # /etc/systemd/system/easycom-standard.service
@@ -123,8 +126,9 @@ After=network.target
 User=ubuntu
 WorkingDirectory=/home/ubuntu/EasyCom/switchboard
 EnvironmentFile=/home/ubuntu/EasyCom/switchboard/.env
-ExecStart=/usr/bin/uvicorn server:app --host 0.0.0.0 --port 5050
+ExecStart=uvicorn server:app --host 0.0.0.0 --port 5050
 Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
@@ -133,4 +137,16 @@ WantedBy=multi-user.target
 ```bash
 systemctl enable easycom-standard
 systemctl start easycom-standard
+systemctl status easycom-standard
 ```
+
+## Coûts estimés (par client)
+
+| Service | Coût |
+|---------|------|
+| VPS (1 serveur pour tous vos clients) | ~5-10€/mois |
+| Twilio (numéro + ~200 min appels) | ~15-25€/mois/client |
+| xAI Grok Voice | ~0.03-0.06$/min d'appel |
+| **Total par client** | **~25-40€/mois de coût** |
+| **Prix de vente suggéré** | **100€/mois** |
+| **Marge** | **~60-75€/mois/client** |
